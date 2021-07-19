@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass, replace
 from typing import Generator, Iterable, Optional
 
+from utahchess._board_repr import representation
 from utahchess.piece import Piece, get_initial_pieces
 
 
@@ -52,58 +53,7 @@ class Board:
         return Board(pieces=new_pieces)
 
     def __repr__(self) -> str:
-        representation = ""
-        row = "          "
-        for i in range(8):
-            row += f"     {i}    "
-        representation += row + "\n"
-        for y_coord in range(8):
-            row = "  "
-            row += "--------  " * 9 + "\n"
-            for x_coord in range(9):
-                if x_coord == 0:
-                    row += f"    {y_coord}    | "
-                    continue
-                else:
-                    x_coord -= 1
-                if self._board[x_coord][y_coord] is None:
-                    row += "|       | "
-                    continue
-                if self._board[x_coord][y_coord].piece_type == "Pawn":
-                    if self._board[x_coord][y_coord].color == "black":
-                        row += f"|   \u265F   | "
-                    if self._board[x_coord][y_coord].color == "white":
-                        row += f"|   \u2659   | "
-                if self._board[x_coord][y_coord].piece_type == "Knight":
-                    if self._board[x_coord][y_coord].color == "black":
-                        row += f"|   \u265E   | "
-                    if self._board[x_coord][y_coord].color == "white":
-                        row += f"|   \u2658   | "
-                if self._board[x_coord][y_coord].piece_type == "Rook":
-                    if self._board[x_coord][y_coord].color == "black":
-                        row += f"|   \u265C   | "
-                    if self._board[x_coord][y_coord].color == "white":
-                        row += f"|   \u2656   | "
-                if self._board[x_coord][y_coord].piece_type == "Bishop":
-                    if self._board[x_coord][y_coord].color == "black":
-                        row += f"|   \u265D   | "
-                    if self._board[x_coord][y_coord].color == "white":
-                        row += f"|   \u2657   | "
-                if self._board[x_coord][y_coord].piece_type == "Queen":
-                    if self._board[x_coord][y_coord].color == "black":
-                        row += f"|   \u265B   | "
-                    if self._board[x_coord][y_coord].color == "white":
-                        row += f"|   \u2655   | "
-
-                if self._board[x_coord][y_coord].piece_type == "King":
-                    if self._board[x_coord][y_coord].color == "black":
-                        row += f"|   \u265A   | "
-                    if self._board[x_coord][y_coord].color == "white":
-                        row += f"|   \u2654   | "
-
-            representation += row + "\n"
-        representation + "  " + "--------  " * 9
-        return representation
+        return representation(self._board)
 
 
 def is_edible(board: Board, position: tuple[int, int], friendly_color: str) -> bool:
