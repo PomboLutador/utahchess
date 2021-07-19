@@ -10,28 +10,6 @@ if TYPE_CHECKING:
 
 from utahchess.tile_movement_utils import apply_movement_vector, is_in_bounds
 
-KNIGHT_MOVEMENT_VECTORS = (
-    (1, 2),
-    (-1, 2),
-    (-1, -2),
-    (1, -2),
-    (2, 1),
-    (-2, 1),
-    (2, -1),
-    (-2, -1),
-)
-
-KING_MOVEMENT_VECTORS = (
-    (0, 1),
-    (0, -1),
-    (1, 0),
-    (-1, 0),
-    (1, 1),
-    (-1, -1),
-    (1, -1),
-    (-1, 1),
-)
-
 
 class Piece(abc.ABC):
     piece_type: str
