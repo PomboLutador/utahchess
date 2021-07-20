@@ -1,4 +1,9 @@
-def representation(_board):
+from __future__ import annotations
+
+from utahchess.piece import Piece
+
+
+def representation(_board: tuple[tuple[Piece, ...], ...]):
     representation = ""
     row = "          "
     for i in range(8):
