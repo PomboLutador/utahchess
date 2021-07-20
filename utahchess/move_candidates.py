@@ -32,8 +32,17 @@ KING_MOVEMENT_VECTORS = (
 
 def get_all_move_candidates(
     board: Board,
+    current_player: str,
 ) -> Generator[tuple[tuple[int, int], tuple[int, int]], None, None]:
-    return chain(*tuple(get_move_candidate_function(piece=piece)(board=board, position=position) for piece in board.all_pieces()))  # type: ignore
+    return chain(
+        *tuple(
+            get_move_candidate_function(piece=piece)(
+                board=board, position=piece.position
+            )
+            for piece in board.all_pieces()
+            if piece.color == current_player
+        )
+    )  # type: ignore
 
 
 def get_move_candidate_function(piece: Piece) -> Callable:
