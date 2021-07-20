@@ -2,3 +2,5 @@
 /.pytest_cache
 /.vscode
 /__pycache__
+/tests/__pycache__/
+/utahchess/__pycache__/
