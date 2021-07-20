@@ -140,3 +140,15 @@ def test_move_piece_doesnt_affect_copy():
 
     # then
     assert board2[(4, 4)] is None
+
+
+@pytest.mark.parametrize("position", [(4, 1), (1, 6), (6, 6), (7, 7), (3, 7)])
+def test_delete_piece(position):
+    # given
+    board = Board()
+
+    # when
+    result = board.delete_piece(position=position)
+
+    # then
+    assert result[position] is None

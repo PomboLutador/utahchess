@@ -40,6 +40,10 @@ class Board:
     def move_piece(
         self, from_position: tuple[int, int], to_position: tuple[int, int]
     ) -> Board:
+        """Get a new board with one piece moved to a new position.
+
+        If the to_position is occupied already, the piece there will be lost.
+        """
         if from_position == to_position:
             return self.copy()
         pieces = self.all_pieces()
@@ -49,6 +53,13 @@ class Board:
             else replace(piece, position=to_position, color=piece.color)
             for piece in pieces
             if piece.position != to_position
+        )
+        return Board(pieces=new_pieces)
+
+    def delete_piece(self, position: tuple[int, int]) -> Board:
+        """Get a new board with one piece deleted."""
+        new_pieces = tuple(
+            piece for piece in self.all_pieces() if piece.position != position
         )
         return Board(pieces=new_pieces)
 
