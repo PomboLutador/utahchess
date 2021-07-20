@@ -18,11 +18,11 @@ class RegularMove(Move):
         self.piece_moves = piece_moves
         self.moving_pieces = moving_pieces
 
+    def set_allows_en_passant_flag(self) -> bool:
+        pass
 
-def get_all_move_candidates(
-    board: Board,
-) -> Generator[tuple[tuple[int, int], tuple[int, int]], None, None]:
-    pass
+    def get_algebraic_notation(self) -> str:
+        pass
 
 
 def is_check(board: Board) -> bool:
