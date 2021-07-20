@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-import abc
 from itertools import chain
-from typing import Generator
+from typing import Callable, Generator
 
 from utahchess.board import Board, is_edible, is_occupied
+from utahchess.piece import Piece
 from utahchess.tile_movement_utils import apply_movement_vector, is_in_bounds
 
 KNIGHT_MOVEMENT_VECTORS = (
@@ -30,32 +30,20 @@ KING_MOVEMENT_VECTORS = (
 )
 
 
-class Piece(abc.ABC):
-    def __init__(
-        self,
-        position: tuple[int, int],
-        color: str,
-        is_in_start_position: bool,
-    ) -> None:
-        self.position = position
-        self.color = color
-        self.is_in_start_position = is_in_start_position
-
-    @abc.abstractmethod
-    def get_move_candidates(
-        self, board: Board
-    ) -> Generator[tuple[tuple[int, int], tuple[int, int]], None, None]:
-        """
-        Get possible move candidates for the piece given a board.
-        """
-        pass
-
-    def set_position(self, position: tuple[int, int]) -> None:
-        self.position = position
-        self.is_in_start_position = False
-
-    def get_position(self) -> tuple[int, int]:
-        return self.position
+def get_move_candidate_function(piece: Piece) -> Callable:
+    if piece.piece_type == "Pawn":
+        return get_pawn_move_candidates
+    elif piece.piece_type == "Knight":
+        return get_knight_move_candidates
+    elif piece.piece_type == "Bishop":
+        return get_bishop_move_candidates
+    elif piece.piece_type == "Rook":
+        return get_rook_move_candidates
+    elif piece.piece_type == "Queen":
+        return get_queen_move_candidates
+    elif piece.piece_type == "King":
+        return get_king_move_candidates
+    raise Exception(f"Piece {piece} did not correspond to any piece type.")
 
 
 def get_pawn_move_candidates(
