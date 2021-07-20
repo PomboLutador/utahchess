@@ -30,6 +30,12 @@ KING_MOVEMENT_VECTORS = (
 )
 
 
+def get_all_move_candidates(
+    board: Board,
+) -> Generator[tuple[tuple[int, int], tuple[int, int]], None, None]:
+    return chain(*tuple(get_move_candidate_function(piece=piece)(board=board, position=position) for piece in board.all_pieces()))  # type: ignore
+
+
 def get_move_candidate_function(piece: Piece) -> Callable:
     if piece.piece_type == "Pawn":
         return get_pawn_move_candidates
@@ -47,9 +53,9 @@ def get_move_candidate_function(piece: Piece) -> Callable:
 
 
 def get_pawn_move_candidates(
-    board: Board, pawn_position: tuple[int, int]
+    board: Board, position: tuple[int, int]
 ) -> Generator[tuple[tuple[int, int], tuple[int, int]], None, None]:
-    pawn = board[pawn_position]
+    pawn = board[position]
     if pawn is None:
         return
     movement_direction = -1 if pawn.color == "white" else 1
@@ -89,54 +95,54 @@ def get_pawn_move_candidates(
 
 
 def get_knight_move_candidates(
-    self, board: Board
+    board: Board, position: tuple[int, int]
 ) -> Generator[tuple[tuple[int, int], tuple[int, int]], None, None]:
-
+    friendly_color = board[position].color
     for movement_vector in KNIGHT_MOVEMENT_VECTORS:
 
         tile_to_check = apply_movement_vector(
-            position=self.position, movement_vector=movement_vector
+            position=position, movement_vector=movement_vector
         )
         if is_in_bounds(position=tile_to_check):
             if is_occupied(board=board, position=tile_to_check) or is_edible(
-                board=board, position=tile_to_check, friendly_color=self.color
+                board=board, position=tile_to_check, friendly_color=friendly_color
             ):
-                yield (self.position, tile_to_check)
+                yield (position, tile_to_check)
 
 
 def get_rook_move_candidates(
-    board: Board, rook_position: tuple[int, int]
+    board: Board, position: tuple[int, int]
 ) -> Generator[tuple[tuple[int, int], tuple[int, int]], None, None]:
 
     horizontal_move_candidates = _get_horizontal_moves(
-        board=board, initial_position=rook_position
+        board=board, initial_position=position
     )
     vertical_move_candidates = _get_vertical_moves(
-        board=board, initial_position=rook_position
+        board=board, initial_position=position
     )
 
     return chain(horizontal_move_candidates, vertical_move_candidates)  # type: ignore
 
 
 def get_bishop_move_candidates(
-    self, board: Board
+    board: Board, position: tuple[int, int]
 ) -> Generator[tuple[tuple[int, int], tuple[int, int]], None, None]:
 
-    return self._get_diagonal_moves(board)
+    return _get_diagonal_moves(board=board, initial_position=position)
 
 
 def get_queen_move_candidates(
-    board: Board, initial_position: tuple[int, int]
+    board: Board, position: tuple[int, int]
 ) -> Generator[tuple[tuple[int, int], tuple[int, int]], None, None]:
 
     diagonal_move_candidates = _get_diagonal_moves(
-        board=board, initial_position=initial_position
+        board=board, initial_position=position
     )
     horizontal_move_candidates = _get_horizontal_moves(
-        board=board, initial_position=initial_position
+        board=board, initial_position=position
     )
     vertical_move_candidates = _get_vertical_moves(
-        board=board, initial_position=initial_position
+        board=board, initial_position=position
     )
 
     return chain(
@@ -147,21 +153,19 @@ def get_queen_move_candidates(
 
 
 def get_king_move_candidates(
-    board: Board, initial_position: tuple[int, int]
+    board: Board, position: tuple[int, int]
 ) -> Generator[tuple[tuple[int, int], tuple[int, int]], None, None]:
-    king = board[initial_position]
-    if king is None:
-        return
+    king = board[position]
     for movement_vector in KING_MOVEMENT_VECTORS:
 
         tile_to_check = apply_movement_vector(
-            position=initial_position, movement_vector=movement_vector
+            position=position, movement_vector=movement_vector
         )
         if is_in_bounds(position=tile_to_check):
             if not is_occupied(board=board, position=tile_to_check) or is_edible(
                 board=board, position=tile_to_check, friendly_color=king.color
             ):
-                yield (initial_position, tile_to_check)
+                yield (position, tile_to_check)
 
 
 def _get_straight_line_moves(
