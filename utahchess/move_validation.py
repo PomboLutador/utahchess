@@ -30,7 +30,7 @@ def is_check(board: Board, current_player: str) -> bool:
     as those are incapable of eating the current player's king.
     """
     enemy_color = "white" if current_player == "black" else "black"
-    current_player_king_position = _find_current_players_king_position(
+    current_player_king_position = find_current_players_king_position(
         board=board, current_player=current_player
     )
     all_possible_enemy_move_candidates = get_all_move_candidates(
@@ -44,7 +44,7 @@ def is_check(board: Board, current_player: str) -> bool:
     return current_player_king_position in all_possible_enemy_destinations
 
 
-def _find_current_players_king_position(
+def find_current_players_king_position(
     board: Board, current_player: str
 ) -> tuple[int, int]:
     for piece in board.all_pieces():
