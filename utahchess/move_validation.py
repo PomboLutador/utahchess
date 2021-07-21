@@ -22,9 +22,6 @@ class RegularMove(Move):
     def set_allows_en_passant_flag(self) -> bool:
         pass
 
-    def get_algebraic_notation(self) -> str:
-        pass
-
 
 def is_check(board: Board, current_player: str) -> bool:
     """Checks if current_player is in check.
