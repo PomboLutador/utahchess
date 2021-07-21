@@ -13,7 +13,7 @@ def test_fools_mate():
             wp-wp-wp-wp-wp-oo-oo-wp
             wr-wk-wb-wq-wc-wb-wk-wr"""
     board = Board(board_string=board_string)
-    
+
     # then
     assert is_checkmate(board=board, current_player="white")
 
