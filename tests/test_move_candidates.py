@@ -318,6 +318,5 @@ def test_get_king_move_candidates_on_board_with_only_kings_in_starting_position(
             board=initial_board_with_only_kings, position=king_position
         )
     )
-
     # then
     assert sorted(result) == sorted(expected)

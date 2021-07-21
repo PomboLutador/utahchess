@@ -1,6 +1,6 @@
 import pytest
-from utahchess.board import Board
 
+from utahchess.board import Board
 from utahchess.piece import (
     INITIAL_BISHOPS,
     INITIAL_BLACK_PAWNS,
