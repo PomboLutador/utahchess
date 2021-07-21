@@ -2,11 +2,7 @@ from __future__ import annotations
 
 import abc
 from dataclasses import dataclass
-from itertools import chain
-from typing import TYPE_CHECKING, Generator
-
-if TYPE_CHECKING:
-    from utahchess.board import Board, is_edible, is_occupied
+from typing import Generator, Optional
 
 from utahchess.tile_movement_utils import apply_movement_vector, is_in_bounds
 
@@ -147,6 +143,29 @@ def get_initial_pieces() -> Generator[Piece, None, None]:
         + INITIAL_ROOKS
     ):
         yield piece
+
+
+def create_piece_instance_from_string(
+    position: tuple[int, int], string: str
+) -> Optional[Piece]:
+    """Convert a string to an instance of the Piece classes."""
+    if string == "oo":
+        return None
+    color, class_identifier = string[0], string[1]
+    color = "black" if color == "b" else "white"
+    if class_identifier == "p":
+        return Pawn(position, color)
+    if class_identifier == "r":
+        return Rook(position, color)
+    if class_identifier == "b":
+        return Bishop(position, color)
+    if class_identifier == "k":
+        return Knight(position, color)
+    if class_identifier == "c":
+        return King(position, color)
+    if class_identifier == "q":
+        return Queen(position, color)
+    raise Exception("Invalid string could not be converted to a Piece instance.")
 
 
 if __name__ == "__main__":
