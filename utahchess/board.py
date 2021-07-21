@@ -4,21 +4,31 @@ from dataclasses import dataclass, replace
 from typing import Generator, Iterable, Optional
 
 from utahchess._board_repr import representation
-from utahchess.piece import Piece, get_initial_pieces
+from utahchess.piece import Piece, create_piece_instance_from_string, get_initial_pieces
 
 
 @dataclass(frozen=True)
 class Board:
     _board: tuple[tuple[Piece, ...], ...]
 
-    def __init__(self, pieces: Iterable[Piece] = []) -> None:
-        if not pieces:
-            pieces = get_initial_pieces()
+    def __init__(self, pieces: Iterable[Piece] = [], board_string: str = "") -> None:
 
-        _board = [[None for x in range(8)] for y in range(8)]
-        for piece in pieces:
-            x, y = piece.position
-            _board[x][y] = piece  # type: ignore
+        if pieces and board_string:
+            raise Exception(
+                "Cannot create board when both pieces and board string are provided."
+            )
+
+        if not board_string:
+            if not pieces:
+                pieces = get_initial_pieces()
+
+            _board = [[None for x in range(8)] for y in range(8)]
+            for piece in pieces:
+                x, y = piece.position
+                _board[x][y] = piece  # type: ignore
+
+        elif board_string:
+            _board = self._initialize_from_string(board_string=board_string)  # type: ignore
 
         object.__setattr__(self, "_board", tuple(tuple(column) for column in _board))
 
@@ -65,6 +75,30 @@ class Board:
 
     def __repr__(self) -> str:
         return representation(self._board)
+
+    def _initialize_from_string(
+        self, board_string: str
+    ) -> tuple[tuple[Piece, ...], ...]:
+        """Initialize a board from a string.
+
+        Example:
+        >>    board_string = f'''br-oo-oo-wq-oo-bc-oo-br
+        >>            oo-oo-oo-oo-bk-oo-bp-oo
+        >>            oo-wb-oo-oo-wp-bp-oo-oo
+        >>            oo-bp-oo-oo-oo-wp-wk-oo
+        >>            bq-wp-oo-oo-wp-oo-oo-bp
+        >>            bb-oo-wp-oo-oo-oo-oo-oo
+        >>            oo-oo-oo-oo-oo-oo-oo-oo
+        >>            oo-wk-oo-wb-oo-wk-oo-wr'''
+        """
+        _board = [[None for x in range(8)] for y in range(8)]
+        row_string = board_string.replace(" ", "").split("\n")
+        for y, row in enumerate(row_string):
+            column_split_string = row.split("-")
+            for x, tile_content in enumerate(column_split_string):
+                piece = create_piece_instance_from_string((x, y), tile_content)
+                _board[x][y] = piece
+        return tuple(tuple(column) for column in _board)
 
 
 def is_edible(board: Board, position: tuple[int, int], friendly_color: str) -> bool:
