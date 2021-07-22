@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from dataclasses import dataclass
 from typing import Generator
 
 from utahchess.board import Board
@@ -8,16 +9,22 @@ from utahchess.move_candidates import get_all_move_candidates
 from utahchess.piece import Piece
 
 
+@dataclass
 class RegularMove(Move):
     type = "Regular Move"
+    piece_moves: tuple[tuple[tuple[int, int], tuple[int, int]], ...]
+    moving_pieces: tuple[Piece, ...]
+    is_capturing_move: bool
 
     def __init__(
         self,
-        piece_moves: tuple[tuple[int, int], tuple[int, int]],
+        piece_moves: tuple[tuple[tuple[int, int], tuple[int, int]]],
         moving_pieces: tuple[Piece],
+        is_capturing_move: bool,
     ) -> None:
         self.piece_moves = piece_moves
         self.moving_pieces = moving_pieces
+        self.is_capturing_move = is_capturing_move
 
     def set_allows_en_passant_flag(self) -> bool:
         pass
@@ -71,6 +78,23 @@ def is_checkmate(board: Board, current_player: str) -> bool:
 
 
 def validate_move_candidates(
-    move_candidates: Generator[tuple[tuple[int, int], tuple[int, int]], None, None]
+    board: Board,
+    move_candidates: Generator[tuple[tuple[int, int], tuple[int, int]], None, None],
 ) -> Generator[RegularMove, None, None]:
-    pass
+    """Filter move candidates based on whether they leave king unprotected."""
+
+    for move_candidate in move_candidates:
+        from_position, to_position = move_candidate
+        board_after_move = board.move_piece(
+            from_position=from_position, to_position=to_position
+        )
+
+        current_player = board[from_position].color
+        destination = board[to_position]
+        is_capturing_move = False if destination is None else True
+        if not is_check(board=board_after_move, current_player=current_player):
+            yield RegularMove(
+                piece_moves=(move_candidate,),
+                moving_pieces=(board[from_position],),
+                is_capturing_move=is_capturing_move,
+            )
