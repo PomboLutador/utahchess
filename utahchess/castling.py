@@ -1,15 +1,11 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Generator
+from typing import Generator, Optional
 
 from utahchess.board import Board, is_edible, is_occupied
 from utahchess.move import Move
-from utahchess.move_validation import (
-    find_current_players_king_position,
-    is_check,
-    is_checkmate,
-)
+from utahchess.move_validation import find_current_players_king_position, is_check
 from utahchess.piece import Piece
 from utahchess.tile_movement_utils import (
     apply_movement_vector,
@@ -59,59 +55,28 @@ def get_castling_moves(
         return
 
     for movement_vector in [(1, 0), (-1, 0)]:
-        next_tile = apply_movement_vector(
-            position=king_position, movement_vector=movement_vector
+        rook_tile = _find_rook_for_castling(
+            board=board, current_player=current_player, movement_vector=movement_vector
         )
-        if not is_in_bounds(position=next_tile):
+        if rook_tile is None:
+            continue
+
+        castling_move = _make_castling_move(
+            board=board,
+            movement_vector=movement_vector,
+            king_position=king_position,
+            rook_position=rook_tile,
+        )
+
+        if is_check(
+            board=board.move_piece(
+                from_position=castling_move.get_king_move()[0],
+                to_position=castling_move.get_king_move()[1],
+            ),
+            current_player=current_player,
+        ):
             break
-        while True:
-
-            # Traverse horizontally until we find a friendly rook in starting position
-            if not is_occupied(board=board, position=next_tile):
-                if is_check(
-                    board=board.move_piece(
-                        from_position=king_position, to_position=next_tile
-                    ),
-                    current_player=current_player,
-                ):
-                    break  # cant castle through check
-
-            elif (
-                board[next_tile].piece_type == "Rook"
-                and board[next_tile].color == current_player
-                and board[next_tile].is_in_start_position
-            ):
-                pass
-            else:  # if next tile is occupied, but not by a friendly rook
-                break
-
-            if is_in_bounds(position=next_tile) and is_occupied(
-                board=board, position=next_tile
-            ):
-
-                castling_move = _make_castling_move(
-                    board=board,
-                    movement_vector=movement_vector,
-                    king_position=king_position,
-                    rook_position=next_tile,
-                )
-
-                if is_check(
-                    board=board.move_piece(
-                        from_position=castling_move.get_king_move()[0],
-                        to_position=castling_move.get_king_move()[1],
-                    ),
-                    current_player=current_player,
-                ):
-                    break
-                yield castling_move
-                break
-
-            next_tile = apply_movement_vector(
-                position=next_tile, movement_vector=movement_vector
-            )
-            if not is_in_bounds(position=next_tile):
-                break
+        yield castling_move
 
 
 def _make_castling_move(
@@ -145,3 +110,44 @@ def _make_castling_move(
     )
 
     return castling_move
+
+
+def _find_rook_for_castling(
+    board: Board, current_player: str, movement_vector: tuple[int, int]
+) -> Optional[tuple[int, int]]:
+    """Find rook in direction of movement vector starting from friendly King."""
+    king_position = find_current_players_king_position(
+        board=board, current_player=current_player
+    )
+    next_tile = apply_movement_vector(
+        position=king_position, movement_vector=movement_vector
+    )
+    while True:
+        if not is_occupied(board=board, position=next_tile):
+            if is_check(
+                board=board.move_piece(
+                    from_position=king_position, to_position=next_tile
+                ),
+                current_player=current_player,
+            ):
+                return None  # Cant castle through check
+        elif (
+            board[next_tile].piece_type == "Rook"
+            and board[next_tile].color == current_player
+            and board[next_tile].is_in_start_position
+        ):
+            pass
+        else:  # If the path to the rook is obstructed
+            return None
+
+        if is_in_bounds(position=next_tile) and is_occupied(
+            board=board, position=next_tile
+        ):
+            return next_tile
+
+        next_tile = apply_movement_vector(
+            position=next_tile, movement_vector=movement_vector
+        )
+        if not is_in_bounds(position=next_tile):
+            break
+    return None
