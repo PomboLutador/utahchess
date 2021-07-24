@@ -87,6 +87,10 @@ def is_checkmate(board: Board, current_player: str) -> bool:
     return is_check(board=board, current_player=current_player)
 
 
+def is_stalemate(board: Board, current_player: str) -> bool:
+    raise NotImplementedError()
+
+
 def validate_move_candidates(
     board: Board,
     move_candidates: Generator[tuple[tuple[int, int], tuple[int, int]], None, None],
@@ -108,3 +112,12 @@ def validate_move_candidates(
                 moving_pieces=(board[from_position],),
                 is_capturing_move=is_capturing_move,
             )
+
+
+def get_all_legal_regular_moves(
+    board: Board, current_player: str
+) -> Generator[RegularMove, None, None]:
+    all_move_candidates = get_all_move_candidates(
+        board=board, current_player=current_player
+    )
+    return validate_move_candidates(board=board, move_candidates=all_move_candidates)
