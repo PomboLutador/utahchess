@@ -25,9 +25,19 @@ class RegularMove(Move):
         self.piece_moves = piece_moves
         self.moving_pieces = moving_pieces
         self.is_capturing_move = is_capturing_move
+        self.allows_en_passant = self._set_allows_en_passant_flag()
 
-    def set_allows_en_passant_flag(self) -> bool:
-        pass
+    def _set_allows_en_passant_flag(self) -> bool:
+        return (
+            self.moving_pieces[0].piece_type == "Pawn"
+            and abs(_get_distance_moved_in_y_direction(self.piece_moves[0])) == 2
+        )
+
+
+def _get_distance_moved_in_y_direction(
+    piece_move: tuple[tuple[int, int], tuple[int, int]]
+) -> int:
+    return piece_move[1][1] - piece_move[0][1]
 
 
 def is_check(board: Board, current_player: str) -> bool:
