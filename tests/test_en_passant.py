@@ -73,3 +73,104 @@ def test_left_side_en_passant_scenario_for_black():
         ),
     )
     assert expected == actual
+
+
+@pytest.mark.parametrize(
+    ("board_string_before_moving_piece", "last_move_initial", "last_move_destination"),
+    [
+        (
+            f"""oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-bc-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-wp-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-wc-oo-oo-oo""",
+            (2, 6),
+            (2, 4),
+        ),
+        (
+            f"""oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-bc-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-wp-oo-oo-oo-oo
+            oo-oo-oo-oo-wc-oo-oo-oo""",
+            (3, 6),
+            (3, 4),
+        ),
+        (
+            f"""oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-bc-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            wp-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-wc-oo-oo-oo""",
+            (0, 6),
+            (0, 4),
+        ),
+        (
+            f"""oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-bc-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-wp
+            oo-oo-oo-oo-wc-oo-oo-oo""",
+            (7, 6),
+            (7, 4),
+        ),
+        (
+            f"""oo-oo-oo-oo-oo-oo-oo-oo
+            bp-oo-oo-oo-bc-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-wc-oo-oo-oo""",
+            (0, 1),
+            (0, 3),
+        ),
+        (
+            f"""oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-bc-oo-oo-bp
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-wc-oo-oo-oo""",
+            (7, 1),
+            (7, 3),
+        ),
+    ],
+)
+def test_last_move_allows_en_passant_but_no_pawn_nearby(
+    board_string_before_moving_piece, last_move_initial, last_move_destination
+):
+    # given
+    board_before_moving_piece = Board(board_string=board_string_before_moving_piece)
+    board_after_moving_piece = board_before_moving_piece.move_piece(
+        from_position=last_move_initial, to_position=last_move_destination
+    )
+    last_move = RegularMove(
+        piece_moves=((last_move_initial, last_move_destination),),
+        moving_pieces=(board_before_moving_piece[last_move_initial],),
+        is_capturing_move=False,
+    )
+
+    # when
+    actual = tuple(
+        get_en_passant_moves(board=board_after_moving_piece, last_move=last_move)
+    )
+
+    # then
+    expected = ()
+    assert expected == actual
