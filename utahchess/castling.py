@@ -13,6 +13,9 @@ from utahchess.tile_movement_utils import (
     is_in_bounds,
 )
 
+SHORT_CASTLING = "Short Castling"
+LONG_CASTLING = "Long Castling"
+
 
 @dataclass
 class CastlingMove(Move):
@@ -20,6 +23,7 @@ class CastlingMove(Move):
     piece_moves: tuple[tuple[tuple[int, int], tuple[int, int]], ...]
     moving_pieces: tuple[Piece, ...]
     is_capturing_move = False
+    castling_type: str
 
     def __init__(
         self,
@@ -28,9 +32,11 @@ class CastlingMove(Move):
             tuple[tuple[int, int], tuple[int, int]],
         ],
         moving_pieces: tuple[Piece, Piece],
+        castling_type: str,
     ) -> None:
         self.piece_moves = piece_moves
         self.moving_pieces = moving_pieces
+        self.castling_type = castling_type
 
     def get_rook_move(self) -> tuple[tuple[int, int], tuple[int, int]]:
         return self.piece_moves[0]
@@ -79,6 +85,10 @@ def get_castling_moves(
         yield castling_move
 
 
+def _get_castling_type(movement_vector: tuple[int, int]) -> str:
+    return SHORT_CASTLING if movement_vector[0] == 1 else LONG_CASTLING
+
+
 def _make_castling_move(
     board: Board,
     movement_vector: tuple[int, int],
@@ -86,14 +96,12 @@ def _make_castling_move(
     rook_position: tuple[int, int],
 ) -> CastlingMove:
     """Gather description of castling move."""
-    current_player = board[king_position].color
-    side = "Right" if movement_vector[0] == 1 else "Left"
-    castling_type = f"{side}-Side Castling ({current_player})"
-    if side == "Right":
+    castling_type = _get_castling_type(movement_vector=movement_vector)
+    if castling_type == SHORT_CASTLING:
         king_destination_tile = apply_movement_vector(
             position=rook_position, movement_vector=(-movement_vector[0], 0)
         )
-    elif side == "Left":
+    elif castling_type == LONG_CASTLING:
         king_destination_tile = apply_movement_vector_n_times(
             position=rook_position, movement_vector=(-movement_vector[0], 0), n=2
         )
@@ -107,6 +115,7 @@ def _make_castling_move(
     castling_move = CastlingMove(
         piece_moves=(rook_move, king_move),
         moving_pieces=(board[rook_position], board[king_position]),
+        castling_type=castling_type,
     )
 
     return castling_move
