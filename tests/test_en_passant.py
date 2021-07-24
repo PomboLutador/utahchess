@@ -11,17 +11,17 @@ def test_right_side_en_passant_scenario_for_black():
             oo-oo-oo-oo-bc-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
-            oo-oo-oo-bp-oo-oo-oo-oo
+            oo-bp-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
-            oo-oo-wp-oo-oo-oo-oo-oo
+            wp-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-wc-oo-oo-oo"""
     board_before_moving_piece = Board(board_string=board_before_moving_piece)
     board_after_moving_piece = board_before_moving_piece.move_piece(
-        from_position=(2, 6), to_position=(2, 4)
+        from_position=(0, 6), to_position=(0, 4)
     )
     last_move = RegularMove(
-        piece_moves=(((2, 6), (2, 4)),),
-        moving_pieces=(board_before_moving_piece[2, 6],),
+        piece_moves=(((0, 6), (0, 4)),),
+        moving_pieces=(board_before_moving_piece[0, 6],),
         is_capturing_move=False,
     )
 
@@ -33,8 +33,8 @@ def test_right_side_en_passant_scenario_for_black():
     # then
     expected = (
         EnPassantMove(
-            piece_moves=(((3, 4), (2, 5)),),
-            moving_pieces=(board_after_moving_piece[3, 4],),
+            piece_moves=(((1, 4), (0, 5)),),
+            moving_pieces=(board_after_moving_piece[1, 4],),
         ),
     )
     assert expected == actual
@@ -46,17 +46,17 @@ def test_left_side_en_passant_scenario_for_black():
             oo-oo-oo-oo-bc-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
-            oo-bp-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-bp-oo
             oo-oo-oo-oo-oo-oo-oo-oo
-            oo-oo-wp-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-wp
             oo-oo-oo-oo-wc-oo-oo-oo"""
     board_before_moving_piece = Board(board_string=board_before_moving_piece)
     board_after_moving_piece = board_before_moving_piece.move_piece(
-        from_position=(2, 6), to_position=(2, 4)
+        from_position=(7, 6), to_position=(7, 4)
     )
     last_move = RegularMove(
-        piece_moves=(((2, 6), (2, 4)),),
-        moving_pieces=(board_before_moving_piece[2, 6],),
+        piece_moves=(((7, 6), (7, 4)),),
+        moving_pieces=(board_before_moving_piece[7, 6],),
         is_capturing_move=False,
     )
 
@@ -68,11 +68,81 @@ def test_left_side_en_passant_scenario_for_black():
     # then
     expected = (
         EnPassantMove(
-            piece_moves=(((1, 4), (2, 5)),),
-            moving_pieces=(board_after_moving_piece[1, 4],),
+            piece_moves=(((6, 4), (7, 5)),),
+            moving_pieces=(board_after_moving_piece[6, 4],),
         ),
     )
     assert expected == actual
+
+
+def test_right_side_en_passant_scenario_for_white():
+    # given
+    board_before_moving_piece = f"""oo-oo-oo-oo-oo-oo-oo-oo
+            bp-oo-oo-oo-bc-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-wp-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-wc-oo-oo-oo"""
+    board_before_moving_piece = Board(board_string=board_before_moving_piece)
+    board_after_moving_piece = board_before_moving_piece.move_piece(
+        from_position=(0, 1), to_position=(0, 3)
+    )
+    last_move = RegularMove(
+        piece_moves=(((0, 1), (0, 3)),),
+        moving_pieces=(board_before_moving_piece[0, 1],),
+        is_capturing_move=False,
+    )
+
+    # when
+    actual = tuple(
+        get_en_passant_moves(board=board_after_moving_piece, last_move=last_move)
+    )
+
+    # then
+    expected = (
+        EnPassantMove(
+            piece_moves=(((1, 3), (0, 2)),),
+            moving_pieces=(board_after_moving_piece[1, 3],),
+        ),
+    )
+    assert expected == actual
+
+
+def test_left_side_en_passant_scenario_for_white():
+    # given
+    board_before_moving_piece = f"""oo-oo-oo-oo-oo-oo-oo-oo
+            oo-bp-oo-oo-bc-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            wp-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-wc-oo-oo-oo"""
+    board_before_moving_piece = Board(board_string=board_before_moving_piece)
+    board_after_moving_piece = board_before_moving_piece.move_piece(
+        from_position=(1, 1), to_position=(1, 3)
+    )
+    last_move = RegularMove(
+        piece_moves=(((1, 1), (1, 3)),),
+        moving_pieces=(board_before_moving_piece[1, 1],),
+        is_capturing_move=False,
+    )
+
+    # when
+    actual = tuple(
+        get_en_passant_moves(board=board_after_moving_piece, last_move=last_move)
+    )
+
+    # then
+    expected = (
+        EnPassantMove(
+            piece_moves=(((0, 3), (1, 2)),),
+            moving_pieces=(board_after_moving_piece[0, 3],),
+        ),
+    )
+    assert actual == expected
 
 
 @pytest.mark.parametrize(
@@ -173,4 +243,142 @@ def test_last_move_allows_en_passant_but_no_pawn_nearby(
 
     # then
     expected = ()
+    assert expected == actual
+
+
+def test_get_en_passant_moves_would_leave_king_in_check_black():
+    # given
+    board_before_moving_piece = f"""oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-bc-oo-bp-wr-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-wp-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-wc-oo-oo-oo"""
+    board_before_moving_piece = Board(board_string=board_before_moving_piece)
+    board_after_moving_piece = board_before_moving_piece.move_piece(
+        from_position=(2, 6), to_position=(2, 4)
+    )
+    last_move = RegularMove(
+        piece_moves=(((2, 6), (2, 4)),),
+        moving_pieces=(board_before_moving_piece[2, 6],),
+        is_capturing_move=False,
+    )
+
+    # when
+    actual = tuple(
+        get_en_passant_moves(board=board_after_moving_piece, last_move=last_move)
+    )
+
+    # then
+    expected = ()
+    assert expected == actual
+
+
+def test_get_en_passant_moves_would_leave_king_in_check_white():
+    # given
+    board_before_moving_piece = f"""oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-bp-oo-oo-oo-bc-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-br-oo-wp-wc-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-wc-oo-oo-oo"""
+    board_before_moving_piece = Board(board_string=board_before_moving_piece)
+    board_after_moving_piece = board_before_moving_piece.move_piece(
+        from_position=(2, 1), to_position=(2, 3)
+    )
+    last_move = RegularMove(
+        piece_moves=(((2, 1), (2, 3)),),
+        moving_pieces=(board_before_moving_piece[2, 1],),
+        is_capturing_move=False,
+    )
+
+    # when
+    actual = tuple(
+        get_en_passant_moves(board=board_after_moving_piece, last_move=last_move)
+    )
+
+    # then
+    expected = ()
+    assert expected == actual
+
+
+def test_both_sides_en_passant_scenario_for_white():
+    # given
+    board_before_moving_piece = f"""oo-oo-oo-oo-oo-oo-oo-oo
+            oo-bp-oo-oo-bc-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            wp-oo-wp-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-wc-oo-oo-oo"""
+    board_before_moving_piece = Board(board_string=board_before_moving_piece)
+    board_after_moving_piece = board_before_moving_piece.move_piece(
+        from_position=(1, 1), to_position=(1, 3)
+    )
+    last_move = RegularMove(
+        piece_moves=(((1, 1), (1, 3)),),
+        moving_pieces=(board_before_moving_piece[1, 1],),
+        is_capturing_move=False,
+    )
+
+    # when
+    actual = tuple(
+        get_en_passant_moves(board=board_after_moving_piece, last_move=last_move)
+    )
+
+    # then
+    expected = (
+        EnPassantMove(
+            piece_moves=(((2, 3), (1, 2)),),
+            moving_pieces=(board_after_moving_piece[2, 3],),
+        ),
+        EnPassantMove(
+            piece_moves=(((0, 3), (1, 2)),),
+            moving_pieces=(board_after_moving_piece[0, 3],),
+        ),
+    )
+    assert expected == actual
+
+
+def test_both_sides_en_passant_scenario_for_black():
+    # given
+    board_before_moving_piece = f"""oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-bc-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            bp-oo-bp-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-wp-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-wc-oo-oo-oo"""
+    board_before_moving_piece = Board(board_string=board_before_moving_piece)
+    board_after_moving_piece = board_before_moving_piece.move_piece(
+        from_position=(1, 6), to_position=(1, 4)
+    )
+    last_move = RegularMove(
+        piece_moves=(((1, 6), (1, 4)),),
+        moving_pieces=(board_before_moving_piece[1, 6],),
+        is_capturing_move=False,
+    )
+
+    # when
+    actual = tuple(
+        get_en_passant_moves(board=board_after_moving_piece, last_move=last_move)
+    )
+
+    # then
+    expected = (
+        EnPassantMove(
+            piece_moves=(((2, 4), (1, 5)),),
+            moving_pieces=(board_after_moving_piece[2, 4],),
+        ),
+        EnPassantMove(
+            piece_moves=(((0, 4), (1, 5)),),
+            moving_pieces=(board_after_moving_piece[0, 4],),
+        ),
+    )
     assert expected == actual
