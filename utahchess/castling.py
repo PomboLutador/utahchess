@@ -24,6 +24,7 @@ class CastlingMove(Move):
     moving_pieces: tuple[Piece, ...]
     is_capturing_move = False
     castling_type: str
+    allows_en_passant = False
 
     def __init__(
         self,
