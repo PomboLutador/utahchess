@@ -41,6 +41,7 @@ def get_en_passant_moves(
     move_direction = 1 if current_player == "black" else -1
     if not last_move.allows_en_passant:
         return None
+
     for x_offset in [1, -1]:
 
         initial_tile = apply_movement_vector(
@@ -56,14 +57,11 @@ def get_en_passant_moves(
             continue
 
         if not is_occupied(board=board, position=initial_tile):
-            break
+            continue
 
         if (
             board[initial_tile].piece_type == "Pawn"
-            and board[
-                last_move.piece_moves[0][1]
-            ].color  # Does this work for arbitrary Move type?
-            != board[initial_tile].color
+            and board[last_move.piece_moves[0][1]].color != board[initial_tile].color
         ):
             yield EnPassantMove(
                 piece_moves=((initial_tile, destination_tile),),
