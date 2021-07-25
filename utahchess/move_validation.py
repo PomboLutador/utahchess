@@ -9,29 +9,23 @@ from utahchess.move_candidates import get_all_move_candidates
 from utahchess.piece import Piece
 
 
-@dataclass
+@dataclass(frozen=True)
 class RegularMove(Move):
     type = "Regular Move"
     piece_moves: tuple[tuple[tuple[int, int], tuple[int, int]], ...]
     moving_pieces: tuple[Piece, ...]
     is_capturing_move: bool
+    allows_en_passant: bool
 
-    def __init__(
-        self,
-        piece_moves: tuple[tuple[tuple[int, int], tuple[int, int]]],
-        moving_pieces: tuple[Piece],
-        is_capturing_move: bool,
-    ) -> None:
-        self.piece_moves = piece_moves
-        self.moving_pieces = moving_pieces
-        self.is_capturing_move = is_capturing_move
-        self.allows_en_passant = self._set_allows_en_passant_flag()
 
-    def _set_allows_en_passant_flag(self) -> bool:
-        return (
-            self.moving_pieces[0].piece_type == "Pawn"
-            and abs(_get_distance_moved_in_y_direction(self.piece_moves[0])) == 2
-        )
+def _set_allows_en_passant_flag(
+    moving_pieces: tuple[Piece],
+    piece_moves: tuple[tuple[tuple[int, int], tuple[int, int]]],
+) -> bool:
+    return (
+        moving_pieces[0].piece_type == "Pawn"
+        and abs(_get_distance_moved_in_y_direction(piece_moves[0])) == 2
+    )
 
 
 def _get_distance_moved_in_y_direction(
@@ -111,6 +105,9 @@ def validate_move_candidates(
                 piece_moves=(move_candidate,),
                 moving_pieces=(board[from_position],),
                 is_capturing_move=is_capturing_move,
+                allows_en_passant=_set_allows_en_passant_flag(
+                    piece_moves=(move_candidate,), moving_pieces=(board[from_position],)
+                ),
             )
 
 

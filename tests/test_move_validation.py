@@ -94,6 +94,7 @@ def test_validate_move_candidates_restricted_king():
             piece_moves=(((7, 6), (6, 7)),),
             moving_pieces=(board[7, 6],),
             is_capturing_move=False,
+            allows_en_passant=False,
         ),
     )
 

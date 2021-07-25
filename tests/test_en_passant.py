@@ -23,6 +23,7 @@ def test_right_side_en_passant_scenario_for_black():
         piece_moves=(((0, 6), (0, 4)),),
         moving_pieces=(board_before_moving_piece[0, 6],),
         is_capturing_move=False,
+        allows_en_passant=True,
     )
 
     # when
@@ -58,6 +59,7 @@ def test_left_side_en_passant_scenario_for_black():
         piece_moves=(((7, 6), (7, 4)),),
         moving_pieces=(board_before_moving_piece[7, 6],),
         is_capturing_move=False,
+        allows_en_passant=True,
     )
 
     # when
@@ -93,6 +95,7 @@ def test_right_side_en_passant_scenario_for_white():
         piece_moves=(((0, 1), (0, 3)),),
         moving_pieces=(board_before_moving_piece[0, 1],),
         is_capturing_move=False,
+        allows_en_passant=True,
     )
 
     # when
@@ -128,6 +131,7 @@ def test_left_side_en_passant_scenario_for_white():
         piece_moves=(((1, 1), (1, 3)),),
         moving_pieces=(board_before_moving_piece[1, 1],),
         is_capturing_move=False,
+        allows_en_passant=True,
     )
 
     # when
@@ -234,6 +238,7 @@ def test_last_move_allows_en_passant_but_no_pawn_nearby(
         piece_moves=((last_move_initial, last_move_destination),),
         moving_pieces=(board_before_moving_piece[last_move_initial],),
         is_capturing_move=False,
+        allows_en_passant=True,
     )
 
     # when
@@ -264,6 +269,7 @@ def test_get_en_passant_moves_would_leave_king_in_check_black():
         piece_moves=(((2, 6), (2, 4)),),
         moving_pieces=(board_before_moving_piece[2, 6],),
         is_capturing_move=False,
+        allows_en_passant=True,
     )
 
     # when
@@ -294,6 +300,7 @@ def test_get_en_passant_moves_would_leave_king_in_check_white():
         piece_moves=(((2, 1), (2, 3)),),
         moving_pieces=(board_before_moving_piece[2, 1],),
         is_capturing_move=False,
+        allows_en_passant=True,
     )
 
     # when
@@ -324,6 +331,7 @@ def test_both_sides_en_passant_scenario_for_white():
         piece_moves=(((1, 1), (1, 3)),),
         moving_pieces=(board_before_moving_piece[1, 1],),
         is_capturing_move=False,
+        allows_en_passant=True,
     )
 
     # when
@@ -363,6 +371,7 @@ def test_both_sides_en_passant_scenario_for_black():
         piece_moves=(((1, 6), (1, 4)),),
         moving_pieces=(board_before_moving_piece[1, 6],),
         is_capturing_move=False,
+        allows_en_passant=True,
     )
 
     # when

@@ -14,120 +14,90 @@ class Piece(abc.ABC):
     is_in_start_position: bool
 
 
-@dataclass
+@dataclass(frozen=True)
 class Pawn(Piece):
     piece_type = "Pawn"
     position: tuple[int, int]
     color: str
     is_in_start_position: bool
 
-    def __init__(
-        self, position: tuple[int, int], color: str, is_in_start_position: bool = True
-    ) -> None:
-        self.position = position
-        self.color = color
-        self.is_in_start_position = is_in_start_position
 
-
-@dataclass
+@dataclass(frozen=True)
 class Knight(Piece):
     piece_type = "Knight"
     position: tuple[int, int]
     color: str
     is_in_start_position: bool
 
-    def __init__(
-        self, position: tuple[int, int], color: str, is_in_start_position: bool = True
-    ) -> None:
-        self.position = position
-        self.color = color
-        self.is_in_start_position = is_in_start_position
 
-
-@dataclass
+@dataclass(frozen=True)
 class Rook(Piece):
     piece_type = "Rook"
     position: tuple[int, int]
     color: str
     is_in_start_position: bool
 
-    def __init__(
-        self, position: tuple[int, int], color: str, is_in_start_position: bool = True
-    ) -> None:
-        self.position = position
-        self.color = color
-        self.is_in_start_position = is_in_start_position
 
-
-@dataclass
+@dataclass(frozen=True)
 class Bishop(Piece):
     piece_type = "Bishop"
     position: tuple[int, int]
     color: str
     is_in_start_position: bool
 
-    def __init__(
-        self, position: tuple[int, int], color: str, is_in_start_position: bool = True
-    ) -> None:
-        self.position = position
-        self.color = color
-        self.is_in_start_position = is_in_start_position
 
-
-@dataclass
+@dataclass(frozen=True)
 class Queen(Piece):
     piece_type = "Queen"
     position: tuple[int, int]
     color: str
     is_in_start_position: bool
 
-    def __init__(
-        self, position: tuple[int, int], color: str, is_in_start_position: bool = True
-    ) -> None:
-        self.position = position
-        self.color = color
-        self.is_in_start_position = is_in_start_position
 
-
-@dataclass
+@dataclass(frozen=True)
 class King(Piece):
     piece_type = "King"
     position: tuple[int, int]
     color: str
     is_in_start_position: bool
 
-    def __init__(
-        self, position: tuple[int, int], color: str, is_in_start_position: bool = True
-    ) -> None:
-        self.position = position
-        self.color = color
-        self.is_in_start_position = is_in_start_position
-
 
 INITIAL_BLACK_PAWNS = tuple(
-    Pawn(position=indices, color="black")
+    Pawn(position=indices, color="black", is_in_start_position=True)
     for indices in ((x_coord, 1) for x_coord in range(8))
 )
 INITIAL_WHITE_PAWNS = tuple(
-    Pawn(position=indices, color="white")
+    Pawn(position=indices, color="white", is_in_start_position=True)
     for indices in ((x_coord, 6) for x_coord in range(8))
 )
 INITIAL_KNIGHTS = tuple(
-    Knight(position=indices, color="black") for indices in ((1, 0), (6, 0))
-) + tuple(Knight(position=indices, color="white") for indices in ((1, 7), (6, 7)))
+    Knight(position=indices, color="black", is_in_start_position=True)
+    for indices in ((1, 0), (6, 0))
+) + tuple(
+    Knight(position=indices, color="white", is_in_start_position=True)
+    for indices in ((1, 7), (6, 7))
+)
 INITIAL_ROOKS = tuple(
-    Rook(position=indices, color="black") for indices in ((0, 0), (7, 0))
-) + tuple(Rook(position=indices, color="white") for indices in ((0, 7), (7, 7)))
+    Rook(position=indices, color="black", is_in_start_position=True)
+    for indices in ((0, 0), (7, 0))
+) + tuple(
+    Rook(position=indices, color="white", is_in_start_position=True)
+    for indices in ((0, 7), (7, 7))
+)
 INITIAL_BISHOPS = tuple(
-    Bishop(position=indices, color="black") for indices in ((2, 0), (5, 0))
-) + tuple(Bishop(position=indices, color="white") for indices in ((2, 7), (5, 7)))
+    Bishop(position=indices, color="black", is_in_start_position=True)
+    for indices in ((2, 0), (5, 0))
+) + tuple(
+    Bishop(position=indices, color="white", is_in_start_position=True)
+    for indices in ((2, 7), (5, 7))
+)
 INITIAL_QUEENS = (
-    Queen(position=(3, 0), color="black"),
-    Queen(position=(3, 7), color="white"),
+    Queen(position=(3, 0), color="black", is_in_start_position=True),
+    Queen(position=(3, 7), color="white", is_in_start_position=True),
 )
 INITIAL_KINGS = (
-    King(position=(4, 0), color="black"),
-    King(position=(4, 7), color="white"),
+    King(position=(4, 0), color="black", is_in_start_position=True),
+    King(position=(4, 7), color="white", is_in_start_position=True),
 )
 
 
@@ -156,21 +126,15 @@ def create_piece_instance_from_string(
     color, class_identifier = string[0], string[1]
     color = "black" if color == "b" else "white"
     if class_identifier == "p":
-        return Pawn(position, color)
+        return Pawn(position, color, is_in_start_position=True)
     if class_identifier == "r":
-        return Rook(position, color)
+        return Rook(position, color, is_in_start_position=True)
     if class_identifier == "b":
-        return Bishop(position, color)
+        return Bishop(position, color, is_in_start_position=True)
     if class_identifier == "k":
-        return King(position, color)
+        return King(position, color, is_in_start_position=True)
     if class_identifier == "n":
-        return Knight(position, color)
+        return Knight(position, color, is_in_start_position=True)
     if class_identifier == "q":
-        return Queen(position, color)
+        return Queen(position, color, is_in_start_position=True)
     raise Exception("Invalid string could not be converted to a Piece instance.")
-
-
-if __name__ == "__main__":
-    p = Pawn((0, 0), "white")
-    p2 = Pawn((0, 0), "black")
-    print(p == p2)
