@@ -114,7 +114,7 @@ def validate_move_candidates(
             )
 
 
-def get_all_legal_regular_moves(
+def get_legal_regular_moves(
     board: Board, current_player: str
 ) -> Generator[RegularMove, None, None]:
     all_move_candidates = get_all_move_candidates(
