@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import string
+
 from utahchess.board import Board
 from utahchess.move import Move
 
@@ -13,3 +15,11 @@ def x_index_to_file(x: int) -> str:
 
 def y_index_to_rank(y: int) -> str:
     return RANK_POSSIBILITIES[y]
+
+
+def rank_to_y_index(rank: str) -> int:
+    return 8 - int(rank)
+
+
+def file_to_x_index(file: str) -> int:
+    return string.ascii_lowercase.index(file)
