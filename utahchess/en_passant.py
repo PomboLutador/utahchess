@@ -9,10 +9,12 @@ from utahchess.move_validation import is_check
 from utahchess.piece import Piece
 from utahchess.tile_movement_utils import apply_movement_vector, is_in_bounds
 
+EN_PASSANT_MOVE = "En Passant Move"
+
 
 @dataclass(frozen=True)
 class EnPassantMove(Move):
-    type = "En Passant Move"
+    type = EN_PASSANT_MOVE
     piece_moves: tuple[tuple[tuple[int, int], tuple[int, int]]]
     moving_pieces: tuple[Piece]
     is_capturing_move = True
