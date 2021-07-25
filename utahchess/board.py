@@ -60,7 +60,12 @@ class Board:
         new_pieces = tuple(
             piece
             if piece.position != from_position
-            else replace(piece, position=to_position, color=piece.color)
+            else replace(
+                piece,
+                position=to_position,
+                is_in_start_position=False,
+                color=piece.color,
+            )
             for piece in pieces
             if piece.position != to_position
         )
