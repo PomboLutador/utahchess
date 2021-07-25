@@ -115,7 +115,7 @@ def _make_castling_move(
     king_move = (king_position, king_destination_tile)
     castling_move = CastlingMove(
         piece_moves=(king_move, rook_move),
-        moving_pieces=(board[rook_position], board[king_position]),
+        moving_pieces=(board[king_position], board[rook_position]),
         castling_type=castling_type,
     )
 

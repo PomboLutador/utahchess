@@ -104,7 +104,7 @@ def test_castling_in_corners(
     expected = (
         CastlingMove(
             piece_moves=expected_piece_moves,
-            moving_pieces=(board[rook_from_position], board[king_from_position]),
+            moving_pieces=(board[king_from_position], board[rook_from_position]),
             castling_type=castling_type,
         ),
     )
@@ -169,12 +169,12 @@ def test_castling_both_sides(
     expected = (
         CastlingMove(
             piece_moves=expected_piece_moves_right,
-            moving_pieces=(board[rook_position_right], board[king_position]),
+            moving_pieces=(board[king_position], board[rook_position_right]),
             castling_type=SHORT_CASTLING,
         ),
         CastlingMove(
             piece_moves=expected_piece_moves_left,
-            moving_pieces=(board[rook_position_left], board[king_position]),
+            moving_pieces=(board[king_position], board[rook_position_left]),
             castling_type=LONG_CASTLING,
         ),
     )
