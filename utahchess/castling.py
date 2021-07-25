@@ -132,6 +132,8 @@ def _find_rook_for_castling(
     next_tile = apply_movement_vector(
         position=king_position, movement_vector=movement_vector
     )
+    if not is_in_bounds(position=next_tile):
+        return None
     while True:
         if not is_occupied(board=board, position=next_tile):
             if is_check(
