@@ -15,11 +15,12 @@ from utahchess.tile_movement_utils import (
 
 SHORT_CASTLING = "Short Castling"
 LONG_CASTLING = "Long Castling"
+CASTLING_MOVE = "Castling Move"
 
 
 @dataclass(frozen=True)
 class CastlingMove(Move):
-    type = "Castling Move"
+    type = CASTLING_MOVE
     piece_moves: tuple[
         tuple[tuple[int, int], tuple[int, int]],
         tuple[tuple[int, int], tuple[int, int]],
