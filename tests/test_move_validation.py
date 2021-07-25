@@ -10,14 +10,14 @@ from utahchess.move_validation import (
 
 def test_is_checkmate_fools_mate():
     # when
-    board_string = f"""br-bk-bb-oo-bc-bb-bk-br
+    board_string = f"""br-bn-bb-oo-bk-bb-bn-br
             bp-bp-bp-bp-oo-bp-bp-bp
             oo-oo-oo-oo-bp-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-wp-bq
             oo-oo-oo-oo-oo-wp-oo-oo
             wp-wp-wp-wp-wp-oo-oo-wp
-            wr-wk-wb-wq-wc-wb-wk-wr"""
+            wr-wn-wb-wq-wk-wb-wn-wr"""
     board = Board(board_string=board_string)
 
     # then
@@ -26,14 +26,14 @@ def test_is_checkmate_fools_mate():
 
 def test_is_checkmate_friendly_piece_can_save_king():
     # when
-    board_string = f"""br-oo-wq-bq-bc-bb-oo-br
+    board_string = f"""br-oo-wq-bq-bk-bb-oo-br
             bp-bp-oo-oo-oo-oo-oo-oo
             bb-oo-oo-oo-oo-bp-oo-oo
             wp-oo-wb-oo-oo-oo-oo-wb
             oo-oo-oo-oo-oo-oo-oo-oo
-            wk-oo-oo-oo-oo-oo-oo-oo
-            oo-wp-wc-oo-oo-oo-wp-oo
-            oo-wr-oo-bk-oo-oo-wk-wr"""
+            wn-oo-oo-oo-oo-oo-oo-oo
+            oo-wp-wk-oo-oo-oo-wp-oo
+            oo-wr-oo-bn-oo-oo-wn-wr"""
     board = Board(board_string=board_string)
 
     # then
@@ -44,12 +44,12 @@ def test_is_checkmate_friendly_piece_can_save_king_two():
     # when
     board_string = f"""br-oo-oo-oo-oo-bb-oo-br
             bp-bp-oo-bb-oo-oo-bp-bp
-            bk-oo-oo-bp-oo-bc-oo-oo
+            bn-oo-oo-bp-oo-bk-oo-oo
             oo-wb-oo-oo-bp-oo-oo-oo
-            oo-oo-wp-oo-wp-wp-bk-oo
+            oo-oo-wp-oo-wp-wp-bn-oo
             wp-oo-wp-oo-oo-oo-oo-oo
             oo-wb-oo-oo-oo-bq-wp-wp
-            wr-wk-oo-oo-oo-wq-wc-wr"""
+            wr-wn-oo-oo-oo-wq-wk-wr"""
     board = Board(board_string=board_string)
 
     # then
@@ -58,14 +58,14 @@ def test_is_checkmate_friendly_piece_can_save_king_two():
 
 def test_is_checkmate_another_scenario():
     # when
-    board_string = f"""br-oo-oo-wq-oo-bc-oo-br
-            oo-oo-oo-oo-bk-oo-bp-oo
+    board_string = f"""br-oo-oo-wq-oo-bk-oo-br
+            oo-oo-oo-oo-bn-oo-bp-oo
             oo-wb-oo-oo-wp-bp-oo-oo
-            oo-bp-oo-oo-oo-wp-wk-oo
+            oo-bp-oo-oo-oo-wp-wn-oo
             bq-wp-oo-oo-wp-oo-oo-bp
             bb-oo-wp-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
-            oo-wk-oo-wb-oo-wk-oo-wr"""
+            oo-wn-oo-wb-oo-wn-oo-wr"""
     board = Board(board_string=board_string)
 
     # then
@@ -74,13 +74,13 @@ def test_is_checkmate_another_scenario():
 
 def test_validate_move_candidates_restricted_king():
     # when
-    board_string = f"""oo-bk-bb-oo-oo-bb-oo-oo
-            oo-oo-oo-oo-bk-oo-oo-br
-            oo-oo-bp-oo-oo-oo-bk-oo
+    board_string = f"""oo-bn-bb-oo-oo-bb-oo-oo
+            oo-oo-oo-oo-bn-oo-oo-br
+            oo-oo-bp-oo-oo-oo-bn-oo
             oo-oo-bp-oo-bp-oo-oo-bp
-            oo-oo-oo-wq-wk-bp-oo-wp
+            oo-oo-oo-wq-wn-bp-oo-wp
             wb-oo-oo-wp-oo-oo-oo-oo
-            br-oo-oo-oo-oo-oo-oo-wc
+            br-oo-oo-oo-oo-oo-oo-wk
             oo-oo-oo-oo-oo-wb-oo-wr"""
     board = Board(board_string=board_string)
     move_candidates = get_king_move_candidates(board=board, position=(7, 6))
@@ -100,13 +100,13 @@ def test_validate_move_candidates_restricted_king():
 
 def test_validate_move_candidates_pawn_cant_move():
     # when
-    board_string = f"""oo-bk-bb-oo-oo-bb-oo-oo
-            bc-oo-oo-oo-oo-oo-oo-oo
+    board_string = f"""oo-bn-bb-oo-oo-bb-oo-oo
+            bk-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
-            oo-oo-oo-oo-br-oo-wp-wc
+            oo-oo-oo-oo-br-oo-wp-wk
             oo-oo-oo-oo-oo-oo-oo-oo"""
     board = Board(board_string=board_string)
     move_candidates = get_pawn_move_candidates(board=board, position=(6, 6))

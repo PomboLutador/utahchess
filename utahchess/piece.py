@@ -162,9 +162,9 @@ def create_piece_instance_from_string(
     if class_identifier == "b":
         return Bishop(position, color)
     if class_identifier == "k":
-        return Knight(position, color)
-    if class_identifier == "c":
         return King(position, color)
+    if class_identifier == "n":
+        return Knight(position, color)
     if class_identifier == "q":
         return Queen(position, color)
     raise Exception("Invalid string could not be converted to a Piece instance.")

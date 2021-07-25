@@ -8,13 +8,13 @@ from utahchess.move_validation import RegularMove
 def test_right_side_en_passant_scenario_for_black():
     # given
     board_before_moving_piece = f"""oo-oo-oo-oo-oo-oo-oo-oo
-            oo-oo-oo-oo-bc-oo-oo-oo
+            oo-oo-oo-oo-bk-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-bp-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             wp-oo-oo-oo-oo-oo-oo-oo
-            oo-oo-oo-oo-wc-oo-oo-oo"""
+            oo-oo-oo-oo-wk-oo-oo-oo"""
     board_before_moving_piece = Board(board_string=board_before_moving_piece)
     board_after_moving_piece = board_before_moving_piece.move_piece(
         from_position=(0, 6), to_position=(0, 4)
@@ -43,13 +43,13 @@ def test_right_side_en_passant_scenario_for_black():
 def test_left_side_en_passant_scenario_for_black():
     # given
     board_before_moving_piece = f"""oo-oo-oo-oo-oo-oo-oo-oo
-            oo-oo-oo-oo-bc-oo-oo-oo
+            oo-oo-oo-oo-bk-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-bp-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-wp
-            oo-oo-oo-oo-wc-oo-oo-oo"""
+            oo-oo-oo-oo-wk-oo-oo-oo"""
     board_before_moving_piece = Board(board_string=board_before_moving_piece)
     board_after_moving_piece = board_before_moving_piece.move_piece(
         from_position=(7, 6), to_position=(7, 4)
@@ -78,13 +78,13 @@ def test_left_side_en_passant_scenario_for_black():
 def test_right_side_en_passant_scenario_for_white():
     # given
     board_before_moving_piece = f"""oo-oo-oo-oo-oo-oo-oo-oo
-            bp-oo-oo-oo-bc-oo-oo-oo
+            bp-oo-oo-oo-bk-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-wp-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
-            oo-oo-oo-oo-wc-oo-oo-oo"""
+            oo-oo-oo-oo-wk-oo-oo-oo"""
     board_before_moving_piece = Board(board_string=board_before_moving_piece)
     board_after_moving_piece = board_before_moving_piece.move_piece(
         from_position=(0, 1), to_position=(0, 3)
@@ -113,13 +113,13 @@ def test_right_side_en_passant_scenario_for_white():
 def test_left_side_en_passant_scenario_for_white():
     # given
     board_before_moving_piece = f"""oo-oo-oo-oo-oo-oo-oo-oo
-            oo-bp-oo-oo-bc-oo-oo-oo
+            oo-bp-oo-oo-bk-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             wp-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
-            oo-oo-oo-oo-wc-oo-oo-oo"""
+            oo-oo-oo-oo-wk-oo-oo-oo"""
     board_before_moving_piece = Board(board_string=board_before_moving_piece)
     board_after_moving_piece = board_before_moving_piece.move_piece(
         from_position=(1, 1), to_position=(1, 3)
@@ -150,73 +150,73 @@ def test_left_side_en_passant_scenario_for_white():
     [
         (
             f"""oo-oo-oo-oo-oo-oo-oo-oo
-            oo-oo-oo-oo-bc-oo-oo-oo
+            oo-oo-oo-oo-bk-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-wp-oo-oo-oo-oo-oo
-            oo-oo-oo-oo-wc-oo-oo-oo""",
+            oo-oo-oo-oo-wk-oo-oo-oo""",
             (2, 6),
             (2, 4),
         ),
         (
             f"""oo-oo-oo-oo-oo-oo-oo-oo
-            oo-oo-oo-oo-bc-oo-oo-oo
+            oo-oo-oo-oo-bk-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-wp-oo-oo-oo-oo
-            oo-oo-oo-oo-wc-oo-oo-oo""",
+            oo-oo-oo-oo-wk-oo-oo-oo""",
             (3, 6),
             (3, 4),
         ),
         (
             f"""oo-oo-oo-oo-oo-oo-oo-oo
-            oo-oo-oo-oo-bc-oo-oo-oo
+            oo-oo-oo-oo-bk-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             wp-oo-oo-oo-oo-oo-oo-oo
-            oo-oo-oo-oo-wc-oo-oo-oo""",
+            oo-oo-oo-oo-wk-oo-oo-oo""",
             (0, 6),
             (0, 4),
         ),
         (
             f"""oo-oo-oo-oo-oo-oo-oo-oo
-            oo-oo-oo-oo-bc-oo-oo-oo
+            oo-oo-oo-oo-bk-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-wp
-            oo-oo-oo-oo-wc-oo-oo-oo""",
+            oo-oo-oo-oo-wk-oo-oo-oo""",
             (7, 6),
             (7, 4),
         ),
         (
             f"""oo-oo-oo-oo-oo-oo-oo-oo
-            bp-oo-oo-oo-bc-oo-oo-oo
+            bp-oo-oo-oo-bk-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
-            oo-oo-oo-oo-wc-oo-oo-oo""",
+            oo-oo-oo-oo-wk-oo-oo-oo""",
             (0, 1),
             (0, 3),
         ),
         (
             f"""oo-oo-oo-oo-oo-oo-oo-oo
-            oo-oo-oo-oo-bc-oo-oo-bp
+            oo-oo-oo-oo-bk-oo-oo-bp
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
-            oo-oo-oo-oo-wc-oo-oo-oo""",
+            oo-oo-oo-oo-wk-oo-oo-oo""",
             (7, 1),
             (7, 3),
         ),
@@ -252,10 +252,10 @@ def test_get_en_passant_moves_would_leave_king_in_check_black():
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
-            oo-bc-oo-bp-wr-oo-oo-oo
+            oo-bk-oo-bp-wr-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-wp-oo-oo-oo-oo-oo
-            oo-oo-oo-oo-wc-oo-oo-oo"""
+            oo-oo-oo-oo-wk-oo-oo-oo"""
     board_before_moving_piece = Board(board_string=board_before_moving_piece)
     board_after_moving_piece = board_before_moving_piece.move_piece(
         from_position=(2, 6), to_position=(2, 4)
@@ -279,13 +279,13 @@ def test_get_en_passant_moves_would_leave_king_in_check_black():
 def test_get_en_passant_moves_would_leave_king_in_check_white():
     # given
     board_before_moving_piece = f"""oo-oo-oo-oo-oo-oo-oo-oo
-            oo-oo-bp-oo-oo-oo-bc-oo
+            oo-oo-bp-oo-oo-oo-bk-oo
             oo-oo-oo-oo-oo-oo-oo-oo
-            oo-br-oo-wp-wc-oo-oo-oo
+            oo-br-oo-wp-wk-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
-            oo-oo-oo-oo-wc-oo-oo-oo"""
+            oo-oo-oo-oo-wk-oo-oo-oo"""
     board_before_moving_piece = Board(board_string=board_before_moving_piece)
     board_after_moving_piece = board_before_moving_piece.move_piece(
         from_position=(2, 1), to_position=(2, 3)
@@ -309,13 +309,13 @@ def test_get_en_passant_moves_would_leave_king_in_check_white():
 def test_both_sides_en_passant_scenario_for_white():
     # given
     board_before_moving_piece = f"""oo-oo-oo-oo-oo-oo-oo-oo
-            oo-bp-oo-oo-bc-oo-oo-oo
+            oo-bp-oo-oo-bk-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             wp-oo-wp-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
-            oo-oo-oo-oo-wc-oo-oo-oo"""
+            oo-oo-oo-oo-wk-oo-oo-oo"""
     board_before_moving_piece = Board(board_string=board_before_moving_piece)
     board_after_moving_piece = board_before_moving_piece.move_piece(
         from_position=(1, 1), to_position=(1, 3)
@@ -348,13 +348,13 @@ def test_both_sides_en_passant_scenario_for_white():
 def test_both_sides_en_passant_scenario_for_black():
     # given
     board_before_moving_piece = f"""oo-oo-oo-oo-oo-oo-oo-oo
-            oo-oo-oo-oo-bc-oo-oo-oo
+            oo-oo-oo-oo-bk-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             bp-oo-bp-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-wp-oo-oo-oo-oo-oo-oo
-            oo-oo-oo-oo-wc-oo-oo-oo"""
+            oo-oo-oo-oo-wk-oo-oo-oo"""
     board_before_moving_piece = Board(board_string=board_before_moving_piece)
     board_after_moving_piece = board_before_moving_piece.move_piece(
         from_position=(1, 6), to_position=(1, 4)
