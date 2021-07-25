@@ -17,27 +17,17 @@ SHORT_CASTLING = "Short Castling"
 LONG_CASTLING = "Long Castling"
 
 
-@dataclass
+@dataclass(frozen=True)
 class CastlingMove(Move):
     type = "Castling Move"
-    piece_moves: tuple[tuple[tuple[int, int], tuple[int, int]], ...]
-    moving_pieces: tuple[Piece, ...]
+    piece_moves: tuple[
+        tuple[tuple[int, int], tuple[int, int]],
+        tuple[tuple[int, int], tuple[int, int]],
+    ]
+    moving_pieces: tuple[Piece, Piece]
     is_capturing_move = False
     castling_type: str
     allows_en_passant = False
-
-    def __init__(
-        self,
-        piece_moves: tuple[
-            tuple[tuple[int, int], tuple[int, int]],
-            tuple[tuple[int, int], tuple[int, int]],
-        ],
-        moving_pieces: tuple[Piece, Piece],
-        castling_type: str,
-    ) -> None:
-        self.piece_moves = piece_moves
-        self.moving_pieces = moving_pieces
-        self.castling_type = castling_type
 
     def get_rook_move(self) -> tuple[tuple[int, int], tuple[int, int]]:
         return self.piece_moves[1]
@@ -57,9 +47,8 @@ def get_castling_moves(
     if not board[king_position].is_in_start_position:
         return
 
-    # Cant castle out of check
     if is_check(board=board, current_player=current_player):
-        return
+        return  # Cant castle out of check
 
     for movement_vector in [(1, 0), (-1, 0)]:
         rook_tile = _find_rook_for_castling(
