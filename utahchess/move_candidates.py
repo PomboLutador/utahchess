@@ -113,7 +113,7 @@ def get_knight_move_candidates(
             position=position, movement_vector=movement_vector
         )
         if is_in_bounds(position=tile_to_check):
-            if is_occupied(board=board, position=tile_to_check) or is_edible(
+            if not is_occupied(board=board, position=tile_to_check) or is_edible(
                 board=board, position=tile_to_check, friendly_color=friendly_color
             ):
                 yield (position, tile_to_check)
