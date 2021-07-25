@@ -21,14 +21,14 @@ from utahchess.castling import (
     ),
     [
         (
-            f"""br-oo-oo-oo-bc-bb-bk-br
+            f"""br-oo-oo-oo-bk-bb-bn-br
             bp-bp-bp-bp-bq-bp-bp-bp
             oo-oo-oo-oo-bp-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-wp-oo
             oo-oo-oo-oo-oo-wp-oo-oo
             wp-wp-wp-wp-wp-oo-oo-wp
-            wr-wk-wb-wq-wc-wb-wk-wr""",
+            wr-wn-wb-wq-wn-wb-wn-wr""",
             (0, 0),
             (3, 0),
             (4, 0),
@@ -37,14 +37,14 @@ from utahchess.castling import (
             LONG_CASTLING,
         ),
         (
-            f"""br-bk-bb-oo-bc-oo-oo-br
+            f"""br-bn-bb-oo-bk-oo-oo-br
             bp-bp-bp-bp-bq-bp-bp-bp
             oo-oo-oo-oo-bp-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-wp-oo
             oo-oo-oo-oo-oo-wp-oo-oo
             wp-wp-wp-wp-wp-oo-oo-wp
-            wr-wk-wb-wq-wc-wb-wk-wr""",
+            wr-wn-wb-wq-wk-wb-wn-wr""",
             (7, 0),
             (5, 0),
             (4, 0),
@@ -53,14 +53,14 @@ from utahchess.castling import (
             SHORT_CASTLING,
         ),
         (
-            f"""br-bk-bb-oo-bc-bb-bk-br
+            f"""br-bn-bb-oo-bk-bb-bn-br
             bp-bp-bp-bp-bq-bp-bp-bp
             oo-oo-oo-oo-bp-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-wp-oo
             oo-oo-oo-oo-oo-wp-oo-oo
             wp-wp-wp-wp-wp-oo-oo-wp
-            wr-oo-oo-oo-wc-wb-wk-wr""",
+            wr-oo-oo-oo-wk-wb-wn-wr""",
             (0, 7),
             (3, 7),
             (4, 7),
@@ -69,14 +69,14 @@ from utahchess.castling import (
             LONG_CASTLING,
         ),
         (
-            f"""br-bk-bb-oo-bc-bb-bk-br
+            f"""br-bn-bb-oo-bk-bb-bn-br
             bp-bp-bp-bp-bq-bp-bp-bp
             oo-oo-oo-oo-bp-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-wp-oo
             oo-oo-oo-oo-oo-wp-oo-oo
             wp-wp-wp-wp-wp-oo-oo-wp
-            wr-wk-wb-wq-wc-oo-oo-wr""",
+            wr-wn-wb-wq-wk-oo-oo-wr""",
             (7, 7),
             (5, 7),
             (4, 7),
@@ -124,28 +124,28 @@ def test_castling_in_corners(
     ),
     [
         (
-            f"""br-bk-bb-oo-bc-bb-bk-br
+            f"""br-bn-bb-oo-bk-bb-bn-br
             bp-bp-bp-bp-bq-bp-bp-bp
             oo-oo-oo-oo-bp-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-wp-oo
             oo-oo-oo-oo-oo-wp-oo-oo
             wp-wp-wp-wp-wp-oo-oo-wp
-            wr-oo-oo-oo-wc-oo-oo-wr""",
+            wr-oo-oo-oo-wk-oo-oo-wr""",
             (0, 7),
             (7, 7),
             (4, 7),
             "white",
         ),
         (
-            f"""br-oo-oo-oo-bc-oo-oo-br
+            f"""br-oo-oo-oo-bk-oo-oo-br
             bp-bp-bp-bp-bq-bp-bp-bp
             oo-oo-oo-oo-bp-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-wp-oo
             oo-oo-oo-oo-oo-wp-oo-oo
             wp-wp-wp-wp-wp-oo-oo-wp
-            wr-oo-oo-oo-wc-oo-oo-wr""",
+            wr-oo-oo-oo-wk-oo-oo-wr""",
             (0, 0),
             (7, 0),
             (4, 0),
@@ -186,14 +186,14 @@ def test_castling_both_sides(
 
 def test_no_rook_for_castling_bottom():
     # when
-    board_string = f"""br-bk-bb-oo-bc-bb-bk-br
+    board_string = f"""br-bn-bb-oo-bk-bb-bn-br
             bp-bp-bp-bp-bq-bp-bp-bp
             oo-oo-oo-oo-bp-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-wp-oo
             oo-oo-oo-oo-oo-wp-oo-oo
             wp-wp-wp-wp-wp-oo-oo-wp
-            oo-oo-oo-oo-wc-oo-oo-oo"""
+            oo-oo-oo-oo-wk-oo-oo-oo"""
     board = Board(board_string=board_string)
     expected = ()
 
@@ -204,14 +204,14 @@ def test_no_rook_for_castling_bottom():
 
 def test_no_rook_for_castling_top():
     # when
-    board_string = f"""oo-oo-oo-oo-bc-oo-oo-oo
+    board_string = f"""oo-oo-oo-oo-bk-oo-oo-oo
             bp-bp-bp-bp-bq-bp-bp-bp
             oo-oo-oo-oo-bp-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-wp-oo
             oo-oo-oo-oo-oo-wp-oo-oo
             wp-wp-wp-wp-wp-oo-oo-wp
-            oo-oo-oo-oo-wc-oo-oo-oo"""
+            oo-oo-oo-oo-wk-oo-oo-oo"""
     board = Board(board_string=board_string)
     expected = ()
 
@@ -222,14 +222,14 @@ def test_no_rook_for_castling_top():
 
 def test_black_cant_castle_through_check():
     # when
-    board_string = f"""br-oo-oo-oo-bc-oo-oo-oo
+    board_string = f"""br-oo-oo-oo-bk-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
-            oo-oo-oo-wq-wc-oo-oo-oo"""
+            oo-oo-oo-wq-wk-oo-oo-oo"""
     board = Board(board_string=board_string)
     expected = ()
 
@@ -240,14 +240,14 @@ def test_black_cant_castle_through_check():
 
 def test_black_cant_castle_into_check():
     # when
-    board_string = f"""br-oo-oo-oo-bc-oo-oo-oo
+    board_string = f"""br-oo-oo-oo-bk-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
-            oo-oo-wq-wc-oo-oo-oo-oo"""
+            oo-oo-wq-wk-oo-oo-oo-oo"""
     board = Board(board_string=board_string)
     expected = ()
 
@@ -258,14 +258,14 @@ def test_black_cant_castle_into_check():
 
 def test_black_cant_castle_out_of_check():
     # when
-    board_string = f"""br-oo-oo-oo-bc-oo-oo-oo
+    board_string = f"""br-oo-oo-oo-bk-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo
-            oo-oo-oo-wc-wq-oo-oo-oo"""
+            oo-oo-oo-wk-wq-oo-oo-oo"""
     board = Board(board_string=board_string)
     expected = ()
 
