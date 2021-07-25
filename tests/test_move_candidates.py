@@ -4,6 +4,7 @@ from utahchess.board import Board
 from utahchess.move_candidates import (
     get_bishop_move_candidates,
     get_king_move_candidates,
+    get_knight_move_candidates,
     get_pawn_move_candidates,
     get_queen_move_candidates,
     get_rook_move_candidates,
@@ -30,22 +31,48 @@ def test_get_pawn_move_candidates_in_starting_position(
     assert result == expected
 
 
-@pytest.mark.parametrize(("y_position", "movement_direction"), [(1, 1), (6, -1)])
-@pytest.mark.parametrize(("x_position"), [0, 1, 2, 3, 4, 5, 6, 7])
-def test_get_knight_move_candidates_in_starting_position(
-    x_position, y_position, movement_direction
-):
+@pytest.mark.parametrize(("knight_from_position"), [(1, 7), (6, 7)])
+def test_get_knight_move_candidates_in_starting_position_white(knight_from_position):
     # given
     board = Board()
     # when
     result = tuple(
-        get_pawn_move_candidates(board=board, position=(x_position, y_position))
+        get_knight_move_candidates(board=board, position=knight_from_position)
     )
 
     # then
     expected = (
-        ((x_position, y_position), (x_position, y_position + movement_direction)),
-        ((x_position, y_position), (x_position, y_position + 2 * movement_direction)),
+        (
+            knight_from_position,
+            (knight_from_position[0] - 1, knight_from_position[1] - 2),
+        ),
+        (
+            knight_from_position,
+            (knight_from_position[0] + 1, knight_from_position[1] - 2),
+        ),
+    )
+    assert result == expected
+
+
+@pytest.mark.parametrize(("knight_from_position"), [(1, 0), (6, 0)])
+def test_get_knight_move_candidates_in_starting_position_black(knight_from_position):
+    # given
+    board = Board()
+    # when
+    result = tuple(
+        get_knight_move_candidates(board=board, position=knight_from_position)
+    )
+
+    # then
+    expected = (
+        (
+            knight_from_position,
+            (knight_from_position[0] + 1, knight_from_position[1] + 2),
+        ),
+        (
+            knight_from_position,
+            (knight_from_position[0] - 1, knight_from_position[1] + 2),
+        ),
     )
     assert result == expected
 
