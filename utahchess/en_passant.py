@@ -10,24 +10,13 @@ from utahchess.piece import Piece
 from utahchess.tile_movement_utils import apply_movement_vector, is_in_bounds
 
 
-@dataclass
+@dataclass(frozen=True)
 class EnPassantMove(Move):
     type = "En Passant Move"
     piece_moves: tuple[tuple[tuple[int, int], tuple[int, int]]]
-    moving_pieces: tuple[Piece, ...]
+    moving_pieces: tuple[Piece]
     is_capturing_move = True
     allows_en_passant = False
-
-    def __init__(
-        self,
-        piece_moves: tuple[tuple[tuple[int, int], tuple[int, int]]],
-        moving_pieces: tuple[Piece],
-    ) -> None:
-        self.piece_moves = piece_moves
-        self.moving_pieces = moving_pieces
-
-    def get_position_of_piece_to_remove(self) -> tuple[int, int]:
-        pass
 
 
 def get_en_passant_moves(
