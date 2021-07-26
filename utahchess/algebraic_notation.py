@@ -8,6 +8,7 @@ from utahchess.castling import CASTLING_MOVE, LONG_CASTLING, SHORT_CASTLING
 from utahchess.en_passant import EN_PASSANT_MOVE
 from utahchess.legal_moves import get_all_legal_moves
 from utahchess.move import Move
+from utahchess.move_validation import REGULAR_MOVE
 
 FILE_POSSIBILITIES = "abcdefgh"
 RANK_POSSIBILITIES = "87654321"
@@ -22,7 +23,9 @@ class AmbiguousAlgebraicNotation:
     capturing_flag: str
 
     def to_string(self) -> str:
-        return f"{self.piece}{self.capturing_flag}{self.destination_tile}"
+        if self.castling_identifier:
+            return self.castling_identifier
+        return f"{self.piece}{self.capturing_flag}{self.destination_tile}{self.en_passant_identifer}"
 
     def __repr__(self) -> str:
         return self.to_string()
@@ -50,7 +53,6 @@ def get_algebraic_notation_mapping(
     ambiguous_mapping = _get_ambiguous_algebraic_notation_mapping(
         board=board, current_player=current_player, last_move=last_move
     )
-
     mapping: dict[str, Move] = {}
     for algebraic_identifer, moves in ambiguous_mapping.items():
         mapping = {
@@ -160,18 +162,18 @@ def _disambiguate_moves(
 def _add_file_to_ambiguous_identifier(
     ambiguous_identifier: AmbiguousAlgebraicNotation, file: str
 ) -> str:
-    return f"{ambiguous_identifier.piece}{file}{ambiguous_identifier.capturing_flag}{ambiguous_identifier.destination_tile}"
+    return f"{ambiguous_identifier.piece}{file}{ambiguous_identifier.capturing_flag}{ambiguous_identifier.destination_tile}{ambiguous_identifier.en_passant_identifer}"
 
 
 def _add_rank_to_ambiguous_identifier(
     ambiguous_identifier: AmbiguousAlgebraicNotation, rank: str
 ) -> str:
-    return f"{ambiguous_identifier.piece}{rank}{ambiguous_identifier.capturing_flag}{ambiguous_identifier.destination_tile}"
+    return f"{ambiguous_identifier.piece}{rank}{ambiguous_identifier.capturing_flag}{ambiguous_identifier.destination_tile}{ambiguous_identifier.en_passant_identifer}"
 
 
 def _get_en_passant_identifier(move: Move) -> str:
     if move.type == EN_PASSANT_MOVE:
-        return "e.p."
+        return " e.p."
     return ""
 
 
