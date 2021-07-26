@@ -117,3 +117,7 @@ def test_validate_move_candidates_pawn_cant_move():
 
     # then
     assert result == ()
+
+
+def test_make_regular_move():
+    raise NotImplementedError("Implement tests for making regular moves!")

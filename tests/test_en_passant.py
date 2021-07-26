@@ -391,3 +391,7 @@ def test_both_sides_en_passant_scenario_for_black():
         ),
     )
     assert expected == actual
+
+
+def test_make_en_passant_move():
+    raise NotImplementedError("Implement tests for making en passant moves!")

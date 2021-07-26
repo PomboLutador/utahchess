@@ -272,3 +272,7 @@ def test_black_cant_castle_out_of_check():
     # then
     actual = tuple(get_castling_moves(board=board, current_player="black"))
     assert expected == actual
+
+
+def test_make_castling_move():
+    raise NotImplementedError("Implement tests for making castling moves!")
