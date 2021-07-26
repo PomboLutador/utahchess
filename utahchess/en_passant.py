@@ -72,16 +72,14 @@ def _complete_en_passant_move(board: Board, en_passant_move: EnPassantMove) -> B
     return board.delete_piece(position=tile_to_delete)
 
 
-def make_en_passant_move(board: Board, en_passant_move: EnPassantMove) -> Board:
-    piece_move = en_passant_move.piece_moves[0]
+def make_en_passant_move(board: Board, move: EnPassantMove) -> Board:
+    piece_move = move.piece_moves[0]
     board = board.move_piece(from_position=piece_move[0], to_position=piece_move[1])
-    board = _complete_en_passant_move(board=board, en_passant_move=en_passant_move)
+    board = _complete_en_passant_move(board=board, en_passant_move=move)
     return board
 
 
 def _is_valid_en_passant_move(board: Board, en_passant_move: EnPassantMove) -> bool:
     current_player = en_passant_move.moving_pieces[0].color
-    board_after_move = make_en_passant_move(
-        board=board, en_passant_move=en_passant_move
-    )
+    board_after_move = make_en_passant_move(board=board, move=en_passant_move)
     return not is_check(board=board_after_move, current_player=current_player)
