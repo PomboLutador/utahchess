@@ -2,19 +2,30 @@ from __future__ import annotations
 
 from utahchess.piece import Piece
 
+FILE_POSSIBILITIES = "abcdefgh"
+RANK_POSSIBILITIES = "87654321"
+
+
+def x_index_to_file(x: int) -> str:
+    return FILE_POSSIBILITIES[x]
+
+
+def y_index_to_rank(y: int) -> str:
+    return RANK_POSSIBILITIES[y]
+
 
 def representation(_board: tuple[tuple[Piece, ...], ...]):
     representation = ""
     row = "          "
     for i in range(8):
-        row += f"     {i}    "
+        row += f"     {x_index_to_file(i)}    "
     representation += row + "\n"
     for y_coord in range(8):
         row = "  "
         row += "--------  " * 9 + "\n"
         for x_coord in range(9):
             if x_coord == 0:
-                row += f"    {y_coord}    | "
+                row += f"    {y_index_to_rank(y_coord)}    | "
                 continue
             else:
                 x_coord -= 1
