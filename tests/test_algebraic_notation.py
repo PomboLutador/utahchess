@@ -90,3 +90,8 @@ def test_file_to_x_index(file, expected_x_index):
 
     # then
     assert result == expected_x_index
+
+
+def test_implement_algebraic_notation_mapping_test():
+    # when and then
+    raise NotImplementedError("Implement tests for algebraic notation mapping!")
