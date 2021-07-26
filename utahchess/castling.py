@@ -58,7 +58,7 @@ def get_castling_moves(
         if rook_tile is None:
             continue
 
-        castling_move = _make_castling_move(
+        castling_move = _get_castling_move(
             board=board,
             movement_vector=movement_vector,
             king_position=king_position,
@@ -76,11 +76,22 @@ def get_castling_moves(
         yield castling_move
 
 
+def make_castling_move(board: Board, move: CastlingMove) -> Board:
+    rook_from, rook_to = move.get_rook_move()
+    king_from, king_to = move.get_king_move()
+    board_after_rook_move = board.move_piece(
+        from_position=rook_from, to_position=rook_to
+    )
+    return board_after_rook_move.move_piece(
+        from_position=king_from, to_position=king_to
+    )
+
+
 def _get_castling_type(movement_vector: tuple[int, int]) -> str:
     return SHORT_CASTLING if movement_vector[0] == 1 else LONG_CASTLING
 
 
-def _make_castling_move(
+def _get_castling_move(
     board: Board,
     movement_vector: tuple[int, int],
     king_position: tuple[int, int],

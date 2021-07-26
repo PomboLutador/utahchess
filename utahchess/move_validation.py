@@ -8,10 +8,12 @@ from utahchess.move import Move
 from utahchess.move_candidates import get_all_move_candidates
 from utahchess.piece import Piece
 
+REGULAR_MOVE = "Regular Move"
+
 
 @dataclass(frozen=True)
 class RegularMove(Move):
-    type = "Regular Move"
+    type = REGULAR_MOVE
     piece_moves: tuple[tuple[tuple[int, int], tuple[int, int]], ...]
     moving_pieces: tuple[Piece, ...]
     is_capturing_move: bool
@@ -118,3 +120,8 @@ def get_legal_regular_moves(
         board=board, current_player=current_player
     )
     return validate_move_candidates(board=board, move_candidates=all_move_candidates)
+
+
+def make_regular_move(board: Board, move: RegularMove) -> Board:
+    from_position, to_position = move.piece_moves[0]
+    return board.move_piece(from_position=from_position, to_position=to_position)
