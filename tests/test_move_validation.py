@@ -1,9 +1,11 @@
+import pytest
+
 from utahchess.board import Board
 from utahchess.move_candidates import get_king_move_candidates, get_pawn_move_candidates
 from utahchess.move_validation import (
     RegularMove,
-    is_check,
     is_checkmate,
+    make_regular_move,
     validate_move_candidates,
 )
 
@@ -119,5 +121,70 @@ def test_validate_move_candidates_pawn_cant_move():
     assert result == ()
 
 
-def test_make_regular_move():
-    raise NotImplementedError("Implement tests for making regular moves!")
+@pytest.mark.parametrize(
+    ("board", "from_move", "to_move", "expected"),
+    [
+        (
+            Board(
+                board_string=f"""bk-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-bp-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-wp-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-wk""",
+            ),
+            (7, 7),
+            (7, 6),
+            Board(
+                board_string=f"""bk-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-bp-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-wp-oo-oo-oo-wk
+            oo-oo-oo-oo-oo-oo-oo-oo""",
+            ),
+        ),
+        (
+            Board(
+                board_string=f"""bk-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-bp-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-wp-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-wk""",
+            ),
+            (4, 4),
+            (4, 5),
+            Board(
+                board_string=f"""bk-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-bp-oo-oo-oo
+            oo-oo-oo-wp-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-wk""",
+            ),
+        ),
+    ],
+)
+def test_make_regular_move(board, from_move, to_move, expected):
+    # given
+    regular_move = RegularMove(
+        piece_moves=((from_move, to_move),),
+        moving_pieces=board[from_move],
+        is_capturing_move=False,
+        allows_en_passant=False,
+    )
+
+    # when
+    result = make_regular_move(board=board, move=regular_move)
+
+    # then
+    assert result == expected
