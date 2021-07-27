@@ -324,6 +324,4 @@ def test_make_castling_move(
     actual = make_castling_move(board=board, move=castling_move)
 
     # then
-    print(actual)
-    print(Board(board_string=expected_board_after_move))
     assert Board(board_string=expected_board_after_move) == actual
