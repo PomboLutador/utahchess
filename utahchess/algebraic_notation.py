@@ -123,13 +123,18 @@ def _disambiguate_moves(
     ambiguous_identifier: AmbiguousAlgebraicNotation, moves_to_disambiguate: list[Move]
 ) -> dict[str, Move]:
     """Get unambiguous algebraic notation for ambigious identifiers."""
-
-    if len(moves_to_disambiguate) < 2:
+    if len(moves_to_disambiguate) == 1:
         return {ambiguous_identifier.to_string(): moves_to_disambiguate[0]}
 
+    if len(moves_to_disambiguate) > 2:
+        raise NotImplementedError(
+            "Functionality to disambiguate more than 2 moves not yet implemented."
+        )
+
     move1, move2 = moves_to_disambiguate
-    file1, rank1 = _get_moving_piece_file(move=move1), _get_moving_piece_rank(
-        move=move1
+    file1, rank1 = (
+        _get_moving_piece_file(move=move1),
+        _get_moving_piece_rank(move=move1),
     )
     file2, rank2, = (
         _get_moving_piece_file(move=move2),
@@ -155,7 +160,7 @@ def _disambiguate_moves(
             ): move2,
         }
     raise Exception(
-        f"Moves {moves_to_disambiguate} with ambiguous identifier {ambiguous_identifier} could not be disambiguated."
+        f"Moves {moves_to_disambiguate} with ambiguous identifier {ambiguous_identifier} could not be disambiguated with just rank and file."
     )
 
 
