@@ -6,6 +6,7 @@ from utahchess.castling import (
     SHORT_CASTLING,
     CastlingMove,
     get_castling_moves,
+    make_castling_move,
 )
 
 
@@ -274,5 +275,55 @@ def test_black_cant_castle_out_of_check():
     assert expected == actual
 
 
-def test_make_castling_move():
-    raise NotImplementedError("Implement tests for making castling moves!")
+@pytest.mark.parametrize(
+    (
+        "board_string",
+        "rook_position",
+        "king_position",
+        "expected_board_after_move",
+    ),
+    [
+        (
+            f"""br-bn-bb-oo-bk-bb-bn-br
+            bp-bp-bp-bp-bq-bp-bp-bp
+            oo-oo-oo-oo-bp-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-wp-oo
+            oo-oo-oo-oo-oo-wp-oo-oo
+            wp-wp-wp-wp-wp-oo-oo-wp
+            wr-oo-oo-oo-wk-oo-oo-wr""",
+            (0, 7),
+            (4, 7),
+            f"""br-bn-bb-oo-bk-bb-bn-br
+            bp-bp-bp-bp-bq-bp-bp-bp
+            oo-oo-oo-oo-bp-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-wp-oo
+            oo-oo-oo-oo-oo-wp-oo-oo
+            wp-wp-wp-wp-wp-oo-oo-wp
+            oo-oo-wk-wr-oo-oo-oo-wr""",
+        ),
+    ],
+)
+def test_make_castling_move(
+    board_string, rook_position, king_position, expected_board_after_move
+):
+    # when
+    board = Board(board_string=board_string)
+    expected_piece_moves_left = (
+        (king_position, (king_position[0] - 2, king_position[1])),
+        (rook_position, (rook_position[0] + 3, rook_position[1])),
+    )
+    castling_move = CastlingMove(
+        piece_moves=expected_piece_moves_left,
+        moving_pieces=(board[king_position], board[rook_position]),
+        castling_type=LONG_CASTLING,
+    )
+
+    # when
+    actual = make_castling_move(board=board, move=castling_move)
+
+    # then
+    print(actual)
+    print(Board(board_string=expected_board_after_move))
+    assert Board(board_string=expected_board_after_move) == actual
