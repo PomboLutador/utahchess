@@ -243,6 +243,7 @@ def test_get_algebraic_notation_mapping(
     )
 
     # then
+    assert len(expected_legal_moves_in_algebraic_notation) == len(result)
     assert set(expected_legal_moves_in_algebraic_notation) == set(result)
 
 
@@ -269,8 +270,7 @@ def test_get_algebraic_notation_mapping(
                 "Ka7",
                 "e3",
                 "xd3 e.p.",
-                "e2",
-            ),  # TODO: e2 is only possible with incorrent is_in_starting_position setting
+            ),
             "black",
             (
                 (
@@ -293,9 +293,8 @@ def test_get_algebraic_notation_mapping(
                 "Kg1",
                 "Kh2",
                 "d6",
-                "d7",
                 "xe6 e.p.",
-            ),  # TODO: d7 is only possible with incorrent is_in_starting_position setting
+            ),
             "white",
             (
                 (
@@ -329,4 +328,5 @@ def test_get_algebraic_notation_mapping_with_last_move_for_en_passant(
     )
 
     # then
+    assert len(result) == len(expected_legal_moves_in_algebraic_notation)
     assert set(expected_legal_moves_in_algebraic_notation) == set(result)
