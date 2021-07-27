@@ -4,8 +4,6 @@ import abc
 from dataclasses import dataclass
 from typing import Generator, Optional
 
-from utahchess.tile_movement_utils import apply_movement_vector, is_in_bounds
-
 
 class Piece(abc.ABC):
     piece_type: str
@@ -125,16 +123,53 @@ def create_piece_instance_from_string(
         return None
     color, class_identifier = string[0], string[1]
     color = "black" if color == "b" else "white"
+    is_in_start_position = _get_is_in_start_position(
+        position=position, class_identifier=class_identifier, color=color
+    )
     if class_identifier == "p":
-        return Pawn(position, color, is_in_start_position=True)
+        return Pawn(position, color, is_in_start_position=is_in_start_position)
     if class_identifier == "r":
-        return Rook(position, color, is_in_start_position=True)
+        return Rook(position, color, is_in_start_position=is_in_start_position)
     if class_identifier == "b":
-        return Bishop(position, color, is_in_start_position=True)
+        return Bishop(position, color, is_in_start_position=is_in_start_position)
     if class_identifier == "k":
-        return King(position, color, is_in_start_position=True)
+        return King(position, color, is_in_start_position=is_in_start_position)
     if class_identifier == "n":
-        return Knight(position, color, is_in_start_position=True)
+        return Knight(position, color, is_in_start_position=is_in_start_position)
     if class_identifier == "q":
-        return Queen(position, color, is_in_start_position=True)
+        return Queen(position, color, is_in_start_position=is_in_start_position)
     raise Exception("Invalid string could not be converted to a Piece instance.")
+
+
+def _get_is_in_start_position(
+    position: tuple[int, int], class_identifier: str, color: str
+) -> bool:
+    if class_identifier == "p":
+        return position in tuple(
+            piece.position
+            for piece in INITIAL_BLACK_PAWNS + INITIAL_WHITE_PAWNS
+            if piece.color == color
+        )
+    if class_identifier == "r":
+        return position in tuple(
+            piece.position for piece in INITIAL_ROOKS if piece.color == color
+        )
+    if class_identifier == "n":
+        return position in tuple(
+            piece.position for piece in INITIAL_KNIGHTS if piece.color == color
+        )
+    if class_identifier == "b":
+        return position in tuple(
+            piece.position for piece in INITIAL_BISHOPS if piece.color == color
+        )
+    if class_identifier == "q":
+        return position in tuple(
+            piece.position for piece in INITIAL_QUEENS if piece.color == color
+        )
+    if class_identifier == "k":
+        return position in tuple(
+            piece.position for piece in INITIAL_KINGS if piece.color == color
+        )
+    raise Exception(
+        "Could not determine whether piece '{class_identifier}' of color {color} in position {position} is in starting position."
+    )
