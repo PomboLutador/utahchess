@@ -117,8 +117,6 @@ def create_piece_instance_from_string(
     position: tuple[int, int], string: str
 ) -> Optional[Piece]:
     """Convert a string to an instance of the Piece classes."""
-    # TODO: Initialize is_in_start_position as well. Heuristic: If piece.position
-    #   is equal to the pieces starting position on a fresh board, then is True
     if string == "oo":
         return None
     color, class_identifier = string[0], string[1]
