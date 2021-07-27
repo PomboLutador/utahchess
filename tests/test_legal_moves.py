@@ -1,13 +1,13 @@
 import pytest
 
-from utahchess.algebraic_notation import (
+from utahchess.board import Board
+from utahchess.legal_moves import (
     file_to_x_index,
     get_algebraic_notation_mapping,
     rank_to_y_index,
     x_index_to_file,
     y_index_to_rank,
 )
-from utahchess.board import Board
 from utahchess.move_validation import RegularMove, make_regular_move
 
 
