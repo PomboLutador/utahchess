@@ -1,7 +1,11 @@
 import pytest
 
 from utahchess.board import Board
-from utahchess.en_passant import EnPassantMove, get_en_passant_moves
+from utahchess.en_passant import (
+    EnPassantMove,
+    get_en_passant_moves,
+    make_en_passant_move,
+)
 from utahchess.move_validation import RegularMove
 
 
@@ -393,5 +397,120 @@ def test_both_sides_en_passant_scenario_for_black():
     assert expected == actual
 
 
-def test_make_en_passant_move():
-    raise NotImplementedError("Implement tests for making en passant moves!")
+@pytest.mark.parametrize(
+    ("intial_board", "expected_board", "en_passant_from", "en_passant_to"),
+    [
+        (
+            Board(
+                board_string=f"""oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-bk-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            bp-wp-bp-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-wk-oo-oo-oo"""
+            ),
+            Board(
+                board_string=f"""oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-bk-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            bp-oo-oo-oo-oo-oo-oo-oo
+            oo-bp-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-wk-oo-oo-oo"""
+            ),
+            (2, 4),
+            (1, 5),
+        ),
+        (
+            Board(
+                board_string=f"""oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-bk-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            bp-wp-bp-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-wk-oo-oo-oo"""
+            ),
+            Board(
+                board_string=f"""oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-bk-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-bp-oo-oo-oo-oo-oo
+            oo-bp-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-wk-oo-oo-oo"""
+            ),
+            (0, 4),
+            (1, 5),
+        ),
+        (
+            Board(
+                board_string=f"""oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-bk-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            wp-bp-wp-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-wk-oo-oo-oo"""
+            ),
+            Board(
+                board_string=f"""oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-bk-oo-oo-oo
+            oo-wp-oo-oo-oo-oo-oo-oo
+            wp-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-wk-oo-oo-oo"""
+            ),
+            (2, 3),
+            (1, 2),
+        ),
+        (
+            Board(
+                board_string=f"""oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-bk-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            wp-bp-wp-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-wk-oo-oo-oo"""
+            ),
+            Board(
+                board_string=f"""oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-bk-oo-oo-oo
+            oo-wp-oo-oo-oo-oo-oo-oo
+            oo-oo-wp-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-wk-oo-oo-oo"""
+            ),
+            (0, 3),
+            (1, 2),
+        ),
+    ],
+)
+def test_make_en_passant_move(
+    intial_board, expected_board, en_passant_from, en_passant_to
+):
+
+    # given
+    en_passant_move = EnPassantMove(
+        piece_moves=((en_passant_from, en_passant_to),),
+        moving_pieces=(intial_board[en_passant_from],),
+    )
+
+    # when
+    actual = make_en_passant_move(
+        board=intial_board,
+        move=en_passant_move,
+    )
+    assert expected_board == actual
