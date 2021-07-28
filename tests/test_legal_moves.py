@@ -4,6 +4,7 @@ from utahchess.board import Board
 from utahchess.legal_moves import (
     file_to_x_index,
     get_algebraic_notation_mapping,
+    is_stalemate,
     rank_to_y_index,
     x_index_to_file,
     y_index_to_rank,
@@ -330,3 +331,61 @@ def test_get_algebraic_notation_mapping_with_last_move_for_en_passant(
     # then
     assert len(result) == len(expected_legal_moves_in_algebraic_notation)
     assert set(expected_legal_moves_in_algebraic_notation) == set(result)
+
+
+def test_is_stalemate():
+    # given
+    board = Board(
+        board_string=f"""bk-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-wr
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-wr-oo-oo-oo-oo-oo-wk"""
+    )
+    black_legal_moves = tuple(
+        get_algebraic_notation_mapping(
+            board=board, current_player="black", last_move=None
+        ).keys()
+    )
+
+    # when
+    result = is_stalemate(
+        board=board,
+        current_player="black",
+        legal_moves_for_current_player=black_legal_moves,
+    )
+
+    # then
+    assert result
+
+
+def test_is_not_stalemate():
+    # given
+    board = Board(
+        board_string=f"""bk-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-wr-oo-oo-oo-oo-oo-wk"""
+    )
+    black_legal_moves = tuple(
+        get_algebraic_notation_mapping(
+            board=board, current_player="black", last_move=None
+        ).keys()
+    )
+
+    # when
+    result = is_stalemate(
+        board=board,
+        current_player="black",
+        legal_moves_for_current_player=black_legal_moves,
+    )
+
+    # then
+    assert not result

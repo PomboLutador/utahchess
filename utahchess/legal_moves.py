@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import string
 from itertools import chain
-from typing import Generator
+from typing import Generator, Sequence
 
 from utahchess.algebraic_notation import AlgebraicNotation
 from utahchess.board import Board
@@ -14,7 +14,7 @@ from utahchess.castling import (
 )
 from utahchess.en_passant import EN_PASSANT_MOVE, get_en_passant_moves
 from utahchess.move import Move
-from utahchess.move_validation import get_legal_regular_moves
+from utahchess.move_validation import get_legal_regular_moves, is_check
 
 FILE_POSSIBILITIES = "abcdefgh"
 RANK_POSSIBILITIES = "87654321"
@@ -30,7 +30,8 @@ def get_algebraic_notation_mapping(
     for algebraic_identifer, moves in ambiguous_mapping.items():
         mapping = {
             **_disambiguate_moves(
-                ambiguous_identifier=algebraic_identifer, moves_to_disambiguate=moves
+                ambiguous_identifier=algebraic_identifer,
+                moves_to_disambiguate=moves,
             ),
             **mapping,
         }
@@ -51,6 +52,16 @@ def rank_to_y_index(rank: str) -> int:
 
 def file_to_x_index(file: str) -> int:
     return string.ascii_lowercase.index(file)
+
+
+def is_stalemate(
+    board: Board, current_player: str, legal_moves_for_current_player: Sequence[str]
+) -> bool:
+
+    return (
+        not is_check(board=board, current_player=current_player)
+        and len(legal_moves_for_current_player) == 0
+    )
 
 
 def _get_ambiguous_algebraic_notation_mapping(
