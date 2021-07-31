@@ -11,10 +11,21 @@ from utahchess.castling import (
     LONG_CASTLING,
     SHORT_CASTLING,
     get_castling_moves,
+    make_castling_move,
 )
-from utahchess.en_passant import EN_PASSANT_MOVE, get_en_passant_moves
+from utahchess.en_passant import (
+    EN_PASSANT_MOVE,
+    get_en_passant_moves,
+    make_en_passant_move,
+)
 from utahchess.move import Move
-from utahchess.move_validation import get_legal_regular_moves, is_check
+from utahchess.move_validation import (
+    REGULAR_MOVE,
+    get_legal_regular_moves,
+    is_check,
+    is_checkmate,
+    make_regular_move,
+)
 
 FILE_POSSIBILITIES = "abcdefgh"
 RANK_POSSIBILITIES = "87654321"
@@ -36,6 +47,15 @@ def get_algebraic_notation_mapping(
             **mapping,
         }
     return mapping
+
+
+def make_move(board: Board, move: Move) -> Board:
+    if move.type == REGULAR_MOVE:
+        return make_regular_move(board=board, move=move)
+    if move.type == CASTLING_MOVE:
+        return make_castling_move(board=board, move=move)
+    if move.type == EN_PASSANT_MOVE:
+        return make_en_passant_move(board=board, move=move)
 
 
 def x_index_to_file(x: int) -> str:
@@ -78,6 +98,9 @@ def _get_ambiguous_algebraic_notation_mapping(
             piece=_get_moving_piece_signifier(move=legal_move),
             destination_tile=_get_destination_tile(move=legal_move),
             capturing_flag=_get_capturing_flag(move=legal_move),
+            check_or_checkmate_flag=_get_check_or_checkmate_identifier(
+                board=board, move=legal_move, current_player=current_player
+            ),
         )
         mapping.setdefault(ambiguous_identifer, []).append(legal_move)
     return mapping
@@ -179,3 +202,25 @@ def _get_moving_piece_file(move: Move) -> str:
 def _get_moving_piece_rank(move: Move) -> str:
     x_from, y_from = move.piece_moves[0][0]
     return y_index_to_rank(y=y_from)
+
+
+def _get_check_or_checkmate_identifier(
+    board: Board, move: Move, current_player: str
+) -> str:
+
+    if is_checkmate(
+        board=make_move(board=board, move=move),
+        current_player=_get_opposite_player(current_player=current_player),
+    ):
+        return "#"
+    elif is_check(
+        board=make_move(board=board, move=move),
+        current_player=_get_opposite_player(current_player=current_player),
+    ):
+        return "+"
+    else:
+        return ""
+
+
+def _get_opposite_player(current_player: str) -> str:
+    return "black" if current_player == "white" else "white"
