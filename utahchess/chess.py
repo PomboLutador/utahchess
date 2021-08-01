@@ -1,3 +1,133 @@
 from __future__ import annotations
 
+from dataclasses import dataclass
+
 from utahchess.board import Board
+from utahchess.legal_moves import get_algebraic_notation_mapping, make_move
+from utahchess.move import Move
+from utahchess.move_validation import is_checkmate
+
+
+@dataclass(frozen=True)
+class GameState:
+    board: Board
+    last_move: Move
+    current_player: str
+    turn: int
+    legal_moves: dict[str, Move]
+
+    def __repr__(self) -> str:
+        representation = self.board.__repr__()
+        representation += f"\n Current player: {self.current_player}."
+        representation += f"\n It's turn {self.turn}."
+        return representation
+
+
+class ChessGame:
+    current_game_state: GameState
+    previous_game_states: list[GameState] = []
+
+    def new_game(self) -> None:
+        board = Board()
+        last_move = None
+        current_player = "white"
+        turn = 1
+        legal_moves = get_algebraic_notation_mapping(
+            board=board, current_player=current_player, last_move=last_move
+        )
+        self.current_game_state = GameState(
+            board=board,
+            last_move=last_move,
+            current_player=current_player,
+            turn=turn,
+            legal_moves=legal_moves,
+        )
+        return
+
+    def make_move(self, move_in_algebraic_notation: str) -> bool:
+        board_after_move, successful_move, last_move = try_move(
+            board=self.current_game_state.board,
+            legal_moves=self.current_game_state.legal_moves,
+            move_in_algebraic_notation=move_in_algebraic_notation,
+        )
+        if successful_move:
+            next_player = self.get_next_player()
+            self.previous_game_states.append(self.current_game_state)
+            self.current_game_state = GameState(
+                board=board_after_move,
+                last_move=last_move,
+                current_player=next_player,
+                turn=self.increment_turn(
+                    turn=self.current_game_state.turn,
+                    current_player=self.current_game_state.current_player,
+                ),
+                legal_moves=get_algebraic_notation_mapping(
+                    board=board_after_move,
+                    current_player=next_player,
+                    last_move=last_move,
+                ),
+            )
+            return successful_move
+        return False
+
+    def get_next_player(self) -> str:
+        return "white" if self.get_current_player() == "black" else "black"
+
+    def is_game_over(self) -> bool:
+        return is_checkmate(
+            board=self.current_game_state.board,
+            current_player=self.get_current_player(),
+        )
+
+    def __repr__(self) -> str:
+        return self.current_game_state.__repr__()
+
+    def increment_turn(self, turn: int, current_player: str) -> int:
+        if current_player == "black":
+            return turn + 1
+        else:
+            return turn
+
+    def undo_move(self) -> None:
+        self.current_game_state = self.previous_game_states.pop()
+
+    def get_current_player(self) -> str:
+        return self.current_game_state.current_player
+
+    def get_legal_moves(self) -> tuple[str, ...]:
+        return tuple(self.current_game_state.legal_moves.keys())
+
+    def get_legal_destinations_for_piece(
+        self, position: tuple[int, int]
+    ) -> tuple[tuple[int, int], ...]:
+        return tuple(
+            legal_move.piece_moves[0][1]
+            for legal_move in self.current_game_state.legal_moves.values()
+            if legal_move.piece_moves[0][0] == position
+        )
+
+
+def try_move(
+    board: Board,
+    legal_moves: dict[str, Move],
+    move_in_algebraic_notation: str,
+) -> tuple[Board, bool, Move]:
+    try:
+        return (
+            make_move(board=board, move=legal_moves[move_in_algebraic_notation]),
+            True,
+            legal_moves[move_in_algebraic_notation],
+        )
+    except KeyError:
+        return board, False, None
+
+
+if __name__ == "__main__":
+    game = ChessGame()
+    game.new_game()
+
+    while not game.is_game_over():
+        print(game)
+        game.make_move(move_in_algebraic_notation=input("Please enter a move: \n"))
+    else:
+        print(f"Game over! The winner is {game.get_next_player()}!")
