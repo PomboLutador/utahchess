@@ -4,3 +4,5 @@
 /__pycache__
 /tests/__pycache__/
 /utahchess/__pycache__/
+/gui/__pycache__/
+/gui/pygame/__pycache__/
