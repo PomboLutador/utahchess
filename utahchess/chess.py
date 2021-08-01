@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Optional
 
 from utahchess.board import Board
 from utahchess.legal_moves import get_algebraic_notation_mapping, make_move
@@ -105,6 +106,17 @@ class ChessGame:
             for legal_move in self.current_game_state.legal_moves.values()
             if legal_move.piece_moves[0][0] == position
         )
+
+    def get_move_from_positions(
+        self, from_position: tuple[int, int], to_position: tuple[int, int]
+    ) -> Optional[tuple[str, Move]]:
+        for algebraic_move, move in self.current_game_state.legal_moves.items():
+            if (
+                move.piece_moves[0][1] == to_position
+                and move.piece_moves[0][0] == from_position
+            ):
+                return algebraic_move, move
+        return None
 
 
 def try_move(
