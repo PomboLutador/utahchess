@@ -112,6 +112,22 @@ def try_move(
     legal_moves: dict[str, Move],
     move_in_algebraic_notation: str,
 ) -> tuple[Board, bool, Move]:
+    """Try to make a move on a given board.
+
+    Args:
+        board: Board on which move is tried on.
+        legal_moves: A mapping of legal moves in algebraic notation to instances of the
+            Move class and its inherited classes.
+        move_in_algebraic_notation: Description of the move that should be tried in
+            algebraic notation.
+
+    Returns:
+        tuple[Board, bool, Move]: If the given move was legal this returns a tuple
+            containing the board after the move, a boolean indicating success and
+            the last move that was just executed. In case the move was not legal the
+            tuple will contain the initial board, a boolean indicating failure and None
+            for the last move.
+    """
     try:
         return (
             make_move(board=board, move=legal_moves[move_in_algebraic_notation]),
