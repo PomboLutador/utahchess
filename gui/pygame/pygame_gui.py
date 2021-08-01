@@ -1,0 +1,134 @@
+from __future__ import annotations
+
+import pygame
+
+from gui.constants import FONT, HEIGHT, WIDTH
+from gui.pygame.click_handler import (
+    convert_pixel_coordinates_to_indices,
+    get_tile_indices_from_user_input,
+    get_user_input,
+)
+from gui.pygame.draw_constants import (
+    draw_controls,
+    draw_empty_board,
+    draw_rank_and_file,
+)
+from gui.pygame.draw_current_game_state import draw_pieces, highlight_legal_destinations
+from utahchess.board import Board, is_edible, is_occupied
+from utahchess.chess import ChessGame
+from utahchess.move_validation import is_check, is_checkmate
+from utahchess.tile_movement_utils import is_in_bounds
+
+
+class PygameGUI:
+    game: ChessGame = ChessGame()
+
+    def __init__(self):
+        pygame.init()
+        self.font = FONT
+        screen = pygame.display.set_mode((WIDTH, HEIGHT))
+        self.running = True
+        self.screen = screen
+        self.last_mouse_click_indices = None
+        self.game_started = False
+
+        draw_empty_board(screen=self.screen)
+        self.new_game_button, self.undo_move_button = draw_controls(
+            screen=self.screen, font=self.font
+        )
+
+        draw_rank_and_file(screen=self.screen, font=self.font)
+        while self.running:
+            pygame.display.flip()
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.running = False
+
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+
+                    self.visualize_current_game_state()
+
+                    x_pixel, y_pixel = get_user_input()
+                    x_index, y_index = get_tile_indices_from_user_input()
+
+                    # Handle button clicks
+                    if self.new_game_button.collidepoint(x_pixel, y_pixel):
+                        self.new_game()
+                    if self.undo_move_button.collidepoint(x_pixel, y_pixel):
+                        self.undo_move()
+
+                    # If no button is clicked and click is outside of board bounds, skip
+                    if not is_in_bounds(position=(x_index, y_index)):
+                        continue
+
+                    # If we click on an occupied tile, highlight legal moves
+                    if is_occupied(
+                        self.get_current_board(), position=(x_index, y_index)
+                    ):
+                        legal_destinations = self.game.get_legal_destinations_for_piece(
+                            position=(x_index, y_index)
+                        )
+                        highlight_legal_destinations(
+                            screen=screen,
+                            legal_destinations=legal_destinations,
+                            x=x_index,
+                            y=y_index,
+                        )
+
+                    # If clicked position is not occupied or from enemy color, try to make a move
+                    if not is_occupied(
+                        self.get_current_board(), (x_index, y_index)
+                    ) or is_edible(
+                        board=self.get_current_board(),
+                        position=(x_index, y_index),
+                        friendly_color=self.get_current_player(),
+                    ):
+                        if self.last_mouse_click_indices:
+                            # Make Move here
+                            potential_move = self.game.get_move_from_positions(
+                                from_position=self.last_mouse_click_indices,
+                                to_position=(x_index, y_index),
+                            )
+                            if potential_move:
+                                algebraic_move, _ = potential_move
+                            _ = self.game.make_move(
+                                move_in_algebraic_notation=algebraic_move
+                            )
+
+                            self.visualize_current_game_state()
+
+                elif event.type == pygame.MOUSEBUTTONUP:
+                    last_mouse_click_indices = convert_pixel_coordinates_to_indices(
+                        pixel_coordinates=pygame.mouse.get_pos()
+                    )
+                    if is_in_bounds(position=last_mouse_click_indices):
+                        self.last_mouse_click_indices = last_mouse_click_indices
+
+    def new_game(self) -> None:
+        self.game.new_game()
+        self.game_started = True
+        self.visualize_current_game_state()
+
+    def undo_move(self) -> None:
+        self.game.undo_move()
+        self.visualize_current_game_state()
+
+    def get_current_board(self) -> Board:
+        return self.game.current_game_state.board
+
+    def get_current_player(self) -> str:
+        return self.game.get_current_player()
+
+    def visualize_current_game_state(self) -> None:
+        draw_empty_board(screen=self.screen)
+        self.new_game_button, self.undo_move_button = draw_controls(
+            screen=self.screen, font=self.font
+        )
+        if self.game_started:
+            draw_pieces(screen=self.screen, board=self.get_current_board())
+        draw_rank_and_file(screen=self.screen, font=self.font)
+
+
+if __name__ == "__main__":
+    gui = PygameGUI()
