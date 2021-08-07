@@ -5,8 +5,11 @@ import pygame
 from gui.constants import (
     BORDER_X_OFFSET,
     BORDER_Y_OFFSET,
+    CHECKMATE_FONT_COLOR,
     HIGHLIGHT_COLOR,
     HIGHLIGHT_THICKNESS,
+    MIDDLE_OF_BOARD_X,
+    MIDDLE_OF_BOARD_Y,
     PIECE_ASSET_HEIGHT,
     PIECE_ASSET_WIDTH,
     TILE_HEIGHT,
@@ -15,6 +18,7 @@ from gui.constants import (
 from gui.piece_to_assetname import piece_to_assetname
 from gui.pygame.click_handler import get_pixel_coordinates_from_integer_coordinates
 from utahchess.board import Board
+from utahchess.move_validation import is_checkmate
 
 
 def draw_pieces(screen: pygame.Surface, board: Board):
@@ -47,6 +51,26 @@ def highlight_legal_destinations(
     """"""
     for destination_tile in legal_destinations:
         _highlight_rectangle(screen, destination_tile[0], destination_tile[1])
+
+
+def notify_checkmate(
+    screen: pygame.Surface,
+    board: Board,
+    player_in_checkmate: str,
+    winning_player: str,
+    font: pygame.font.Font,
+):
+
+    if is_checkmate(board=board, current_player=player_in_checkmate):
+        text_rect = font.render(
+            f"{player_in_checkmate} is in checkmate - {winning_player} wins!",
+            True,
+            CHECKMATE_FONT_COLOR,
+        )
+        screen_center = (MIDDLE_OF_BOARD_X, MIDDLE_OF_BOARD_Y)
+        new_x = screen_center[0] - text_rect.get_rect().width / 2
+        new_y = screen_center[1] - text_rect.get_rect().height / 2
+        screen.blit(text_rect, (new_x, new_y))
 
 
 def _highlight_rectangle(screen: pygame.Surface, x: int, y: int):

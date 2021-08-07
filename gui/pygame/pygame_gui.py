@@ -13,10 +13,13 @@ from gui.pygame.draw_constants import (
     draw_empty_board,
     draw_rank_and_file,
 )
-from gui.pygame.draw_current_game_state import draw_pieces, highlight_legal_destinations
+from gui.pygame.draw_current_game_state import (
+    draw_pieces,
+    highlight_legal_destinations,
+    notify_checkmate,
+)
 from utahchess.board import Board, is_edible, is_occupied
 from utahchess.chess import ChessGame
-from utahchess.move_validation import is_check, is_checkmate
 from utahchess.tile_movement_utils import is_in_bounds
 
 
@@ -127,7 +130,17 @@ class PygameGUI:
         )
         if self.game_started:
             draw_pieces(screen=self.screen, board=self.get_current_board())
+            notify_checkmate(
+                screen=self.screen,
+                board=self.get_current_board(),
+                player_in_checkmate=self.get_current_player(),
+                winning_player=self.get_opposite_player(),
+                font=self.font,
+            )
         draw_rank_and_file(screen=self.screen, font=self.font)
+
+    def get_opposite_player(self) -> str:
+        return "black" if self.get_current_player() == "white" else "white"
 
 
 if __name__ == "__main__":
