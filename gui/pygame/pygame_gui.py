@@ -29,9 +29,8 @@ class PygameGUI:
     def __init__(self):
         pygame.init()
         self.font = FONT
-        screen = pygame.display.set_mode((WIDTH, HEIGHT))
         self.running = True
-        self.screen = screen
+        self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         self.last_mouse_click_indices = None
         self.game_started = False
 
@@ -73,7 +72,7 @@ class PygameGUI:
                             position=(x_index, y_index)
                         )
                         highlight_legal_destinations(
-                            screen=screen,
+                            screen=self.screen,
                             legal_destinations=legal_destinations,
                             x=x_index,
                             y=y_index,
