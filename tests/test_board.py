@@ -152,3 +152,23 @@ def test_delete_piece(position):
 
     # then
     assert result[position] is None
+
+
+def test_board_to_string():
+    # given
+    board = Board()
+
+    # when
+    result = board.to_string()
+
+    # then
+    expected = f"""br-bn-bb-bq-bk-bb-bn-br
+bp-bp-bp-bp-bp-bp-bp-bp
+oo-oo-oo-oo-oo-oo-oo-oo
+oo-oo-oo-oo-oo-oo-oo-oo
+oo-oo-oo-oo-oo-oo-oo-oo
+oo-oo-oo-oo-oo-oo-oo-oo
+wp-wp-wp-wp-wp-wp-wp-wp
+wr-wn-wb-wq-wk-wb-wn-wr"""
+    assert len(result) == len(expected)
+    assert result == expected
