@@ -163,7 +163,7 @@ def test_file_to_x_index(file, expected_x_index):
                 "Ke7",
                 "Kd8",
                 "O-O-O",
-                "Ra1",
+                "Ra1+",
                 "Ra2",
                 "Ra3",
                 "Ra4",
