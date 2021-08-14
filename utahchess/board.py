@@ -78,6 +78,34 @@ class Board:
         )
         return Board(pieces=new_pieces)
 
+    def to_string(self) -> str:
+        """Get string representation of the board to use for initialization.
+
+        Returns:
+            A representation of the board that can be used to initialize a board.
+            Example:
+                f'''oo-oo-oo-oo-oo-oo-oo-oo
+                oo-oo-oo-oo-bk-oo-oo-oo
+                oo-oo-oo-oo-oo-oo-oo-oo
+                wp-bp-wp-oo-oo-oo-oo-oo
+                oo-oo-oo-oo-oo-oo-oo-oo
+                oo-oo-oo-oo-oo-oo-oo-oo
+                oo-oo-oo-oo-oo-oo-oo-oo
+                oo-oo-oo-oo-wk-oo-oo-oo'''
+        """
+        board_string = "\n".join(
+            [
+                "-".join(
+                    [
+                        self[x, y].to_string() if self[x, y] is not None else "oo"  # type: ignore
+                        for x in range(8)
+                    ]
+                )
+                for y in range(8)
+            ]
+        )
+        return board_string
+
     def __repr__(self) -> str:
         return representation(self._board)
 
@@ -115,9 +143,3 @@ def is_edible(board: Board, position: tuple[int, int], friendly_color: str) -> b
 
 def is_occupied(board: Board, position: tuple[int, int]) -> bool:
     return board[position] is not None
-
-
-if __name__ == "__main__":
-    board = Board()
-    print(board.move_piece((0, 0), (0, 1)))
-    print(board.move_piece((0, 1), (0, 0)))
