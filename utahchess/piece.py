@@ -19,6 +19,9 @@ class Pawn(Piece):
     color: str
     is_in_start_position: bool
 
+    def to_string(self) -> str:
+        return f"{'b' if self.color == 'black' else 'w'}p"
+
 
 @dataclass(frozen=True)
 class Knight(Piece):
@@ -26,6 +29,9 @@ class Knight(Piece):
     position: tuple[int, int]
     color: str
     is_in_start_position: bool
+
+    def to_string(self) -> str:
+        return f"{'b' if self.color == 'black' else 'w'}n"
 
 
 @dataclass(frozen=True)
@@ -35,6 +41,9 @@ class Rook(Piece):
     color: str
     is_in_start_position: bool
 
+    def to_string(self) -> str:
+        return f"{'b' if self.color == 'black' else 'w'}r"
+
 
 @dataclass(frozen=True)
 class Bishop(Piece):
@@ -42,6 +51,9 @@ class Bishop(Piece):
     position: tuple[int, int]
     color: str
     is_in_start_position: bool
+
+    def to_string(self) -> str:
+        return f"{'b' if self.color == 'black' else 'w'}b"
 
 
 @dataclass(frozen=True)
@@ -51,6 +63,9 @@ class Queen(Piece):
     color: str
     is_in_start_position: bool
 
+    def to_string(self) -> str:
+        return f"{'b' if self.color == 'black' else 'w'}q"
+
 
 @dataclass(frozen=True)
 class King(Piece):
@@ -58,6 +73,9 @@ class King(Piece):
     position: tuple[int, int]
     color: str
     is_in_start_position: bool
+
+    def to_string(self) -> str:
+        return f"{'b' if self.color == 'black' else 'w'}k"
 
 
 INITIAL_BLACK_PAWNS = tuple(
