@@ -36,6 +36,7 @@ def minimax(
     maximizing_player: bool,
     alpha: float,
     beta: float,
+    prune: bool = True,
 ) -> tuple[Node, float]:
     if (
         depth == 0
@@ -55,13 +56,15 @@ def minimax(
                 maximizing_player=False,
                 alpha=alpha,
                 beta=beta,
+                prune=prune,
             )
             if eval > best_value:
                 best_value = eval
                 best_move = child_node
             alpha = max(alpha, best_value)
             if alpha >= beta:
-                break
+                if prune:
+                    break
 
     else:
         best_value = +np.inf
@@ -74,46 +77,83 @@ def minimax(
                 maximizing_player=True,
                 alpha=alpha,
                 beta=beta,
+                prune=prune,
             )
             if eval < best_value:
                 best_value = eval
                 best_move = child_node
             beta = min(beta, best_value)
             if alpha >= beta:
-                break
+                if prune:
+                    break
     return best_move, best_value
 
 
 def _order_moves_by_potential(moves_mapping: dict[str, Move]) -> OrderedDict[str, Move]:
-    ordered_dict: OrderedDict[str, Move] = OrderedDict()
+    checkmate_moves = []
+    pawn_captures = []
+    other_captures = []
+    rest = []
 
-    # TODO: This function to order moves by potential. The sooner we encounter a
-    # potentially very good move, the sooner we can prune the tree.
+    for algebraic_identifier, move in moves_mapping.items():
+        # Checkmate moves
+        if algebraic_identifier[-1] == "#":
+            checkmate_moves.append((algebraic_identifier, move))
 
-    # first put all checkmate moves -> moves that end with #
-    # then put all moves where a pawn captures a non-pawn piece -> moves of the form 'x<destination_tile>'
-    # then put all other capturing moves -> moves of the form '<capital_letter>x<destination_tile>'
-    # where should we put checking moves?
+        # Pawn captures
+        elif algebraic_identifier[0] == "x":
+            pawn_captures.append((algebraic_identifier, move))
 
-    return ordered_dict
+        # Other captures
+        elif algebraic_identifier[0] != "x" and "x" in algebraic_identifier:
+            other_captures.append((algebraic_identifier, move))
+
+        # Leftovers
+        else:
+            rest.append((algebraic_identifier, move))
+
+    ordered_moves = checkmate_moves + pawn_captures + other_captures + rest
+    return OrderedDict(ordered_moves)
 
 
-def create_children_from_parent(parent_node: Node) -> Generator[Node, None, None]:
+def create_children_from_parent(
+    parent_node: Node, ordered: bool
+) -> Generator[Node, None, None]:
     parent_board = parent_node.board
     parent_last_move = parent_node.last_move
     parent_player = parent_node.player
-    return (
-        Node(
-            algebraic_identifier,
-            parent=parent_node,
-            board=make_move(board=parent_board, move=legal_move),
-            last_move=legal_move,
-            player=_get_enemy_color(friendly_color=parent_player),
+    if ordered:
+        return (
+            Node(
+                algebraic_identifier,
+                parent=parent_node,
+                board=make_move(board=parent_board, move=legal_move),
+                last_move=legal_move,
+                player=_get_enemy_color(friendly_color=parent_player),
+            )
+            for algebraic_identifier, legal_move in _order_moves_by_potential(
+                get_algebraic_notation_mapping(
+                    board=parent_board,
+                    current_player=parent_player,
+                    last_move=parent_last_move,
+                )
+            ).items()
         )
-        for algebraic_identifier, legal_move in get_algebraic_notation_mapping(
-            board=parent_board, current_player=parent_player, last_move=parent_last_move
-        ).items()
-    )
+    else:
+        return (
+            Node(
+                algebraic_identifier,
+                parent=parent_node,
+                board=make_move(board=parent_board, move=legal_move),
+                last_move=legal_move,
+                player=_get_enemy_color(friendly_color=parent_player),
+            )
+            for algebraic_identifier, legal_move in get_algebraic_notation_mapping(
+                board=parent_board,
+                current_player=parent_player,
+                last_move=parent_last_move,
+            ).items()
+        )
 
 
 def get_board_value(board: Board, player_that_just_made_the_move: str) -> float:
