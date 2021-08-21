@@ -12,7 +12,28 @@ class Board:
     _board: tuple[tuple[Piece, ...], ...]
 
     def __init__(self, pieces: Iterable[Piece] = [], board_string: str = "") -> None:
+        """8x8 chess board containing black and white pieces.
 
+        If no arguments are provided a board containing the original 32 chess pieces
+        will be initialized.
+
+        Args:
+            pieces: Pieces to initialize the board with.
+            board_string: A string describing a board state to initialize board from.
+                Example:
+                >>    board_string = f'''br-oo-oo-wq-oo-bc-oo-br
+                >>            oo-oo-oo-oo-bk-oo-bp-oo
+                >>            oo-wb-oo-oo-wp-bp-oo-oo
+                >>            oo-bp-oo-oo-oo-wp-wk-oo
+                >>            bq-wp-oo-oo-wp-oo-oo-bp
+                >>            bb-oo-wp-oo-oo-oo-oo-oo
+                >>            oo-oo-oo-oo-oo-oo-oo-oo
+                >>            oo-wk-oo-wb-oo-wk-oo-wr'''
+                
+        Raises:
+            Exception: If both a board string and an iterable of pieces are provided
+                the initialization method will raise an exception.
+        """
         if pieces and board_string:
             raise Exception(
                 "Cannot create board when both pieces and board string are provided."
@@ -37,6 +58,11 @@ class Board:
         return self._board[x][y]
 
     def all_pieces(self) -> Generator[Piece, None, None]:
+        """Get all current pieces on the board.
+
+        Yields:
+            All pieces on the board.
+        """
         for x in range(8):
             for y in range(8):
                 item = self._board[x][y]
@@ -44,6 +70,8 @@ class Board:
                     yield item
 
     def copy(self) -> Board:
+        """Create a copy of the board."""
+        #TODO: Is this really a proper copy?
         new_pieces = tuple(piece for piece in self.all_pieces())
         return Board(pieces=new_pieces)
 
@@ -52,7 +80,7 @@ class Board:
     ) -> Board:
         """Get a new board with one piece moved to a new position.
 
-        If the to_position is occupied already, the piece there will be lost.
+        If the destination is already occupied, the piece will be lost / captured.
         """
         if from_position == to_position:
             return self.copy()
@@ -84,14 +112,14 @@ class Board:
         Returns:
             A representation of the board that can be used to initialize a board.
             Example:
-                f'''oo-oo-oo-oo-oo-oo-oo-oo
-                oo-oo-oo-oo-bk-oo-oo-oo
-                oo-oo-oo-oo-oo-oo-oo-oo
-                wp-bp-wp-oo-oo-oo-oo-oo
-                oo-oo-oo-oo-oo-oo-oo-oo
-                oo-oo-oo-oo-oo-oo-oo-oo
-                oo-oo-oo-oo-oo-oo-oo-oo
-                oo-oo-oo-oo-wk-oo-oo-oo'''
+            >>    f'''oo-oo-oo-oo-oo-oo-oo-oo
+            >>    oo-oo-oo-oo-bk-oo-oo-oo
+            >>    oo-oo-oo-oo-oo-oo-oo-oo
+            >>    wp-bp-wp-oo-oo-oo-oo-oo
+            >>    oo-oo-oo-oo-oo-oo-oo-oo
+            >>    oo-oo-oo-oo-oo-oo-oo-oo
+            >>    oo-oo-oo-oo-oo-oo-oo-oo
+            >>   oo-oo-oo-oo-wk-oo-oo-oo'''
         """
         board_string = "\n".join(
             [
@@ -112,18 +140,7 @@ class Board:
     def _initialize_from_string(
         self, board_string: str
     ) -> tuple[tuple[Piece, ...], ...]:
-        """Initialize a board from a string.
-
-        Example:
-        >>    board_string = f'''br-oo-oo-wq-oo-bc-oo-br
-        >>            oo-oo-oo-oo-bk-oo-bp-oo
-        >>            oo-wb-oo-oo-wp-bp-oo-oo
-        >>            oo-bp-oo-oo-oo-wp-wk-oo
-        >>            bq-wp-oo-oo-wp-oo-oo-bp
-        >>            bb-oo-wp-oo-oo-oo-oo-oo
-        >>            oo-oo-oo-oo-oo-oo-oo-oo
-        >>            oo-wk-oo-wb-oo-wk-oo-wr'''
-        """
+        """Initialize a board from a string."""
         _board = [[None for x in range(8)] for y in range(8)]
         row_string = board_string.replace(" ", "").split("\n")
         for y, row in enumerate(row_string):
@@ -135,11 +152,32 @@ class Board:
 
 
 def is_edible(board: Board, position: tuple[int, int], friendly_color: str) -> bool:
+    """Get if a position on the board is edible.
+    
+    Edible is defined as the position on the board being both occupied as well as
+    the piece on it from an enemy color.
 
+    Args:
+        board: Board to check.
+        position: Position on the board to check.
+        friendly_color: Color of pieces which is considered friendly.
+
+    Returns:
+        A boolean indicating whether the position is edible or not.
+    """
     if not is_occupied(board=board, position=position):
         return False
     return board[position].color != friendly_color  # type: ignore
 
 
 def is_occupied(board: Board, position: tuple[int, int]) -> bool:
+    """Get if a position on the board is occupied.
+
+    Args:
+        board: Board to check.
+        position: Position on the board to check.
+
+    Returns:
+        bool: A boolean indicating whether the position is occupied or not.
+    """
     return board[position] is not None
