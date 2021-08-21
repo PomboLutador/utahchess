@@ -4,7 +4,11 @@ from dataclasses import dataclass
 from typing import Optional
 
 from utahchess.board import Board
-from utahchess.legal_moves import get_algebraic_notation_mapping, make_move
+from utahchess.legal_moves import (
+    get_algebraic_notation_mapping,
+    is_stalemate,
+    make_move,
+)
 from utahchess.move import Move
 from utahchess.move_validation import is_checkmate
 
@@ -78,6 +82,10 @@ class ChessGame:
         return is_checkmate(
             board=self.current_game_state.board,
             current_player=self.get_current_player(),
+        ) or is_stalemate(
+            board=self.current_game_state.board,
+            current_player=self.get_current_player(),
+            legal_moves_for_current_player=self.current_game_state.legal_moves.keys(),
         )
 
     def __repr__(self) -> str:
