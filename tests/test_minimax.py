@@ -1,3 +1,5 @@
+from functools import partial
+
 import numpy as np
 import pytest
 from anytree import Node
@@ -93,9 +95,11 @@ def test_get_board_value_is_symmetric(current_player, opposite_player):
         assert result1 == -result2
 
 
+@pytest.mark.parametrize(("ordered"), [True, False])
 @pytest.mark.parametrize(("depth"), [1, 2, 3])
-def test_minimax_finds_checkmate_in_fools_mate(depth):
+def test_minimax_finds_checkmate_in_fools_mate(depth, ordered):
     # given
+    children_function = partial(create_children_from_parent, ordered=ordered)
     board = Board(
         board_string=f"""br-bn-bb-bq-bk-bb-bn-br
             bp-bp-bp-bp-oo-bp-bp-bp
@@ -112,7 +116,7 @@ def test_minimax_finds_checkmate_in_fools_mate(depth):
     resulting_node, resulting_value = minimax(
         parent_node=parent_node,
         value_function=get_node_value,
-        get_children=create_children_from_parent,
+        get_children=children_function,
         depth=depth,
         alpha=-np.inf,
         beta=np.inf,
@@ -126,6 +130,7 @@ def test_minimax_finds_checkmate_in_fools_mate(depth):
 
 def test_minimax_with_dummy_game():
     # given
+
     parent_node = Node(name="parent", value=3, depth=0)
     children_nodes_function = lambda parent_node: [
         Node(

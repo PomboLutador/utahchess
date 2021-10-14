@@ -29,7 +29,7 @@ class Board:
                 >>            bb-oo-wp-oo-oo-oo-oo-oo
                 >>            oo-oo-oo-oo-oo-oo-oo-oo
                 >>            oo-wk-oo-wb-oo-wk-oo-wr'''
-                
+
         Raises:
             Exception: If both a board string and an iterable of pieces are provided
                 the initialization method will raise an exception.
@@ -71,7 +71,7 @@ class Board:
 
     def copy(self) -> Board:
         """Create a copy of the board."""
-        #TODO: Is this really a proper copy?
+        # TODO: Is this really a proper copy?
         new_pieces = tuple(piece for piece in self.all_pieces())
         return Board(pieces=new_pieces)
 
@@ -153,7 +153,7 @@ class Board:
 
 def is_edible(board: Board, position: tuple[int, int], friendly_color: str) -> bool:
     """Get if a position on the board is edible.
-    
+
     Edible is defined as the position on the board being both occupied as well as
     the piece on it from an enemy color.
 
