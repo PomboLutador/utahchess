@@ -119,7 +119,7 @@ class Board:
             >>    oo-oo-oo-oo-oo-oo-oo-oo
             >>    oo-oo-oo-oo-oo-oo-oo-oo
             >>    oo-oo-oo-oo-oo-oo-oo-oo
-            >>   oo-oo-oo-oo-wk-oo-oo-oo'''
+            >>    oo-oo-oo-oo-wk-oo-oo-oo'''
         """
         board_string = "\n".join(
             [
