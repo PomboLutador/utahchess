@@ -5,7 +5,7 @@ from itertools import product
 from typing import Callable, Generator
 
 import numpy as np
-from anytree import Node
+from anytree import Node  # type: ignore
 
 from utahchess.board import Board
 from utahchess.legal_moves import get_algebraic_notation_mapping, make_move

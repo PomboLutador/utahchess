@@ -6,7 +6,7 @@ from os import walk
 from typing import Generator, Sequence
 
 import numpy as np
-from anytree import Node
+from anytree import Node  # type: ignore
 
 from utahchess.board import Board
 from utahchess.minimax import create_children_from_parent, get_node_value, minimax

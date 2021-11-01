@@ -106,7 +106,12 @@ def get_pawn_move_candidates(
 def get_knight_move_candidates(
     board: Board, position: tuple[int, int]
 ) -> Generator[tuple[tuple[int, int], tuple[int, int]], None, None]:
-    friendly_color = board[position].color
+    piece = board[position]
+    if piece is None:
+        raise Exception(
+            f"Piece at position {position} is None when it should be a Knight."
+        )
+    friendly_color = piece.color
     for movement_vector in KNIGHT_MOVEMENT_VECTORS:
 
         tile_to_check = apply_movement_vector(
@@ -165,6 +170,10 @@ def get_king_move_candidates(
     board: Board, position: tuple[int, int]
 ) -> Generator[tuple[tuple[int, int], tuple[int, int]], None, None]:
     king = board[position]
+    if king is None:
+        raise Exception(
+            f"Piece at position {position} is None when it should be a King."
+        )
     for movement_vector in KING_MOVEMENT_VECTORS:
 
         tile_to_check = apply_movement_vector(

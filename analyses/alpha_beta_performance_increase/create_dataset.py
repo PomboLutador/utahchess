@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from itertools import product
+from typing import Type
 
 import numpy as np
 
@@ -50,9 +51,9 @@ def sample_random_board(n_pieces: int) -> Board:
         knight_counter = 0
         rook_counter = 0
         queen_counter = 0
-        valid_choices: tuple[Piece, ...] = (Pawn, Bishop, Knight, Rook, Queen)
+        valid_choices: tuple[Type[Piece], ...] = (Pawn, Bishop, Knight, Rook, Queen)
         for _ in range(number_of_pieces):
-            class_to_instantiate = np.random.choice(valid_choices)
+            class_to_instantiate = np.random.choice(valid_choices)  # type: ignore
             board_pieces.append(
                 class_to_instantiate(
                     position=positions_to_fill.pop(),
@@ -105,11 +106,11 @@ def sample_random_board(n_pieces: int) -> Board:
     if is_checkmate(board=board, current_player="black") or is_checkmate(
         board=board, current_player="white"
     ):
-        return None
+        return sample_random_board(n_pieces=n_pieces)
     if is_check(board=board, current_player="black") or is_check(
         board=board, current_player="white"
     ):
-        return None
+        return sample_random_board(n_pieces=n_pieces)
     return board
 
 
@@ -119,12 +120,11 @@ if __name__ == "__main__":
     while count < NUM_BOARDS:
         num_pieces = int(np.random.uniform(3, 20))
         board = sample_random_board(n_pieces=num_pieces)
-        if board is not None:
-            count += 1
-            if count % 10 == 0:
-                print(f"Saving board {count}")
-            with open(
-                f"analyses/alpha_beta_performance_increase/board_strings/board_{count}.txt",
-                "w",
-            ) as file:
-                file.write(board.to_string())
+        count += 1
+        if count % 10 == 0:
+            print(f"Saving board {count}")
+        with open(
+            f"analyses/alpha_beta_performance_increase/board_strings/aaa_board_{count}.txt",
+            "w",
+        ) as file:
+            file.write(board.to_string())

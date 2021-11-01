@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import string
 from itertools import chain
-from typing import Generator, Sequence
+from typing import Generator, Optional, Sequence
 
 from utahchess.algebraic_notation import AlgebraicNotation
 from utahchess.board import Board
@@ -10,6 +10,7 @@ from utahchess.castling import (
     CASTLING_MOVE,
     LONG_CASTLING,
     SHORT_CASTLING,
+    CastlingMove,
     get_castling_moves,
     make_castling_move,
 )
@@ -32,7 +33,7 @@ RANK_POSSIBILITIES = "87654321"
 
 
 def get_algebraic_notation_mapping(
-    board: Board, current_player: str, last_move: Move
+    board: Board, current_player: str, last_move: Optional[Move] = None
 ) -> dict[str, Move]:
     ambiguous_mapping = _get_ambiguous_algebraic_notation_mapping(
         board=board, current_player=current_player, last_move=last_move
@@ -51,11 +52,14 @@ def get_algebraic_notation_mapping(
 
 def make_move(board: Board, move: Move) -> Board:
     if move.type == REGULAR_MOVE:
-        return make_regular_move(board=board, move=move)
-    if move.type == CASTLING_MOVE:
-        return make_castling_move(board=board, move=move)
-    if move.type == EN_PASSANT_MOVE:
-        return make_en_passant_move(board=board, move=move)
+        return make_regular_move(board=board, move=move)  # type: ignore
+    elif move.type == CASTLING_MOVE:
+        return make_castling_move(board=board, move=move)  # type: ignore
+    elif move.type == EN_PASSANT_MOVE:
+        return make_en_passant_move(board=board, move=move)  # type: ignore
+    raise Exception(
+        f"Move {move} did not match any of the move types when trying to make a move."
+    )
 
 
 def x_index_to_file(x: int) -> str:
@@ -85,7 +89,7 @@ def is_stalemate(
 
 
 def _get_ambiguous_algebraic_notation_mapping(
-    board: Board, current_player: str, last_move: Move
+    board: Board, current_player: str, last_move: Optional[Move]
 ) -> dict[AlgebraicNotation, list[Move]]:
 
     mapping: dict[AlgebraicNotation, list[Move]] = {}
@@ -93,7 +97,7 @@ def _get_ambiguous_algebraic_notation_mapping(
         board=board, current_player=current_player, last_move=last_move
     ):
         ambiguous_identifer = AlgebraicNotation(
-            castling_identifier=_get_castling_move_algebraic_notation(move=legal_move),
+            castling_identifier=_get_castling_move_algebraic_notation(move=legal_move),  # type: ignore
             en_passant_identifer=_get_en_passant_identifier(move=legal_move),
             piece=_get_moving_piece_signifier(move=legal_move),
             destination_tile=_get_destination_tile(move=legal_move),
@@ -107,7 +111,7 @@ def _get_ambiguous_algebraic_notation_mapping(
 
 
 def _get_all_legal_moves(
-    board: Board, current_player: str, last_move: Move
+    board: Board, current_player: str, last_move: Optional[Move]
 ) -> Generator[Move, None, None]:
     regular_moves = get_legal_regular_moves(board=board, current_player=current_player)
     en_passant_moves = get_en_passant_moves(board=board, last_move=last_move)
@@ -141,7 +145,7 @@ def _get_capturing_flag(move: Move) -> str:
     return "x" if move.is_capturing_move else ""
 
 
-def _get_castling_move_algebraic_notation(move: Move) -> str:
+def _get_castling_move_algebraic_notation(move: CastlingMove) -> str:
     if not move.type == CASTLING_MOVE:
         return ""
     if move.castling_type == SHORT_CASTLING:

@@ -9,7 +9,7 @@ from utahchess.piece import Piece, create_piece_instance_from_string, get_initia
 
 @dataclass(frozen=True)
 class Board:
-    _board: tuple[tuple[Piece, ...], ...]
+    _board: tuple[tuple[Optional[Piece], ...], ...]
 
     def __init__(self, pieces: Iterable[Piece] = [], board_string: str = "") -> None:
         """8x8 chess board containing black and white pieces.
@@ -147,8 +147,8 @@ class Board:
             column_split_string = row.split("-")
             for x, tile_content in enumerate(column_split_string):
                 piece = create_piece_instance_from_string((x, y), tile_content)
-                _board[x][y] = piece
-        return tuple(tuple(column) for column in _board)
+                _board[x][y] = piece  # type: ignore
+        return tuple(tuple(column) for column in _board)  # type: ignore
 
 
 def is_edible(board: Board, position: tuple[int, int], friendly_color: str) -> bool:

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from utahchess.piece import Piece
+from utahchess.piece import Optional, Piece
 
 FILE_POSSIBILITIES = "abcdefgh"
 RANK_POSSIBILITIES = "87654321"
@@ -14,7 +14,7 @@ def y_index_to_rank(y: int) -> str:
     return RANK_POSSIBILITIES[y]
 
 
-def representation(_board: tuple[tuple[Piece, ...], ...]):
+def representation(_board: tuple[tuple[Optional[Piece], ...], ...]):
     representation = ""
     row = "          "
     for i in range(8):
@@ -29,39 +29,40 @@ def representation(_board: tuple[tuple[Piece, ...], ...]):
                 continue
             else:
                 x_coord -= 1
-            if _board[x_coord][y_coord] is None:
+            piece = _board[x_coord][y_coord]
+            if piece is None:
                 row += "|       | "
                 continue
-            if _board[x_coord][y_coord].piece_type == "Pawn":
-                if _board[x_coord][y_coord].color == "black":
+            if piece.piece_type == "Pawn":
+                if piece.color == "black":
                     row += f"|   \u265F   | "
-                if _board[x_coord][y_coord].color == "white":
+                if piece.color == "white":
                     row += f"|   \u2659   | "
-            if _board[x_coord][y_coord].piece_type == "Knight":
-                if _board[x_coord][y_coord].color == "black":
+            if piece.piece_type == "Knight":
+                if piece.color == "black":
                     row += f"|   \u265E   | "
-                if _board[x_coord][y_coord].color == "white":
+                if piece.color == "white":
                     row += f"|   \u2658   | "
-            if _board[x_coord][y_coord].piece_type == "Rook":
-                if _board[x_coord][y_coord].color == "black":
+            if piece.piece_type == "Rook":
+                if piece.color == "black":
                     row += f"|   \u265C   | "
-                if _board[x_coord][y_coord].color == "white":
+                if piece.color == "white":
                     row += f"|   \u2656   | "
-            if _board[x_coord][y_coord].piece_type == "Bishop":
-                if _board[x_coord][y_coord].color == "black":
+            if piece.piece_type == "Bishop":
+                if piece.color == "black":
                     row += f"|   \u265D   | "
-                if _board[x_coord][y_coord].color == "white":
+                if piece.color == "white":
                     row += f"|   \u2657   | "
-            if _board[x_coord][y_coord].piece_type == "Queen":
-                if _board[x_coord][y_coord].color == "black":
+            if piece.piece_type == "Queen":
+                if piece.color == "black":
                     row += f"|   \u265B   | "
-                if _board[x_coord][y_coord].color == "white":
+                if piece.color == "white":
                     row += f"|   \u2655   | "
 
-            if _board[x_coord][y_coord].piece_type == "King":
-                if _board[x_coord][y_coord].color == "black":
+            if piece.piece_type == "King":
+                if piece.color == "black":
                     row += f"|   \u265A   | "
-                if _board[x_coord][y_coord].color == "white":
+                if piece.color == "white":
                     row += f"|   \u2654   | "
 
         representation += row + "\n"
