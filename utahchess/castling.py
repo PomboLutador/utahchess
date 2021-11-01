@@ -44,8 +44,12 @@ def get_castling_moves(
     king_position = find_current_players_king_position(
         board=board, current_player=current_player
     )
-
-    if not board[king_position].is_in_start_position:
+    king = board[king_position]
+    if king is None:
+        raise Exception(
+            f"Piece at position {king_position} is None when it should be a King."
+        )
+    if not king.is_in_start_position:
         return
 
     if is_check(board=board, current_player=current_player):
@@ -112,11 +116,14 @@ def _get_castling_move(
         position=king_position, movement_vector=movement_vector
     )
 
-    rook_move = (rook_position, rook_destination_tile)
-    king_move = (king_position, king_destination_tile)
+    rook_move, king_move = (rook_position, rook_destination_tile), (
+        king_position,
+        king_destination_tile,
+    )
+    king, rook = board[king_position], board[rook_position]
     castling_move = CastlingMove(
         piece_moves=(king_move, rook_move),
-        moving_pieces=(board[king_position], board[rook_position]),
+        moving_pieces=(king, rook),  # type: ignore
         castling_type=castling_type,
     )
 
@@ -136,6 +143,7 @@ def _find_rook_for_castling(
     if not is_in_bounds(position=next_tile):
         return None
     while True:
+        next_piece = board[next_tile]
         if not is_occupied(board=board, position=next_tile):
             if is_check(
                 board=board.move_piece(
@@ -144,10 +152,10 @@ def _find_rook_for_castling(
                 current_player=current_player,
             ):
                 return None  # Cant castle through check
-        elif (
-            board[next_tile].piece_type == "Rook"
-            and board[next_tile].color == current_player
-            and board[next_tile].is_in_start_position
+        elif (  # If next tile is occupied, it has to be a friendly rook
+            next_piece.piece_type == "Rook"  # type: ignore
+            and next_piece.color == current_player  # type: ignore
+            and next_piece.is_in_start_position  # type: ignore
         ):
             pass
         else:  # If the path to the rook is obstructed

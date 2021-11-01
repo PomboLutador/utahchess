@@ -16,10 +16,10 @@ from utahchess.move_validation import is_checkmate
 @dataclass(frozen=True)
 class GameState:
     board: Board
-    last_move: Move
     current_player: str
     turn: int
     legal_moves: dict[str, Move]
+    last_move: Optional[Move] = None
 
     def __repr__(self) -> str:
         representation = self.board.__repr__()
@@ -34,15 +34,13 @@ class ChessGame:
 
     def new_game(self) -> None:
         board = Board()
-        last_move = None
         current_player = "white"
         turn = 1
         legal_moves = get_algebraic_notation_mapping(
-            board=board, current_player=current_player, last_move=last_move
+            board=board, current_player=current_player
         )
         self.current_game_state = GameState(
             board=board,
-            last_move=last_move,
             current_player=current_player,
             turn=turn,
             legal_moves=legal_moves,
@@ -85,7 +83,9 @@ class ChessGame:
         ) or is_stalemate(
             board=self.current_game_state.board,
             current_player=self.get_current_player(),
-            legal_moves_for_current_player=self.current_game_state.legal_moves.keys(),
+            legal_moves_for_current_player=tuple(
+                self.current_game_state.legal_moves.keys()
+            ),
         )
 
     def __repr__(self) -> str:
@@ -131,7 +131,7 @@ def try_move(
     board: Board,
     legal_moves: dict[str, Move],
     move_in_algebraic_notation: str,
-) -> tuple[Board, bool, Move]:
+) -> tuple[Board, bool, Optional[Move]]:
     """Try to make a move on a given board.
 
     Args:

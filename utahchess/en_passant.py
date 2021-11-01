@@ -47,16 +47,20 @@ def get_en_passant_moves(
         ):
             continue
 
-        if not is_occupied(board=board, position=initial_tile):
+        opponent_piece = board[last_move.piece_moves[0][1]]
+        if opponent_piece is None:
+            raise Exception(
+                f"Piece at position {last_move.piece_moves[0][1]} is None when it should be a Pawn."
+            )
+
+        from_piece = board[initial_tile]
+        if from_piece is None:
             continue
 
-        if (
-            board[initial_tile].piece_type == "Pawn"
-            and board[last_move.piece_moves[0][1]].color != board[initial_tile].color
-        ):
+        if from_piece.piece_type == "Pawn" and opponent_piece.color != from_piece.color:
             potential_move = EnPassantMove(
                 piece_moves=((initial_tile, destination_tile),),
-                moving_pieces=(board[initial_tile],),
+                moving_pieces=(from_piece,),
             )
             if _is_valid_en_passant_move(board=board, en_passant_move=potential_move):
                 yield potential_move

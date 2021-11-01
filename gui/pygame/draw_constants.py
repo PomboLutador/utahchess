@@ -63,7 +63,7 @@ def draw_rank_and_file(screen: pygame.Surface, font: pygame.font.Font) -> None:
 
     # Left of board
     for idx, file in enumerate(reversed(range(1, 9))):
-        x, y = (BORDER_X_OFFSET / 4, BORDER_Y_OFFSET + (idx + 0.5) * TILE_HEIGHT)
+        x, y = ((BORDER_X_OFFSET / 4, BORDER_Y_OFFSET + (idx + 0.5) * TILE_HEIGHT),)  # type: ignore
         text_rect = font.render(str(file), True, FILE_FONT_COLOR)
         screen.blit(text_rect, (x, y))
 
@@ -71,7 +71,7 @@ def draw_rank_and_file(screen: pygame.Surface, font: pygame.font.Font) -> None:
     for idx, file in enumerate(range(1, 9)):
         x, y = (
             BORDER_X_OFFSET * 1.25 + TILE_WIDTH * 8,
-            BORDER_Y_OFFSET + (idx + 0.5) * TILE_HEIGHT,
+            BORDER_Y_OFFSET + (idx + 0.5) * TILE_HEIGHT,  # type: ignore
         )
         text_rect = font.render(str(file), True, FILE_FONT_COLOR)
         screen.blit(text_rect, (x, y))

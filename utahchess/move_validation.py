@@ -94,17 +94,22 @@ def validate_move_candidates(
         board_after_move = board.move_piece(
             from_position=from_position, to_position=to_position
         )
+        from_piece = board[from_position]
+        if from_piece is None:
+            raise Exception(
+                f"Piece at position {from_position} is None when the position should be occupied."
+            )
 
-        current_player = board[from_position].color
+        current_player = from_piece.color
         destination = board[to_position]
         is_capturing_move = False if destination is None else True
         if not is_check(board=board_after_move, current_player=current_player):
             yield RegularMove(
                 piece_moves=(move_candidate,),
-                moving_pieces=(board[from_position],),
+                moving_pieces=(from_piece,),
                 is_capturing_move=is_capturing_move,
                 allows_en_passant=_set_allows_en_passant_flag(
-                    piece_moves=(move_candidate,), moving_pieces=(board[from_position],)
+                    piece_moves=(move_candidate,), moving_pieces=(from_piece,)
                 ),
             )
 
