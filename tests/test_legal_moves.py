@@ -97,7 +97,11 @@ def test_file_to_x_index(file, expected_x_index):
 
 
 @pytest.mark.parametrize(
-    ("board_string", "expected_legal_moves_in_algebraic_notation", "current_player"),
+    (
+        "board_string",
+        "expected_legal_moves_in_algebraic_notation",
+        "current_player",
+    ),
     [
         (
             f"""bk-oo-oo-oo-oo-oo-oo-oo
@@ -307,7 +311,10 @@ def test_get_algebraic_notation_mapping(
     ],
 )
 def test_get_algebraic_notation_mapping_with_last_move_for_en_passant(
-    board_string, expected_legal_moves_in_algebraic_notation, current_player, pawn_move
+    board_string,
+    expected_legal_moves_in_algebraic_notation,
+    current_player,
+    pawn_move,
 ):
     # given
     board = Board(board_string=board_string)

@@ -39,7 +39,8 @@ def get_en_passant_moves(
             position=last_move.piece_moves[0][1], movement_vector=(x_offset, 0)
         )
         destination_tile = apply_movement_vector(
-            position=last_move.piece_moves[0][1], movement_vector=(0, move_direction)
+            position=last_move.piece_moves[0][1],
+            movement_vector=(0, move_direction),
         )
 
         if not is_in_bounds(position=initial_tile) or not is_in_bounds(

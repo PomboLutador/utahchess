@@ -57,7 +57,9 @@ def get_castling_moves(
 
     for movement_vector in [(1, 0), (-1, 0)]:
         rook_tile = _find_rook_for_castling(
-            board=board, current_player=current_player, movement_vector=movement_vector
+            board=board,
+            current_player=current_player,
+            movement_vector=movement_vector,
         )
         if rook_tile is None:
             continue
@@ -109,7 +111,9 @@ def _get_castling_move(
         )
     elif castling_type == LONG_CASTLING:
         king_destination_tile = apply_movement_vector_n_times(
-            position=rook_position, movement_vector=(-movement_vector[0], 0), n=2
+            position=rook_position,
+            movement_vector=(-movement_vector[0], 0),
+            n=2,
         )
 
     rook_destination_tile = apply_movement_vector(

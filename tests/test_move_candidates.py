@@ -25,14 +25,22 @@ def test_get_pawn_move_candidates_in_starting_position(
 
     # then
     expected = (
-        ((x_position, y_position), (x_position, y_position + movement_direction)),
-        ((x_position, y_position), (x_position, y_position + 2 * movement_direction)),
+        (
+            (x_position, y_position),
+            (x_position, y_position + movement_direction),
+        ),
+        (
+            (x_position, y_position),
+            (x_position, y_position + 2 * movement_direction),
+        ),
     )
     assert result == expected
 
 
 @pytest.mark.parametrize(("knight_from_position"), [(1, 7), (6, 7)])
-def test_get_knight_move_candidates_in_starting_position_white(knight_from_position):
+def test_get_knight_move_candidates_in_starting_position_white(
+    knight_from_position,
+):
     # given
     board = Board()
     # when
@@ -55,7 +63,9 @@ def test_get_knight_move_candidates_in_starting_position_white(knight_from_posit
 
 
 @pytest.mark.parametrize(("knight_from_position"), [(1, 0), (6, 0)])
-def test_get_knight_move_candidates_in_starting_position_black(knight_from_position):
+def test_get_knight_move_candidates_in_starting_position_black(
+    knight_from_position,
+):
     # given
     board = Board()
     # when

@@ -71,7 +71,8 @@ def test_get_board_value_is_infinite_when_in_checkmate():
 
 
 @pytest.mark.parametrize(
-    ("current_player", "opposite_player"), [("white", "black"), ("black", "white")]
+    ("current_player", "opposite_player"),
+    [("white", "black"), ("black", "white")],
 )
 def test_get_board_value_is_symmetric(current_player, opposite_player):
     # given
@@ -85,10 +86,12 @@ def test_get_board_value_is_symmetric(current_player, opposite_player):
 
         # when
         result1 = get_board_value(
-            board=board_after_move, player_that_just_made_the_move=current_player
+            board=board_after_move,
+            player_that_just_made_the_move=current_player,
         )
         result2 = get_board_value(
-            board=board_after_move, player_that_just_made_the_move=opposite_player
+            board=board_after_move,
+            player_that_just_made_the_move=opposite_player,
         )
 
         # then

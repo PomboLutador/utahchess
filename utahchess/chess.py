@@ -118,7 +118,10 @@ class ChessGame:
     def get_move_from_positions(
         self, from_position: tuple[int, int], to_position: tuple[int, int]
     ) -> Optional[tuple[str, Move]]:
-        for algebraic_move, move in self.current_game_state.legal_moves.items():
+        for (
+            algebraic_move,
+            move,
+        ) in self.current_game_state.legal_moves.items():
             if (
                 move.piece_moves[0][1] == to_position
                 and move.piece_moves[0][0] == from_position

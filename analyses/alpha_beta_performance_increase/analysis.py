@@ -67,7 +67,11 @@ if __name__ == "__main__":
         ordered_and_pruned_time, ordered_and_pruned_values = run_experiment(
             dataset=dataset, depth=DEPTH, order=True, prune=True
         )
-        print("Ordered and pruned finished after", ordered_and_pruned_time, "seconds")
+        print(
+            "Ordered and pruned finished after",
+            ordered_and_pruned_time,
+            "seconds",
+        )
         print("Working on just pruned experiment...")
         just_pruned_time, just_pruned_values = run_experiment(
             dataset=dataset, depth=DEPTH, order=False, prune=True
