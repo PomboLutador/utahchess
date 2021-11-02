@@ -84,6 +84,7 @@ class Board:
         """
         if from_position == to_position:
             return self.copy()
+
         pieces = self.all_pieces()
         new_pieces = tuple(
             piece

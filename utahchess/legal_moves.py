@@ -79,7 +79,9 @@ def file_to_x_index(file: str) -> int:
 
 
 def is_stalemate(
-    board: Board, current_player: str, legal_moves_for_current_player: Sequence[str]
+    board: Board,
+    current_player: str,
+    legal_moves_for_current_player: Sequence[str],
 ) -> bool:
 
     return (

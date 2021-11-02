@@ -154,7 +154,11 @@ def test_left_side_en_passant_scenario_for_white():
 
 
 @pytest.mark.parametrize(
-    ("board_string_before_moving_piece", "last_move_initial", "last_move_destination"),
+    (
+        "board_string_before_moving_piece",
+        "last_move_initial",
+        "last_move_destination",
+    ),
     [
         (
             f"""oo-oo-oo-oo-oo-oo-oo-oo

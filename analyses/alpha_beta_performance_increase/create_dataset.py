@@ -28,12 +28,16 @@ def sample_random_board(n_pieces: int) -> Board:
     # place two kings
     board_pieces.append(
         King(
-            position=positions_to_fill.pop(), color="white", is_in_start_position=False
+            position=positions_to_fill.pop(),
+            color="white",
+            is_in_start_position=False,
         )
     )
     board_pieces.append(
         King(
-            position=positions_to_fill.pop(), color="black", is_in_start_position=False
+            position=positions_to_fill.pop(),
+            color="black",
+            is_in_start_position=False,
         )
     )
 
@@ -51,7 +55,13 @@ def sample_random_board(n_pieces: int) -> Board:
         knight_counter = 0
         rook_counter = 0
         queen_counter = 0
-        valid_choices: tuple[Type[Piece], ...] = (Pawn, Bishop, Knight, Rook, Queen)
+        valid_choices: tuple[Type[Piece], ...] = (
+            Pawn,
+            Bishop,
+            Knight,
+            Rook,
+            Queen,
+        )
         for _ in range(number_of_pieces):
             class_to_instantiate = np.random.choice(valid_choices)  # type: ignore
             board_pieces.append(

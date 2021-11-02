@@ -92,7 +92,8 @@ def get_pawn_move_candidates(
             position=pawn.position, movement_vector=(1, 1 * movement_direction)
         ),
         apply_movement_vector(
-            position=pawn.position, movement_vector=(-1, 1 * movement_direction)
+            position=pawn.position,
+            movement_vector=(-1, 1 * movement_direction),
         ),
     ]
     for tile_to_check in tiles_to_check:
@@ -119,7 +120,9 @@ def get_knight_move_candidates(
         )
         if is_in_bounds(position=tile_to_check):
             if not is_occupied(board=board, position=tile_to_check) or is_edible(
-                board=board, position=tile_to_check, friendly_color=friendly_color
+                board=board,
+                position=tile_to_check,
+                friendly_color=friendly_color,
             ):
                 yield (position, tile_to_check)
 
@@ -187,7 +190,9 @@ def get_king_move_candidates(
 
 
 def _get_straight_line_moves(
-    board: Board, initial_position: tuple[int, int], movement_vector: tuple[int, int]
+    board: Board,
+    initial_position: tuple[int, int],
+    movement_vector: tuple[int, int],
 ) -> Generator[tuple[tuple[int, int], tuple[int, int]], None, None]:
     piece = board[initial_position]
     if piece is None:
