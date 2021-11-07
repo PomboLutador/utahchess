@@ -76,14 +76,18 @@ class Board:
         return Board(pieces=new_pieces)
 
     def move_piece(
-        self, from_position: tuple[int, int], to_position: tuple[int, int]
+        self, from_position: tuple[int, int], to_position: Optional[tuple[int, int]]
     ) -> Board:
         """Get a new board with one piece moved to a new position.
 
         If the destination is already occupied, the piece will be lost / captured.
+        If the destination is None, the piece at the origin will be deleted.
         """
         if from_position == to_position:
             return self.copy()
+
+        elif to_position is None:
+            return self._delete_piece(position=from_position)
 
         pieces = self.all_pieces()
         new_pieces = tuple(
@@ -100,7 +104,7 @@ class Board:
         )
         return Board(pieces=new_pieces)
 
-    def delete_piece(self, position: tuple[int, int]) -> Board:
+    def _delete_piece(self, position: Optional[tuple[int, int]]) -> Board:
         """Get a new board with one piece deleted."""
         new_pieces = tuple(
             piece for piece in self.all_pieces() if piece.position != position
