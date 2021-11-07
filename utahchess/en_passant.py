@@ -74,7 +74,7 @@ def _complete_en_passant_move(board: Board, en_passant_move: EnPassantMove) -> B
     tile_to_delete = apply_movement_vector(
         position=piece_move[1], movement_vector=(0, -movement_direction)
     )
-    return board.delete_piece(position=tile_to_delete)
+    return board.move_piece(from_position=tile_to_delete, to_position=None)
 
 
 def make_en_passant_move(board: Board, move: EnPassantMove) -> Board:
