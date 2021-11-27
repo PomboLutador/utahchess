@@ -3,12 +3,9 @@ import pytest
 from utahchess.board import Board
 from utahchess.piece import (
     INITIAL_BISHOPS,
-    INITIAL_BLACK_PAWNS,
     INITIAL_KINGS,
-    INITIAL_KNIGHTS,
     INITIAL_QUEENS,
     INITIAL_ROOKS,
-    INITIAL_WHITE_PAWNS,
 )
 
 
