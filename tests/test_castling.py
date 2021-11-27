@@ -4,10 +4,10 @@ from utahchess.board import Board
 from utahchess.castling import (
     LONG_CASTLING,
     SHORT_CASTLING,
-    CastlingMove,
     get_castling_moves,
     make_castling_move,
 )
+from utahchess.move import Move
 
 
 @pytest.mark.parametrize(
@@ -103,13 +103,15 @@ def test_castling_in_corners(
         (rook_from_position, rook_to_position),
     )
     expected = (
-        CastlingMove(
+        Move(
+            type=castling_type,
             piece_moves=expected_piece_moves,
             moving_pieces=(
                 board[king_from_position],
                 board[rook_from_position],
             ),
-            castling_type=castling_type,
+            is_capturing_move=False,
+            allows_en_passant=False,
         ),
     )
 
@@ -181,15 +183,19 @@ def test_castling_both_sides(
         ),
     )
     expected = (
-        CastlingMove(
+        Move(
+            type=SHORT_CASTLING,
             piece_moves=expected_piece_moves_right,
             moving_pieces=(board[king_position], board[rook_position_right]),
-            castling_type=SHORT_CASTLING,
+            is_capturing_move=False,
+            allows_en_passant=False,
         ),
-        CastlingMove(
+        Move(
+            type=LONG_CASTLING,
             piece_moves=expected_piece_moves_left,
             moving_pieces=(board[king_position], board[rook_position_left]),
-            castling_type=LONG_CASTLING,
+            is_capturing_move=False,
+            allows_en_passant=False,
         ),
     )
 
@@ -327,10 +333,12 @@ def test_make_castling_move(
         (king_position, (king_position[0] - 2, king_position[1])),
         (rook_position, (rook_position[0] + 3, rook_position[1])),
     )
-    castling_move = CastlingMove(
+    castling_move = Move(
+        type=LONG_CASTLING,
         piece_moves=expected_piece_moves_left,
         moving_pieces=(board[king_position], board[rook_position]),
-        castling_type=LONG_CASTLING,
+        is_capturing_move=False,
+        allows_en_passant=False,
     )
 
     # when

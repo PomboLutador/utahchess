@@ -1,9 +1,10 @@
 import pytest
 
 from utahchess.board import Board
+from utahchess.move import Move
 from utahchess.move_candidates import get_king_move_candidates, get_pawn_move_candidates
 from utahchess.move_validation import (
-    RegularMove,
+    REGULAR_MOVE,
     is_checkmate,
     make_regular_move,
     validate_move_candidates,
@@ -92,7 +93,8 @@ def test_validate_move_candidates_restricted_king():
 
     # then
     assert result == (
-        RegularMove(
+        Move(
+            type=REGULAR_MOVE,
             piece_moves=(((7, 6), (6, 7)),),
             moving_pieces=(board[7, 6],),
             is_capturing_move=False,
@@ -176,7 +178,8 @@ def test_validate_move_candidates_pawn_cant_move():
 )
 def test_make_regular_move(board, from_move, to_move, expected):
     # given
-    regular_move = RegularMove(
+    regular_move = Move(
+        type=REGULAR_MOVE,
         piece_moves=((from_move, to_move),),
         moving_pieces=board[from_move],
         is_capturing_move=False,

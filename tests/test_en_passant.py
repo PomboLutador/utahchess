@@ -2,11 +2,12 @@ import pytest
 
 from utahchess.board import Board
 from utahchess.en_passant import (
-    EnPassantMove,
+    EN_PASSANT_MOVE,
     get_en_passant_moves,
     make_en_passant_move,
 )
-from utahchess.move_validation import RegularMove
+from utahchess.move import Move
+from utahchess.move_validation import REGULAR_MOVE
 
 
 def test_right_side_en_passant_scenario_for_black():
@@ -23,7 +24,8 @@ def test_right_side_en_passant_scenario_for_black():
     board_after_moving_piece = board_before_moving_piece.move_piece(
         from_position=(0, 6), to_position=(0, 4)
     )
-    last_move = RegularMove(
+    last_move = Move(
+        type=REGULAR_MOVE,
         piece_moves=(((0, 6), (0, 4)),),
         moving_pieces=(board_before_moving_piece[0, 6],),
         is_capturing_move=False,
@@ -37,9 +39,13 @@ def test_right_side_en_passant_scenario_for_black():
 
     # then
     expected = (
-        EnPassantMove(
+        Move(
+            type=EN_PASSANT_MOVE,
             piece_moves=(((1, 4), (0, 5)),),
             moving_pieces=(board_after_moving_piece[1, 4],),
+            pieces_to_delete=((0, 4),),
+            is_capturing_move=True,
+            allows_en_passant=False,
         ),
     )
     assert expected == actual
@@ -59,7 +65,8 @@ def test_left_side_en_passant_scenario_for_black():
     board_after_moving_piece = board_before_moving_piece.move_piece(
         from_position=(7, 6), to_position=(7, 4)
     )
-    last_move = RegularMove(
+    last_move = Move(
+        type=REGULAR_MOVE,
         piece_moves=(((7, 6), (7, 4)),),
         moving_pieces=(board_before_moving_piece[7, 6],),
         is_capturing_move=False,
@@ -73,9 +80,13 @@ def test_left_side_en_passant_scenario_for_black():
 
     # then
     expected = (
-        EnPassantMove(
+        Move(
+            type=EN_PASSANT_MOVE,
             piece_moves=(((6, 4), (7, 5)),),
             moving_pieces=(board_after_moving_piece[6, 4],),
+            pieces_to_delete=((7, 4),),
+            is_capturing_move=True,
+            allows_en_passant=False,
         ),
     )
     assert expected == actual
@@ -95,7 +106,8 @@ def test_right_side_en_passant_scenario_for_white():
     board_after_moving_piece = board_before_moving_piece.move_piece(
         from_position=(0, 1), to_position=(0, 3)
     )
-    last_move = RegularMove(
+    last_move = Move(
+        type=REGULAR_MOVE,
         piece_moves=(((0, 1), (0, 3)),),
         moving_pieces=(board_before_moving_piece[0, 1],),
         is_capturing_move=False,
@@ -109,9 +121,13 @@ def test_right_side_en_passant_scenario_for_white():
 
     # then
     expected = (
-        EnPassantMove(
+        Move(
+            type=EN_PASSANT_MOVE,
             piece_moves=(((1, 3), (0, 2)),),
             moving_pieces=(board_after_moving_piece[1, 3],),
+            pieces_to_delete=((0, 3),),
+            is_capturing_move=True,
+            allows_en_passant=False,
         ),
     )
     assert expected == actual
@@ -131,7 +147,8 @@ def test_left_side_en_passant_scenario_for_white():
     board_after_moving_piece = board_before_moving_piece.move_piece(
         from_position=(1, 1), to_position=(1, 3)
     )
-    last_move = RegularMove(
+    last_move = Move(
+        type=REGULAR_MOVE,
         piece_moves=(((1, 1), (1, 3)),),
         moving_pieces=(board_before_moving_piece[1, 1],),
         is_capturing_move=False,
@@ -145,9 +162,13 @@ def test_left_side_en_passant_scenario_for_white():
 
     # then
     expected = (
-        EnPassantMove(
+        Move(
+            type=EN_PASSANT_MOVE,
             piece_moves=(((0, 3), (1, 2)),),
             moving_pieces=(board_after_moving_piece[0, 3],),
+            pieces_to_delete=((1, 3),),
+            is_capturing_move=True,
+            allows_en_passant=False,
         ),
     )
     assert actual == expected
@@ -242,7 +263,8 @@ def test_last_move_allows_en_passant_but_no_pawn_nearby(
     board_after_moving_piece = board_before_moving_piece.move_piece(
         from_position=last_move_initial, to_position=last_move_destination
     )
-    last_move = RegularMove(
+    last_move = Move(
+        type=REGULAR_MOVE,
         piece_moves=((last_move_initial, last_move_destination),),
         moving_pieces=(board_before_moving_piece[last_move_initial],),
         is_capturing_move=False,
@@ -273,7 +295,8 @@ def test_get_en_passant_moves_would_leave_king_in_check_black():
     board_after_moving_piece = board_before_moving_piece.move_piece(
         from_position=(2, 6), to_position=(2, 4)
     )
-    last_move = RegularMove(
+    last_move = Move(
+        type=REGULAR_MOVE,
         piece_moves=(((2, 6), (2, 4)),),
         moving_pieces=(board_before_moving_piece[2, 6],),
         is_capturing_move=False,
@@ -304,7 +327,8 @@ def test_get_en_passant_moves_would_leave_king_in_check_white():
     board_after_moving_piece = board_before_moving_piece.move_piece(
         from_position=(2, 1), to_position=(2, 3)
     )
-    last_move = RegularMove(
+    last_move = Move(
+        type=REGULAR_MOVE,
         piece_moves=(((2, 1), (2, 3)),),
         moving_pieces=(board_before_moving_piece[2, 1],),
         is_capturing_move=False,
@@ -335,7 +359,8 @@ def test_both_sides_en_passant_scenario_for_white():
     board_after_moving_piece = board_before_moving_piece.move_piece(
         from_position=(1, 1), to_position=(1, 3)
     )
-    last_move = RegularMove(
+    last_move = Move(
+        type=REGULAR_MOVE,
         piece_moves=(((1, 1), (1, 3)),),
         moving_pieces=(board_before_moving_piece[1, 1],),
         is_capturing_move=False,
@@ -349,13 +374,21 @@ def test_both_sides_en_passant_scenario_for_white():
 
     # then
     expected = (
-        EnPassantMove(
+        Move(
+            type=EN_PASSANT_MOVE,
             piece_moves=(((2, 3), (1, 2)),),
             moving_pieces=(board_after_moving_piece[2, 3],),
+            pieces_to_delete=((1, 3),),
+            is_capturing_move=True,
+            allows_en_passant=False,
         ),
-        EnPassantMove(
+        Move(
+            type=EN_PASSANT_MOVE,
             piece_moves=(((0, 3), (1, 2)),),
             moving_pieces=(board_after_moving_piece[0, 3],),
+            pieces_to_delete=((1, 3),),
+            is_capturing_move=True,
+            allows_en_passant=False,
         ),
     )
     assert expected == actual
@@ -375,7 +408,8 @@ def test_both_sides_en_passant_scenario_for_black():
     board_after_moving_piece = board_before_moving_piece.move_piece(
         from_position=(1, 6), to_position=(1, 4)
     )
-    last_move = RegularMove(
+    last_move = Move(
+        type=REGULAR_MOVE,
         piece_moves=(((1, 6), (1, 4)),),
         moving_pieces=(board_before_moving_piece[1, 6],),
         is_capturing_move=False,
@@ -389,20 +423,34 @@ def test_both_sides_en_passant_scenario_for_black():
 
     # then
     expected = (
-        EnPassantMove(
+        Move(
+            type=EN_PASSANT_MOVE,
             piece_moves=(((2, 4), (1, 5)),),
             moving_pieces=(board_after_moving_piece[2, 4],),
+            pieces_to_delete=((1, 4),),
+            is_capturing_move=True,
+            allows_en_passant=False,
         ),
-        EnPassantMove(
+        Move(
+            type=EN_PASSANT_MOVE,
             piece_moves=(((0, 4), (1, 5)),),
             moving_pieces=(board_after_moving_piece[0, 4],),
+            pieces_to_delete=((1, 4),),
+            is_capturing_move=True,
+            allows_en_passant=False,
         ),
     )
     assert expected == actual
 
 
 @pytest.mark.parametrize(
-    ("intial_board", "expected_board", "en_passant_from", "en_passant_to"),
+    (
+        "intial_board",
+        "expected_board",
+        "en_passant_from",
+        "en_passant_to",
+        "piece_to_delete",
+    ),
     [
         (
             Board(
@@ -427,6 +475,7 @@ def test_both_sides_en_passant_scenario_for_black():
             ),
             (2, 4),
             (1, 5),
+            (1, 4),
         ),
         (
             Board(
@@ -451,6 +500,7 @@ def test_both_sides_en_passant_scenario_for_black():
             ),
             (0, 4),
             (1, 5),
+            (1, 4),
         ),
         (
             Board(
@@ -475,6 +525,7 @@ def test_both_sides_en_passant_scenario_for_black():
             ),
             (2, 3),
             (1, 2),
+            (1, 3),
         ),
         (
             Board(
@@ -499,17 +550,26 @@ def test_both_sides_en_passant_scenario_for_black():
             ),
             (0, 3),
             (1, 2),
+            (1, 3),
         ),
     ],
 )
 def test_make_en_passant_move(
-    intial_board, expected_board, en_passant_from, en_passant_to
+    intial_board,
+    expected_board,
+    en_passant_from,
+    en_passant_to,
+    piece_to_delete,
 ):
 
     # given
-    en_passant_move = EnPassantMove(
+    en_passant_move = Move(
+        type=EN_PASSANT_MOVE,
         piece_moves=((en_passant_from, en_passant_to),),
         moving_pieces=(intial_board[en_passant_from],),
+        pieces_to_delete=(),
+        is_capturing_move=True,
+        allows_en_passant=False,
     )
 
     # when

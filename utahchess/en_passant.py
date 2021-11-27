@@ -1,9 +1,8 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
 from typing import Generator, Optional
 
-from utahchess.board import Board, is_occupied
+from utahchess.board import Board
 from utahchess.move import Move
 from utahchess.move_validation import is_check
 from utahchess.piece import Piece
@@ -12,18 +11,9 @@ from utahchess.tile_movement_utils import apply_movement_vector, is_in_bounds
 EN_PASSANT_MOVE = "En Passant Move"
 
 
-@dataclass(frozen=True)
-class EnPassantMove(Move):
-    type = EN_PASSANT_MOVE
-    piece_moves: tuple[tuple[tuple[int, int], tuple[int, int]]]
-    moving_pieces: tuple[Piece]
-    is_capturing_move = True
-    allows_en_passant = False
-
-
 def get_en_passant_moves(
     board: Board, last_move: Optional[Move]
-) -> Generator[EnPassantMove, None, None]:
+) -> Generator[Move, None, None]:
     """Returns all legal En Passant moves for current player."""
     if last_move is None:
         return None
@@ -59,15 +49,32 @@ def get_en_passant_moves(
             continue
 
         if from_piece.piece_type == "Pawn" and opponent_piece.color != from_piece.color:
-            potential_move = EnPassantMove(
+            potential_move = Move(
+                type=EN_PASSANT_MOVE,
                 piece_moves=((initial_tile, destination_tile),),
                 moving_pieces=(from_piece,),
+                pieces_to_delete=(
+                    _get_piece_to_delete(piece_move=(initial_tile, destination_tile))
+                ),
+                is_capturing_move=True,
+                allows_en_passant=False,
             )
             if _is_valid_en_passant_move(board=board, en_passant_move=potential_move):
                 yield potential_move
 
 
-def _complete_en_passant_move(board: Board, en_passant_move: EnPassantMove) -> Board:
+def _get_piece_to_delete(
+    piece_move: tuple[tuple[int, int], tuple[int, int]]
+) -> tuple[tuple[int, int], ...]:
+    movement_direction = piece_move[1][1] - piece_move[0][1]
+    return (
+        apply_movement_vector(
+            position=piece_move[1], movement_vector=(0, -movement_direction)
+        ),
+    )
+
+
+def _complete_en_passant_move(board: Board, en_passant_move: Move) -> Board:
     """Completes the capturing part of an en passant move."""
     piece_move = en_passant_move.piece_moves[0]
     movement_direction = piece_move[1][1] - piece_move[0][1]
@@ -77,14 +84,14 @@ def _complete_en_passant_move(board: Board, en_passant_move: EnPassantMove) -> B
     return board.delete_piece(position=tile_to_delete)
 
 
-def make_en_passant_move(board: Board, move: EnPassantMove) -> Board:
+def make_en_passant_move(board: Board, move: Move) -> Board:
     piece_move = move.piece_moves[0]
     board = board.move_piece(from_position=piece_move[0], to_position=piece_move[1])
     board = _complete_en_passant_move(board=board, en_passant_move=move)
     return board
 
 
-def _is_valid_en_passant_move(board: Board, en_passant_move: EnPassantMove) -> bool:
+def _is_valid_en_passant_move(board: Board, en_passant_move: Move) -> bool:
     current_player = en_passant_move.moving_pieces[0].color
     board_after_move = make_en_passant_move(board=board, move=en_passant_move)
     return not is_check(board=board_after_move, current_player=current_player)
