@@ -1,6 +1,7 @@
 import pytest
 
 from utahchess.board import Board
+from utahchess.move import Move
 from utahchess.legal_moves import (
     file_to_x_index,
     get_algebraic_notation_mapping,
