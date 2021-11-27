@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
 from typing import Generator
 
 from utahchess.board import Board
@@ -9,15 +8,6 @@ from utahchess.move_candidates import get_all_move_candidates
 from utahchess.piece import Piece
 
 REGULAR_MOVE = "Regular Move"
-
-
-@dataclass(frozen=True)
-class RegularMove(Move):
-    type = REGULAR_MOVE
-    piece_moves: tuple[tuple[tuple[int, int], tuple[int, int]], ...]
-    moving_pieces: tuple[Piece, ...]
-    is_capturing_move: bool
-    allows_en_passant: bool
 
 
 def _set_allows_en_passant_flag(
@@ -86,7 +76,7 @@ def is_checkmate(board: Board, current_player: str) -> bool:
 def validate_move_candidates(
     board: Board,
     move_candidates: Generator[tuple[tuple[int, int], tuple[int, int]], None, None],
-) -> Generator[RegularMove, None, None]:
+) -> Generator[Move, None, None]:
     """Filter move candidates based on whether they leave king unprotected."""
 
     for move_candidate in move_candidates:
@@ -104,7 +94,8 @@ def validate_move_candidates(
         destination = board[to_position]
         is_capturing_move = False if destination is None else True
         if not is_check(board=board_after_move, current_player=current_player):
-            yield RegularMove(
+            yield Move(
+                type=REGULAR_MOVE,
                 piece_moves=(move_candidate,),
                 moving_pieces=(from_piece,),
                 is_capturing_move=is_capturing_move,
@@ -116,13 +107,13 @@ def validate_move_candidates(
 
 def get_legal_regular_moves(
     board: Board, current_player: str
-) -> Generator[RegularMove, None, None]:
+) -> Generator[Move, None, None]:
     all_move_candidates = get_all_move_candidates(
         board=board, current_player=current_player
     )
     return validate_move_candidates(board=board, move_candidates=all_move_candidates)
 
 
-def make_regular_move(board: Board, move: RegularMove) -> Board:
+def make_regular_move(board: Board, move: Move) -> Board:
     from_position, to_position = move.piece_moves[0]
     return board.move_piece(from_position=from_position, to_position=to_position)

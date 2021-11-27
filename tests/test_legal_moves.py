@@ -9,7 +9,7 @@ from utahchess.legal_moves import (
     x_index_to_file,
     y_index_to_rank,
 )
-from utahchess.move_validation import RegularMove, make_regular_move
+from utahchess.move_validation import REGULAR_MOVE, make_regular_move
 
 
 @pytest.mark.parametrize(
@@ -318,7 +318,8 @@ def test_get_algebraic_notation_mapping_with_last_move_for_en_passant(
 ):
     # given
     board = Board(board_string=board_string)
-    move_to_make = RegularMove(
+    move_to_make = Move(
+        type=REGULAR_MOVE,
         piece_moves=pawn_move,
         moving_pieces=(board[pawn_move[0][0]],),
         is_capturing_move=False,
