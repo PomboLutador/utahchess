@@ -68,17 +68,6 @@ def get_king_move(move: Move) -> tuple[tuple[int, int], tuple[int, int]]:
     return move.piece_moves[0]
 
 
-def make_castling_move(board: Board, move: Move) -> Board:
-    rook_from, rook_to = get_rook_move(move=move)
-    king_from, king_to = get_king_move(move=move)
-    board_after_rook_move = board.move_piece(
-        from_position=rook_from, to_position=rook_to
-    )
-    return board_after_rook_move.move_piece(
-        from_position=king_from, to_position=king_to
-    )
-
-
 def _get_castling_type(movement_vector: tuple[int, int]) -> str:
     return SHORT_CASTLING if movement_vector[0] == 1 else LONG_CASTLING
 

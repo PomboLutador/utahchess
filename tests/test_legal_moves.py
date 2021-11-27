@@ -1,16 +1,17 @@
 import pytest
 
 from utahchess.board import Board
-from utahchess.move import Move
 from utahchess.legal_moves import (
     file_to_x_index,
     get_algebraic_notation_mapping,
     is_stalemate,
+    make_move,
     rank_to_y_index,
     x_index_to_file,
     y_index_to_rank,
 )
-from utahchess.move_validation import REGULAR_MOVE, make_regular_move
+from utahchess.move import Move
+from utahchess.move_validation import REGULAR_MOVE
 
 
 @pytest.mark.parametrize(
@@ -326,7 +327,7 @@ def test_get_algebraic_notation_mapping_with_last_move_for_en_passant(
         is_capturing_move=False,
         allows_en_passant=True,
     )
-    board_after_move = make_regular_move(board=board, move=move_to_make)
+    board_after_move = make_move(board=board, move=move_to_make)
 
     # when
     result = tuple(

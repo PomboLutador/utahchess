@@ -1,12 +1,8 @@
 import pytest
 
 from utahchess.board import Board
-from utahchess.castling import (
-    LONG_CASTLING,
-    SHORT_CASTLING,
-    get_castling_moves,
-    make_castling_move,
-)
+from utahchess.castling import LONG_CASTLING, SHORT_CASTLING, get_castling_moves
+from utahchess.legal_moves import make_move
 from utahchess.move import Move
 
 
@@ -342,7 +338,7 @@ def test_make_castling_move(
     )
 
     # when
-    actual = make_castling_move(board=board, move=castling_move)
+    actual = make_move(board=board, move=castling_move)
 
     # then
     assert Board(board_string=expected_board_after_move) == actual
