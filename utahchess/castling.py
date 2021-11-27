@@ -1,45 +1,23 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
 from typing import Generator, Optional
 
-from utahchess.board import Board, is_edible, is_occupied
+from utahchess.board import Board, is_occupied
 from utahchess.move import Move
 from utahchess.move_validation import find_current_players_king_position, is_check
-from utahchess.piece import Piece
 from utahchess.tile_movement_utils import (
     apply_movement_vector,
     apply_movement_vector_n_times,
     is_in_bounds,
 )
 
-SHORT_CASTLING = "Short Castling"
-LONG_CASTLING = "Long Castling"
-CASTLING_MOVE = "Castling Move"
-
-
-@dataclass(frozen=True)
-class CastlingMove(Move):
-    type = CASTLING_MOVE
-    piece_moves: tuple[
-        tuple[tuple[int, int], tuple[int, int]],
-        tuple[tuple[int, int], tuple[int, int]],
-    ]
-    moving_pieces: tuple[Piece, Piece]
-    is_capturing_move = False
-    castling_type: str
-    allows_en_passant = False
-
-    def get_rook_move(self) -> tuple[tuple[int, int], tuple[int, int]]:
-        return self.piece_moves[1]
-
-    def get_king_move(self) -> tuple[tuple[int, int], tuple[int, int]]:
-        return self.piece_moves[0]
+SHORT_CASTLING = "Short Castling Move"
+LONG_CASTLING = "Long Castling Move"
 
 
 def get_castling_moves(
     board: Board, current_player: str
-) -> Generator[CastlingMove, None, None]:
+) -> Generator[Move, None, None]:
     """Get all castling moves for the current player."""
     king_position = find_current_players_king_position(
         board=board, current_player=current_player
@@ -73,8 +51,8 @@ def get_castling_moves(
 
         if is_check(
             board=board.move_piece(
-                from_position=castling_move.get_king_move()[0],
-                to_position=castling_move.get_king_move()[1],
+                from_position=get_king_move(move=castling_move)[0],
+                to_position=get_king_move(move=castling_move)[1],
             ),
             current_player=current_player,
         ):
@@ -82,9 +60,17 @@ def get_castling_moves(
         yield castling_move
 
 
-def make_castling_move(board: Board, move: CastlingMove) -> Board:
-    rook_from, rook_to = move.get_rook_move()
-    king_from, king_to = move.get_king_move()
+def get_rook_move(move: Move) -> tuple[tuple[int, int], tuple[int, int]]:
+    return move.piece_moves[1]
+
+
+def get_king_move(move: Move) -> tuple[tuple[int, int], tuple[int, int]]:
+    return move.piece_moves[0]
+
+
+def make_castling_move(board: Board, move: Move) -> Board:
+    rook_from, rook_to = get_rook_move(move=move)
+    king_from, king_to = get_king_move(move=move)
     board_after_rook_move = board.move_piece(
         from_position=rook_from, to_position=rook_to
     )
@@ -102,7 +88,7 @@ def _get_castling_move(
     movement_vector: tuple[int, int],
     king_position: tuple[int, int],
     rook_position: tuple[int, int],
-) -> CastlingMove:
+) -> Move:
     """Gather description of castling move."""
     castling_type = _get_castling_type(movement_vector=movement_vector)
     if castling_type == SHORT_CASTLING:
@@ -125,10 +111,12 @@ def _get_castling_move(
         king_destination_tile,
     )
     king, rook = board[king_position], board[rook_position]
-    castling_move = CastlingMove(
+    castling_move = Move(
+        type=castling_type,
         piece_moves=(king_move, rook_move),
         moving_pieces=(king, rook),  # type: ignore
-        castling_type=castling_type,
+        is_capturing_move=False,
+        allows_en_passant=False,
     )
 
     return castling_move
