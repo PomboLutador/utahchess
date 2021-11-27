@@ -7,10 +7,8 @@ from typing import Generator, Optional, Sequence
 from utahchess.algebraic_notation import AlgebraicNotation
 from utahchess.board import Board
 from utahchess.castling import (
-    CASTLING_MOVE,
     LONG_CASTLING,
     SHORT_CASTLING,
-    CastlingMove,
     get_castling_moves,
     make_castling_move,
 )
@@ -53,7 +51,7 @@ def get_algebraic_notation_mapping(
 def make_move(board: Board, move: Move) -> Board:
     if move.type == REGULAR_MOVE:
         return make_regular_move(board=board, move=move)  # type: ignore
-    elif move.type == CASTLING_MOVE:
+    elif move.type == SHORT_CASTLING or move.type == LONG_CASTLING:
         return make_castling_move(board=board, move=move)  # type: ignore
     elif move.type == EN_PASSANT_MOVE:
         return make_en_passant_move(board=board, move=move)  # type: ignore
@@ -147,14 +145,13 @@ def _get_capturing_flag(move: Move) -> str:
     return "x" if move.is_capturing_move else ""
 
 
-def _get_castling_move_algebraic_notation(move: CastlingMove) -> str:
-    if not move.type == CASTLING_MOVE:
-        return ""
-    if move.castling_type == SHORT_CASTLING:
+def _get_castling_move_algebraic_notation(move: Move) -> str:
+    if move.type == SHORT_CASTLING:
         return "O-O"
-    elif move.castling_type == LONG_CASTLING:
+    elif move.type == LONG_CASTLING:
         return "O-O-O"
-    raise Exception(f"{move} is not a valid Castling Move")
+    else:
+        return ""
 
 
 def _disambiguate_moves(
