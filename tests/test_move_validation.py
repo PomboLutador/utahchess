@@ -1,12 +1,12 @@
 import pytest
 
 from utahchess.board import Board
+from utahchess.legal_moves import make_move
 from utahchess.move import Move
 from utahchess.move_candidates import get_king_move_candidates, get_pawn_move_candidates
 from utahchess.move_validation import (
     REGULAR_MOVE,
     is_checkmate,
-    make_regular_move,
     validate_move_candidates,
 )
 
@@ -187,7 +187,7 @@ def test_make_regular_move(board, from_move, to_move, expected):
     )
 
     # when
-    result = make_regular_move(board=board, move=regular_move)
+    result = make_move(board=board, move=regular_move)
 
     # then
     assert result == expected

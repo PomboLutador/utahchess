@@ -1,11 +1,8 @@
 import pytest
 
 from utahchess.board import Board
-from utahchess.en_passant import (
-    EN_PASSANT_MOVE,
-    get_en_passant_moves,
-    make_en_passant_move,
-)
+from utahchess.en_passant import EN_PASSANT_MOVE, get_en_passant_moves
+from utahchess.legal_moves import make_move
 from utahchess.move import Move
 from utahchess.move_validation import REGULAR_MOVE
 
@@ -567,13 +564,13 @@ def test_make_en_passant_move(
         type=EN_PASSANT_MOVE,
         piece_moves=((en_passant_from, en_passant_to),),
         moving_pieces=(intial_board[en_passant_from],),
-        pieces_to_delete=(),
+        pieces_to_delete=((piece_to_delete),),
         is_capturing_move=True,
         allows_en_passant=False,
     )
 
     # when
-    actual = make_en_passant_move(
+    actual = make_move(
         board=intial_board,
         move=en_passant_move,
     )

@@ -10,20 +10,13 @@ from utahchess.piece import Piece
 REGULAR_MOVE = "Regular Move"
 
 
-def _set_allows_en_passant_flag(
-    moving_pieces: tuple[Piece],
-    piece_moves: tuple[tuple[tuple[int, int], tuple[int, int]]],
-) -> bool:
-    return (
-        moving_pieces[0].piece_type == "Pawn"
-        and abs(_get_distance_moved_in_y_direction(piece_moves[0])) == 2
+def get_legal_regular_moves(
+    board: Board, current_player: str
+) -> Generator[Move, None, None]:
+    all_move_candidates = get_all_move_candidates(
+        board=board, current_player=current_player
     )
-
-
-def _get_distance_moved_in_y_direction(
-    piece_move: tuple[tuple[int, int], tuple[int, int]]
-) -> int:
-    return piece_move[1][1] - piece_move[0][1]
+    return validate_move_candidates(board=board, move_candidates=all_move_candidates)
 
 
 def is_check(board: Board, current_player: str) -> bool:
@@ -73,6 +66,18 @@ def is_checkmate(board: Board, current_player: str) -> bool:
     return is_check(board=board, current_player=current_player)
 
 
+def validate_move(board: Board, move: Move) -> bool:
+    board_after_move = board.copy()
+    current_player = board[move.piece_moves[0][0]].color  # type: ignore
+    for piece_move in move.piece_moves:
+        board_after_move = board_after_move.move_piece(
+            from_position=piece_move[0], to_position=piece_move[1]
+        )
+    for piece_to_delete in move.pieces_to_delete:
+        board_after_move = board_after_move.delete_piece(position=piece_to_delete)
+    return not is_check(board=board_after_move, current_player=current_player)
+
+
 def validate_move_candidates(
     board: Board,
     move_candidates: Generator[tuple[tuple[int, int], tuple[int, int]], None, None],
@@ -105,15 +110,17 @@ def validate_move_candidates(
             )
 
 
-def get_legal_regular_moves(
-    board: Board, current_player: str
-) -> Generator[Move, None, None]:
-    all_move_candidates = get_all_move_candidates(
-        board=board, current_player=current_player
+def _set_allows_en_passant_flag(
+    moving_pieces: tuple[Piece],
+    piece_moves: tuple[tuple[tuple[int, int], tuple[int, int]]],
+) -> bool:
+    return (
+        moving_pieces[0].piece_type == "Pawn"
+        and abs(_get_distance_moved_in_y_direction(piece_moves[0])) == 2
     )
-    return validate_move_candidates(board=board, move_candidates=all_move_candidates)
 
 
-def make_regular_move(board: Board, move: Move) -> Board:
-    from_position, to_position = move.piece_moves[0]
-    return board.move_piece(from_position=from_position, to_position=to_position)
+def _get_distance_moved_in_y_direction(
+    piece_move: tuple[tuple[int, int], tuple[int, int]]
+) -> int:
+    return piece_move[1][1] - piece_move[0][1]
