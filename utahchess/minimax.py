@@ -12,6 +12,10 @@ from utahchess.legal_moves import get_algebraic_notation_mapping, make_move
 from utahchess.move import Move
 from utahchess.move_validation import is_checkmate
 
+# TODO: We can just replace Node with a little dict containing the necessary
+# TODO: fields. We are not actually making use of any Node properties.
+
+
 PAWN_VALUE = 1
 BISHOP_VALUE = 3
 KNIGHT_VALUE = 3
