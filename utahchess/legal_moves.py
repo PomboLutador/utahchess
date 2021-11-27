@@ -6,25 +6,10 @@ from typing import Generator, Optional, Sequence
 
 from utahchess.algebraic_notation import AlgebraicNotation
 from utahchess.board import Board
-from utahchess.castling import (
-    LONG_CASTLING,
-    SHORT_CASTLING,
-    get_castling_moves,
-    make_castling_move,
-)
-from utahchess.en_passant import (
-    EN_PASSANT_MOVE,
-    get_en_passant_moves,
-    make_en_passant_move,
-)
+from utahchess.castling import LONG_CASTLING, SHORT_CASTLING, get_castling_moves
+from utahchess.en_passant import EN_PASSANT_MOVE, get_en_passant_moves
 from utahchess.move import Move
-from utahchess.move_validation import (
-    REGULAR_MOVE,
-    get_legal_regular_moves,
-    is_check,
-    is_checkmate,
-    make_regular_move,
-)
+from utahchess.move_validation import get_legal_regular_moves, is_check, is_checkmate
 
 FILE_POSSIBILITIES = "abcdefgh"
 RANK_POSSIBILITIES = "87654321"
@@ -49,15 +34,14 @@ def get_algebraic_notation_mapping(
 
 
 def make_move(board: Board, move: Move) -> Board:
-    if move.type == REGULAR_MOVE:
-        return make_regular_move(board=board, move=move)  # type: ignore
-    elif move.type == SHORT_CASTLING or move.type == LONG_CASTLING:
-        return make_castling_move(board=board, move=move)  # type: ignore
-    elif move.type == EN_PASSANT_MOVE:
-        return make_en_passant_move(board=board, move=move)  # type: ignore
-    raise Exception(
-        f"Move {move} did not match any of the move types when trying to make a move."
-    )
+    board_after_move = board.copy()
+    for piece_move in move.piece_moves:
+        board_after_move = board_after_move.move_piece(
+            from_position=piece_move[0], to_position=piece_move[1]
+        )
+    for piece_to_delete in move.pieces_to_delete:
+        board_after_move = board_after_move.delete_piece(position=piece_to_delete)
+    return board_after_move
 
 
 def x_index_to_file(x: int) -> str:
@@ -114,8 +98,8 @@ def _get_all_legal_moves(
     board: Board, current_player: str, last_move: Optional[Move]
 ) -> Generator[Move, None, None]:
     regular_moves = get_legal_regular_moves(board=board, current_player=current_player)
-    en_passant_moves = get_en_passant_moves(board=board, last_move=last_move)
     castling_moves = get_castling_moves(board=board, current_player=current_player)
+    en_passant_moves = get_en_passant_moves(board=board, last_move=last_move)
     return chain(regular_moves, en_passant_moves, castling_moves)  # type: ignore
 
 
