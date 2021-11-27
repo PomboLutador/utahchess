@@ -4,7 +4,7 @@ from typing import Generator, Optional
 
 from utahchess.board import Board
 from utahchess.move import Move
-from utahchess.move_validation import validate_move
+from utahchess.move_validation import is_valid_move
 from utahchess.tile_movement_utils import apply_movement_vector, is_in_bounds
 
 EN_PASSANT_MOVE = "En Passant Move"
@@ -59,7 +59,7 @@ def get_en_passant_moves(
                 is_capturing_move=True,
                 allows_en_passant=False,
             )
-            if validate_move(board=board, move=potential_move):
+            if is_valid_move(board=board, move=potential_move):
                 yield potential_move
 
 

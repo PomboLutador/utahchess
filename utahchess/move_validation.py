@@ -66,7 +66,7 @@ def is_checkmate(board: Board, current_player: str) -> bool:
     return is_check(board=board, current_player=current_player)
 
 
-def validate_move(board: Board, move: Move) -> bool:
+def is_valid_move(board: Board, move: Move) -> bool:
     board_after_move = board.copy()
     current_player = board[move.piece_moves[0][0]].color  # type: ignore
     for piece_move in move.piece_moves:
