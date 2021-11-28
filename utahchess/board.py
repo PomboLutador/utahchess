@@ -71,7 +71,6 @@ class Board:
 
     def copy(self) -> Board:
         """Create a copy of the board."""
-        # TODO: Is this really a proper copy?
         new_pieces = tuple(piece for piece in self.all_pieces())
         return Board(pieces=new_pieces)
 
