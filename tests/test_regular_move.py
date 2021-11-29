@@ -1,5 +1,3 @@
-import pytest
-
 from utahchess.board import Board
 from utahchess.regular_move import get_regular_moves
 
