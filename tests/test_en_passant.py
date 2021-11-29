@@ -4,7 +4,7 @@ from utahchess.board import Board
 from utahchess.en_passant import EN_PASSANT_MOVE, get_en_passant_moves
 from utahchess.legal_moves import make_move
 from utahchess.move import Move
-from utahchess.move_validation import REGULAR_MOVE
+from utahchess.regular_move import REGULAR_MOVE
 
 
 def test_right_side_en_passant_scenario_for_black():

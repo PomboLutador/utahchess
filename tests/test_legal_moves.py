@@ -11,7 +11,7 @@ from utahchess.legal_moves import (
     y_index_to_rank,
 )
 from utahchess.move import Move
-from utahchess.move_validation import REGULAR_MOVE
+from utahchess.regular_move import REGULAR_MOVE
 
 
 @pytest.mark.parametrize(

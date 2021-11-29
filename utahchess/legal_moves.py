@@ -9,7 +9,8 @@ from utahchess.board import Board
 from utahchess.castling import LONG_CASTLING, SHORT_CASTLING, get_castling_moves
 from utahchess.en_passant import EN_PASSANT_MOVE, get_en_passant_moves
 from utahchess.move import Move
-from utahchess.move_validation import get_legal_regular_moves, is_check, is_checkmate
+from utahchess.move_validation import is_check, is_checkmate
+from utahchess.regular_move import get_regular_moves
 
 FILE_POSSIBILITIES = "abcdefgh"
 RANK_POSSIBILITIES = "87654321"
@@ -97,7 +98,7 @@ def _get_ambiguous_algebraic_notation_mapping(
 def _get_all_legal_moves(
     board: Board, current_player: str, last_move: Optional[Move]
 ) -> Generator[Move, None, None]:
-    regular_moves = get_legal_regular_moves(board=board, current_player=current_player)
+    regular_moves = get_regular_moves(board=board, current_player=current_player)
     castling_moves = get_castling_moves(board=board, current_player=current_player)
     en_passant_moves = get_en_passant_moves(board=board, last_move=last_move)
     return chain(regular_moves, en_passant_moves, castling_moves)  # type: ignore
