@@ -187,5 +187,6 @@ def _get_is_in_start_position(
             piece.position for piece in INITIAL_KINGS if piece.color == color
         )
     raise Exception(
-        "Could not determine whether piece '{class_identifier}' of color {color} in position {position} is in starting position."
+        f"Could not determine whether piece '{class_identifier}' of color "
+        f"{color} in position {position} is in starting position."
     )

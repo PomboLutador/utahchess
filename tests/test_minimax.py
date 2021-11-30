@@ -135,16 +135,20 @@ def test_minimax_with_dummy_game():
     # given
 
     parent_node = Node(name="parent", value=3, depth=0)
-    children_nodes_function = lambda parent_node: [
-        Node(
-            name=f"child_with_value_{i+1}_depth_{parent_node.depth+1}",
-            parent=parent_node,
-            value=(i + 1),
-            depth=parent_node.depth + 1,
-        )
-        for i in range(4)
-    ]
-    node_value_function = lambda node: node.value
+
+    def children_nodes_function(parent_node):
+        return [
+            Node(
+                name=f"child_with_value_{i+1}_depth_{parent_node.depth+1}",
+                parent=parent_node,
+                value=(i + 1),
+                depth=parent_node.depth + 1,
+            )
+            for i in range(4)
+        ]
+
+    def node_value_function(node):
+        return node.value
 
     # when
     result_node, result_value = minimax(

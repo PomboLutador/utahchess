@@ -82,7 +82,9 @@ def _get_ambiguous_algebraic_notation_mapping(
         board=board, current_player=current_player, last_move=last_move
     ):
         ambiguous_identifer = AlgebraicNotation(
-            castling_identifier=_get_castling_move_algebraic_notation(move=legal_move),  # type: ignore
+            castling_identifier=_get_castling_identifer(
+                move=legal_move,
+            ),  # type: ignore
             en_passant_identifer=_get_en_passant_identifier(move=legal_move),
             piece=_get_moving_piece_signifier(move=legal_move),
             destination_tile=_get_destination_tile(move=legal_move),
@@ -130,7 +132,7 @@ def _get_capturing_flag(move: Move) -> str:
     return "x" if move.is_capturing_move else ""
 
 
-def _get_castling_move_algebraic_notation(move: Move) -> str:
+def _get_castling_identifer(move: Move) -> str:
     if move.type == SHORT_CASTLING:
         return "O-O"
     elif move.type == LONG_CASTLING:
@@ -172,7 +174,8 @@ def _disambiguate_moves(
             ambiguous_identifier.to_string_with_rank(rank=rank2): move2,
         }
     raise Exception(
-        f"Moves {moves_to_disambiguate} with ambiguous identifier {ambiguous_identifier} could not be disambiguated with just rank and file."
+        f"Moves {moves_to_disambiguate} with ambiguous identifier "
+        f"{ambiguous_identifier} could not be disambiguated with just rank and file."
     )
 
 
