@@ -41,7 +41,9 @@ class Board:
 
         if not board_string:
             if not pieces:
-                pieces = get_initial_pieces()
+                pieces = get_initial_pieces(
+                    
+                )
 
             _board = [[None for x in range(8)] for y in range(8)]
             for piece in pieces:
