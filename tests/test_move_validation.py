@@ -4,7 +4,7 @@ from utahchess.board import Board
 from utahchess.legal_moves import make_move
 from utahchess.move import Move
 from utahchess.move_candidates import get_king_move_candidates, get_pawn_move_candidates
-from utahchess.move_validation import is_check, is_checkmate, is_valid_move
+from utahchess.move_validation import is_checkmate, is_valid_move
 from utahchess.regular_move import REGULAR_MOVE
 
 

@@ -78,7 +78,7 @@ class PygameGUI:
                             y=y_index,
                         )
 
-                    # If clicked position is not occupied or from enemy color, try to make a move
+                    # Not occupied or enemy color, try to make a move
                     if not is_occupied(
                         self.get_current_board(), (x_index, y_index)
                     ) or is_edible(

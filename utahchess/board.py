@@ -49,7 +49,9 @@ class Board:
                 _board[x][y] = piece  # type: ignore
 
         elif board_string:
-            _board = self._initialize_from_string(board_string=board_string)  # type: ignore
+            _board = self._initialize_from_string(
+                board_string=board_string,
+            )  # type: ignore
 
         object.__setattr__(self, "_board", tuple(tuple(column) for column in _board))
 
@@ -125,7 +127,7 @@ class Board:
             [
                 "-".join(
                     [
-                        self[x, y].to_string() if self[x, y] is not None else "oo"  # type: ignore
+                        self[x, y].to_string() if self[x, y] is not None else "oo"  # type: ignore # noqa
                         for x in range(8)
                     ]
                 )
