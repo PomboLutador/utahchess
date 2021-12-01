@@ -6,10 +6,9 @@ from os import walk
 from typing import Generator, Sequence
 
 import numpy as np
-from anytree import Node  # type: ignore
 
 from utahchess.board import Board
-from utahchess.minimax import create_children_from_parent, get_node_value, minimax
+from utahchess.minimax import create_children_from_parent, get_node_value, minimax, Node
 
 
 def generate_dataset(
@@ -31,7 +30,7 @@ def run_experiment(
     found_values = []
     for board in dataset:
 
-        parent_node = Node("initial_node", board=board, last_move=None, player="white")
+        parent_node = Node(name="initial_node", parent=None, board=board, last_move=None, player="white")
         suggested_node, value = minimax(
             parent_node=parent_node,
             value_function=get_node_value,

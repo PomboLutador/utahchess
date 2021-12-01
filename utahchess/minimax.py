@@ -2,10 +2,9 @@ from __future__ import annotations
 
 from collections import OrderedDict
 from itertools import product
-from typing import Callable, Generator
+from typing import Any, Callable, Generator, Optional
 
 import numpy as np
-from anytree import Node  # type: ignore
 
 from utahchess.board import Board
 from utahchess.legal_moves import get_algebraic_notation_mapping, make_move
@@ -28,6 +27,20 @@ EDGE_POSITIONS = tuple(product((0, 1, 6, 7), (0, 1, 6, 7))) + tuple(
 EDGE_VALUE = -0.25
 
 
+class Node:
+    def __init__(self, parent: Optional[Node], name: str, **kwargs):
+        self.parent = parent
+        self.name = name
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+
+    def __repr__(self):
+        return self.name
+
+    def __getattr__(self, attribute_name: str) -> Any:
+        return getattr(self, attribute_name)
+
+
 def minimax(
     parent_node: Node,
     value_function: Callable,
@@ -44,7 +57,7 @@ def minimax(
         # Or is this handled by the fact that get_children won't produce any new nodes?
         return parent_node, value_function(node=parent_node)
 
-    best_move = None
+    best_move: Any = None
     if maximizing_player:
         best_value = -np.inf
         for child_node in get_children(parent_node=parent_node):
@@ -117,7 +130,7 @@ def _order_moves_by_potential(moves_mapping: dict[str, Move]) -> OrderedDict[str
 
 
 def create_children_from_parent(
-    parent_node: Node, ordered: bool
+    parent_node: Node, ordered: bool = True
 ) -> Generator[Node, None, None]:
     parent_board = parent_node.board
     parent_last_move = parent_node.last_move
@@ -125,8 +138,8 @@ def create_children_from_parent(
     if ordered:
         return (
             Node(
-                algebraic_identifier,
                 parent=parent_node,
+                name=algebraic_identifier,
                 board=make_move(board=parent_board, move=legal_move),
                 last_move=legal_move,
                 player=_get_enemy_color(friendly_color=parent_player),
@@ -142,8 +155,8 @@ def create_children_from_parent(
     else:
         return (
             Node(
-                algebraic_identifier,
                 parent=parent_node,
+                name=algebraic_identifier,
                 board=make_move(board=parent_board, move=legal_move),
                 last_move=legal_move,
                 player=_get_enemy_color(friendly_color=parent_player),
@@ -209,13 +222,19 @@ if __name__ == "__main__":
             wp-wp-wp-wp-wp-oo-oo-wp
             wr-wn-wb-wq-wk-wb-wn-wr"""
     )
-    parent_node = Node("initial_node", board=fools_mate, last_move=None, player="black")
+    parent_node = Node(
+        name="initial_node",
+        parent=None,
+        board=fools_mate,
+        last_move=None,
+        player="black",
+    )
 
     suggested_node, value = minimax(
         parent_node=parent_node,
         value_function=get_node_value,
         get_children=create_children_from_parent,
-        depth=5,
+        depth=4,
         alpha=-np.inf,
         beta=np.inf,
         maximizing_player=True,
