@@ -1,9 +1,8 @@
 from __future__ import annotations
 
+import random
 from itertools import product
 from typing import Type
-
-import numpy as np
 
 from utahchess.board import Board
 from utahchess.move_validation import is_check, is_checkmate
@@ -18,12 +17,12 @@ IMBALANCE_RANGE_HIGH = 0.7
 
 
 def sample_n_positions(n: int) -> list[tuple[int, int]]:
-    np.random.shuffle(POSSIBLE_INDICES)
+    random.shuffle(POSSIBLE_INDICES)
     return list(ALL_POSITIONS[i] for i in POSSIBLE_INDICES[:n])
 
 
 def sample_random_board(n_pieces: int) -> Board:
-    board_pieces = []
+    board_pieces: list[Piece] = []
     positions_to_fill = sample_n_positions(n=n_pieces)
     # place two kings
     board_pieces.append(
@@ -43,7 +42,7 @@ def sample_random_board(n_pieces: int) -> Board:
 
     pieces_left = n_pieces - 2
     white_number_of_pieces = int(
-        np.random.uniform(IMBALANCE_RANGE_LOW, IMBALANCE_RANGE_HIGH) * pieces_left
+        random.uniform(IMBALANCE_RANGE_LOW, IMBALANCE_RANGE_HIGH) * pieces_left
     )
     black_number_of_pieces = pieces_left - white_number_of_pieces
 
@@ -63,9 +62,9 @@ def sample_random_board(n_pieces: int) -> Board:
             Queen,
         )
         for _ in range(number_of_pieces):
-            class_to_instantiate = np.random.choice(valid_choices)  # type: ignore
+            class_to_instantiate = random.choice(valid_choices)  # type: ignore
             board_pieces.append(
-                class_to_instantiate(
+                class_to_instantiate(  # type: ignore
                     position=positions_to_fill.pop(),
                     color=color,
                     is_in_start_position=False,
@@ -128,7 +127,7 @@ if __name__ == "__main__":
     NUM_BOARDS = 1000
     count = 0
     while count < NUM_BOARDS:
-        num_pieces = int(np.random.uniform(3, 20))
+        num_pieces = int(random.uniform(3, 20))
         board = sample_random_board(n_pieces=num_pieces)
         count += 1
         if count % 10 == 0:
