@@ -127,7 +127,7 @@ class Board:
             [
                 "-".join(
                     [
-                        self[x, y].to_string() if self[x, y] is not None else "oo"  # type: ignore
+                        self[x, y].to_string() if self[x, y] is not None else "oo"  # type: ignore # noqa
                         for x in range(8)
                     ]
                 )
