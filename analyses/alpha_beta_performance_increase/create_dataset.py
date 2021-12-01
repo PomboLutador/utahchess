@@ -134,7 +134,7 @@ if __name__ == "__main__":
             print(f"Saving board {count}")
         with open(
             f"analyses"
-            f"/alpha_beta_performance_increase/board_strings/aaa_board_{count}.txt",
+            f"/alpha_beta_performance_increase/board_strings/board_{count}.txt",
             "w",
         ) as file:
             file.write(board.to_string())
