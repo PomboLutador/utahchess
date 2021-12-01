@@ -1,6 +1,5 @@
 from functools import partial
 
-import numpy as np
 import pytest
 
 from utahchess.board import Board
@@ -66,7 +65,7 @@ def test_get_board_value_is_infinite_when_in_checkmate():
 
     # then
     assert is_checkmate(board=board, current_player="white")
-    assert result_black == np.inf
+    assert result_black == float("inf")
     assert result_black == -result_white
 
 
@@ -123,14 +122,14 @@ def test_minimax_finds_checkmate_in_fools_mate(depth, ordered):
         value_function=get_node_value,
         get_children=children_function,
         depth=depth,
-        alpha=-np.inf,
-        beta=np.inf,
+        alpha=-float("inf"),
+        beta=float("inf"),
         maximizing_player=True,
     )
 
     # then
     assert resulting_node.name == "Qh4#"
-    assert resulting_value == np.inf
+    assert resulting_value == float("inf")
 
 
 def test_minimax_with_dummy_game():
@@ -159,8 +158,8 @@ def test_minimax_with_dummy_game():
         get_children=children_nodes_function,
         depth=3,
         maximizing_player=True,
-        alpha=-np.inf,
-        beta=np.inf,
+        alpha=-float("inf"),
+        beta=float("inf"),
     )
 
     # then

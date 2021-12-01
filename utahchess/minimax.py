@@ -4,8 +4,6 @@ from collections import OrderedDict
 from itertools import product
 from typing import Any, Callable, Generator, Optional
 
-import numpy as np
-
 from utahchess.board import Board
 from utahchess.legal_moves import get_algebraic_notation_mapping, make_move
 from utahchess.move import Move
@@ -16,7 +14,7 @@ BISHOP_VALUE = 3
 KNIGHT_VALUE = 3
 ROOK_VALUE = 5
 QUEEN_VALUE = 9
-CHECKMATE_VALUE = np.inf
+CHECKMATE_VALUE = float("inf")
 
 CENTER_OF_BOARD_POSITIONS = tuple(product((2, 3, 4, 5), (2, 3, 4, 5)))
 CENTER_OF_BOARD_VALUE = 0.25
@@ -59,7 +57,7 @@ def minimax(
 
     best_move: Any = None
     if maximizing_player:
-        best_value = -np.inf
+        best_value = -float("inf")
         for child_node in get_children(parent_node=parent_node):
             _, eval = minimax(
                 parent_node=child_node,
@@ -80,7 +78,7 @@ def minimax(
                     break
 
     else:
-        best_value = +np.inf
+        best_value = +float("inf")
         for child_node in get_children(parent_node=parent_node):
             _, eval = minimax(
                 parent_node=child_node,
@@ -235,8 +233,8 @@ if __name__ == "__main__":
         value_function=get_node_value,
         get_children=create_children_from_parent,
         depth=4,
-        alpha=-np.inf,
-        beta=np.inf,
+        alpha=-float("inf"),
+        beta=float("inf"),
         maximizing_player=True,
     )
     print(suggested_node, value)

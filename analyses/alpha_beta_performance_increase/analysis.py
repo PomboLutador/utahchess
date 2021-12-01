@@ -5,10 +5,8 @@ from functools import partial
 from os import walk
 from typing import Generator, Sequence
 
-import numpy as np
-
 from utahchess.board import Board
-from utahchess.minimax import create_children_from_parent, get_node_value, minimax, Node
+from utahchess.minimax import Node, create_children_from_parent, get_node_value, minimax
 
 
 def generate_dataset(
@@ -30,14 +28,20 @@ def run_experiment(
     found_values = []
     for board in dataset:
 
-        parent_node = Node(name="initial_node", parent=None, board=board, last_move=None, player="white")
+        parent_node = Node(
+            name="initial_node",
+            parent=None,
+            board=board,
+            last_move=None,
+            player="white",
+        )
         suggested_node, value = minimax(
             parent_node=parent_node,
             value_function=get_node_value,
             get_children=partial(create_children_from_parent, ordered=order),
             depth=depth,
-            alpha=-np.inf,
-            beta=np.inf,
+            alpha=-float("inf"),
+            beta=float("inf"),
             maximizing_player=True,
             prune=prune,
         )
