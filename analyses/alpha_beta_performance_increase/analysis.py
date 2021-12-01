@@ -58,9 +58,13 @@ if __name__ == "__main__":
             )
         )
         print(
-            f"Loaded dataset with {len(dataset)} boards. On average these boards contain {sum(len(tuple(board.all_pieces())) for board in dataset)/len(dataset)} pieces."
-            f"\nWith a maximum of {max(len(tuple(board.all_pieces())) for board in dataset)} pieces "
-            f"and a minimum of {min(len(tuple(board.all_pieces())) for board in dataset)} pieces."
+            f"Loaded dataset with {len(dataset)} boards. "
+            f"On average these boards contain "
+            f"{sum(len(tuple(board.all_pieces())) for board in dataset)/len(dataset)} "
+            f"pieces. \nWith a maximum of "
+            f"{max(len(tuple(board.all_pieces())) for board in dataset)} pieces "
+            f"and a minimum of "
+            f" {min(len(tuple(board.all_pieces())) for board in dataset)} pieces."
         )
 
         print("Working on ordered and pruned experiment...")

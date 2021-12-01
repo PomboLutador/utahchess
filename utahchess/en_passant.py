@@ -41,7 +41,10 @@ def get_en_passant_moves(
 
         if opponent_piece is None:
             raise Exception(
-                f"Piece at position {last_move.piece_moves[0][1]} is None when it should be a Pawn."
+                (
+                    f"Piece at position "
+                    f"{last_move.piece_moves[0][1]} is None when it should be a Pawn."
+                )
             )
 
         from_piece = board[initial_tile]

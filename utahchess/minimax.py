@@ -190,10 +190,11 @@ def _get_enemy_color(friendly_color: str) -> str:
     return "white" if friendly_color == "black" else "black"
 
 
-get_node_value = lambda node: get_board_value(
-    board=node.board,
-    player_that_just_made_the_move=_get_enemy_color(friendly_color=node.player),
-)
+def get_node_value(node: Node):
+    return get_board_value(
+        board=node.board,
+        player_that_just_made_the_move=_get_enemy_color(friendly_color=node.player),
+    )
 
 
 if __name__ == "__main__":
