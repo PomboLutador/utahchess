@@ -2,8 +2,7 @@ import pytest
 
 from utahchess.board import Board
 from utahchess.castling import get_castling_moves
-from utahchess.legal_moves import make_move
-from utahchess.move import LONG_CASTLING, SHORT_CASTLING, Move
+from utahchess.move import LONG_CASTLING, SHORT_CASTLING, Move, make_move
 
 
 @pytest.mark.parametrize(

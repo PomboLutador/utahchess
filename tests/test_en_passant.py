@@ -2,8 +2,7 @@ import pytest
 
 from utahchess.board import Board
 from utahchess.en_passant import get_en_passant_moves
-from utahchess.legal_moves import make_move
-from utahchess.move import EN_PASSANT_MOVE, REGULAR_MOVE, Move
+from utahchess.move import EN_PASSANT_MOVE, REGULAR_MOVE, Move, make_move
 
 
 def test_right_side_en_passant_scenario_for_black():

@@ -5,12 +5,11 @@ from utahchess.legal_moves import (
     file_to_x_index,
     get_algebraic_notation_mapping,
     is_stalemate,
-    make_move,
     rank_to_y_index,
     x_index_to_file,
     y_index_to_rank,
 )
-from utahchess.move import REGULAR_MOVE, Move
+from utahchess.move import REGULAR_MOVE, Move, make_move
 
 
 @pytest.mark.parametrize(
