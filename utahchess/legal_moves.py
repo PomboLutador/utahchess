@@ -5,9 +5,15 @@ from typing import Generator, Optional, Sequence
 
 from utahchess.algebraic_notation import AlgebraicNotation
 from utahchess.board import Board
-from utahchess.castling import LONG_CASTLING, SHORT_CASTLING, get_castling_moves
-from utahchess.en_passant import EN_PASSANT_MOVE, get_en_passant_moves
-from utahchess.move import Move
+from utahchess.castling import get_castling_moves
+from utahchess.en_passant import get_en_passant_moves
+from utahchess.move import (
+    EN_PASSANT_MOVE,
+    LONG_CASTLING,
+    SHORT_CASTLING,
+    Move,
+    make_move,
+)
 from utahchess.move_validation import is_check, is_checkmate
 from utahchess.regular_move import get_regular_moves
 from utahchess.utils import x_index_to_file, y_index_to_rank
@@ -29,17 +35,6 @@ def get_algebraic_notation_mapping(
             **mapping,
         }
     return mapping
-
-
-def make_move(board: Board, move: Move) -> Board:
-    board_after_move = board.copy()
-    for piece_move in move.piece_moves:
-        board_after_move = board_after_move.move_piece(
-            from_position=piece_move[0], to_position=piece_move[1]
-        )
-    for piece_to_delete in move.pieces_to_delete:
-        board_after_move = board_after_move.delete_piece(position=piece_to_delete)
-    return board_after_move
 
 
 def is_stalemate(

@@ -4,12 +4,8 @@ from dataclasses import dataclass
 from typing import Optional
 
 from utahchess.board import Board
-from utahchess.legal_moves import (
-    get_algebraic_notation_mapping,
-    is_stalemate,
-    make_move,
-)
-from utahchess.move import Move
+from utahchess.legal_moves import get_algebraic_notation_mapping, is_stalemate
+from utahchess.move import Move, make_move
 from utahchess.move_validation import is_checkmate
 
 

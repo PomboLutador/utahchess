@@ -1,13 +1,8 @@
 import pytest
 
 from utahchess.board import Board
-from utahchess.legal_moves import (
-    get_algebraic_notation_mapping,
-    is_stalemate,
-    make_move,
-)
-from utahchess.move import Move
-from utahchess.regular_move import REGULAR_MOVE
+from utahchess.legal_moves import get_algebraic_notation_mapping, is_stalemate
+from utahchess.move import REGULAR_MOVE, Move, make_move
 
 
 @pytest.mark.parametrize(

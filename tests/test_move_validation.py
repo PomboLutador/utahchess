@@ -1,11 +1,9 @@
 import pytest
 
 from utahchess.board import Board
-from utahchess.legal_moves import make_move
-from utahchess.move import Move
+from utahchess.move import REGULAR_MOVE, Move, make_move
 from utahchess.move_candidates import get_king_move_candidates, get_pawn_move_candidates
 from utahchess.move_validation import is_checkmate, is_valid_move
-from utahchess.regular_move import REGULAR_MOVE
 
 
 def test_is_checkmate_fools_mate():
@@ -210,8 +208,6 @@ def test_is_valid_move_pawn_cant_move():
 )
 def test_make_regular_move(board, from_move, to_move, expected):
     # given
-    from utahchess.regular_move import REGULAR_MOVE
-
     regular_move = Move(
         type=REGULAR_MOVE,
         piece_moves=((from_move, to_move),),
