@@ -5,8 +5,8 @@ from itertools import product
 from typing import Any, Callable, Generator, Optional
 
 from utahchess.board import Board
-from utahchess.legal_moves import get_algebraic_notation_mapping, make_move
-from utahchess.move import Move
+from utahchess.legal_moves import get_algebraic_notation_mapping
+from utahchess.move import Move, make_move
 from utahchess.move_validation import is_checkmate
 
 PAWN_VALUE = 1

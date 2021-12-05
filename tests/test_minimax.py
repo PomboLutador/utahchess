@@ -3,7 +3,7 @@ from functools import partial
 import pytest
 
 from utahchess.board import Board
-from utahchess.legal_moves import get_algebraic_notation_mapping, make_move
+from utahchess.legal_moves import get_algebraic_notation_mapping
 from utahchess.minimax import (
     Node,
     create_children_from_parent,
@@ -11,6 +11,7 @@ from utahchess.minimax import (
     get_node_value,
     minimax,
 )
+from utahchess.move import make_move
 from utahchess.move_validation import is_checkmate
 
 

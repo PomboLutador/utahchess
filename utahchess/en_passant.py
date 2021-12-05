@@ -3,11 +3,9 @@ from __future__ import annotations
 from typing import Generator, Optional
 
 from utahchess.board import Board
-from utahchess.move import Move
+from utahchess.move import EN_PASSANT_MOVE, Move
 from utahchess.move_validation import is_valid_move
 from utahchess.tile_movement_utils import apply_movement_vector, is_in_bounds
-
-EN_PASSANT_MOVE = "En Passant Move"
 
 
 def get_en_passant_moves(
