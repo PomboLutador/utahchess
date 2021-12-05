@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import string
 from itertools import chain
 from typing import Generator, Optional, Sequence
 
@@ -11,9 +10,7 @@ from utahchess.en_passant import EN_PASSANT_MOVE, get_en_passant_moves
 from utahchess.move import Move
 from utahchess.move_validation import is_check, is_checkmate
 from utahchess.regular_move import get_regular_moves
-
-FILE_POSSIBILITIES = "abcdefgh"
-RANK_POSSIBILITIES = "87654321"
+from utahchess.utils import x_index_to_file, y_index_to_rank
 
 
 def get_algebraic_notation_mapping(
@@ -43,22 +40,6 @@ def make_move(board: Board, move: Move) -> Board:
     for piece_to_delete in move.pieces_to_delete:
         board_after_move = board_after_move.delete_piece(position=piece_to_delete)
     return board_after_move
-
-
-def x_index_to_file(x: int) -> str:
-    return FILE_POSSIBILITIES[x]
-
-
-def y_index_to_rank(y: int) -> str:
-    return RANK_POSSIBILITIES[y]
-
-
-def rank_to_y_index(rank: str) -> int:
-    return 8 - int(rank)
-
-
-def file_to_x_index(file: str) -> int:
-    return string.ascii_lowercase.index(file)
 
 
 def is_stalemate(
