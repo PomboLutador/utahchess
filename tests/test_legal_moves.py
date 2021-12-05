@@ -3,12 +3,6 @@ import pytest
 from utahchess.board import Board
 from utahchess.legal_moves import get_algebraic_notation_mapping, is_stalemate
 from utahchess.move import REGULAR_MOVE, Move, make_move
-from utahchess.utils import (
-    file_to_x_index,
-    rank_to_y_index,
-    x_index_to_file,
-    y_index_to_rank,
-)
 
 
 @pytest.mark.parametrize(
