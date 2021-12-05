@@ -3,38 +3,14 @@ from __future__ import annotations
 from itertools import chain
 from typing import Generator, Optional, Sequence
 
-from utahchess.algebraic_notation import AlgebraicNotation
+from utahchess.algebraic_notation import get_algebraic_identifer
 from utahchess.board import Board
 from utahchess.castling import get_castling_moves
 from utahchess.en_passant import get_en_passant_moves
-from utahchess.move import (
-    EN_PASSANT_MOVE,
-    LONG_CASTLING,
-    SHORT_CASTLING,
-    Move,
-    make_move,
-)
-from utahchess.move_validation import is_check, is_checkmate
+from utahchess.move import Move
+from utahchess.move_validation import is_check
 from utahchess.regular_move import get_regular_moves
 from utahchess.utils import x_index_to_file, y_index_to_rank
-
-
-def get_algebraic_notation_mapping(
-    board: Board, current_player: str, last_move: Optional[Move] = None
-) -> dict[str, Move]:
-    ambiguous_mapping = _get_ambiguous_algebraic_notation_mapping(
-        board=board, current_player=current_player, last_move=last_move
-    )
-    mapping: dict[str, Move] = {}
-    for algebraic_identifer, moves in ambiguous_mapping.items():
-        mapping = {
-            **_disambiguate_moves(
-                ambiguous_identifier=algebraic_identifer,
-                moves_to_disambiguate=moves,
-            ),
-            **mapping,
-        }
-    return mapping
 
 
 def is_stalemate(
@@ -49,31 +25,7 @@ def is_stalemate(
     )
 
 
-def _get_ambiguous_algebraic_notation_mapping(
-    board: Board, current_player: str, last_move: Optional[Move]
-) -> dict[AlgebraicNotation, list[Move]]:
-
-    mapping: dict[AlgebraicNotation, list[Move]] = {}
-    for legal_move in _get_all_legal_moves(
-        board=board, current_player=current_player, last_move=last_move
-    ):
-        ambiguous_identifer = AlgebraicNotation(
-            castling_identifier=_get_castling_identifer(
-                move=legal_move,
-            ),  # type: ignore
-            en_passant_identifer=_get_en_passant_identifier(move=legal_move),
-            piece=_get_moving_piece_signifier(move=legal_move),
-            destination_tile=_get_destination_tile(move=legal_move),
-            capturing_flag=_get_capturing_flag(move=legal_move),
-            check_or_checkmate_flag=_get_check_or_checkmate_identifier(
-                board=board, move=legal_move, current_player=current_player
-            ),
-        )
-        mapping.setdefault(ambiguous_identifer, []).append(legal_move)
-    return mapping
-
-
-def _get_all_legal_moves(
+def get_all_legal_moves(
     board: Board, current_player: str, last_move: Optional[Move]
 ) -> Generator[Move, None, None]:
     regular_moves = get_regular_moves(board=board, current_player=current_player)
@@ -82,47 +34,44 @@ def _get_all_legal_moves(
     return chain(regular_moves, en_passant_moves, castling_moves)  # type: ignore
 
 
-def _get_moving_piece_signifier(move: Move) -> str:
-    piece = move.moving_pieces[0]
-    if piece.piece_type == "Pawn":
-        return ""
-    elif piece.piece_type == "King":
-        return "K"
-    elif piece.piece_type == "Bishop":
-        return "B"
-    elif piece.piece_type == "Queen":
-        return "Q"
-    elif piece.piece_type == "Knight":
-        return "N"
-    elif piece.piece_type == "Rook":
-        return "R"
-    raise Exception(f"Unrecognized piece type: {piece.piece_type}")
+def get_move_per_algebraic_identifier(
+    board: Board, current_player: str, last_move: Optional[Move] = None
+) -> dict[str, Move]:
+    ambiguous_mapping = get_ambiguous_algebraic_notation_mapping(
+        board=board, current_player=current_player, last_move=last_move
+    )
+    mapping: dict[str, Move] = {}
+    for algebraic_identifer, moves in ambiguous_mapping.items():
+        mapping = {
+            **_disambiguate_moves(
+                board=board,
+                ambiguous_identifier=algebraic_identifer,
+                moves_to_disambiguate=moves,
+            ),
+            **mapping,
+        }
+    return mapping
 
 
-def _get_destination_tile(move: Move) -> str:
-    x, y = move.piece_moves[0][1]
-    return f"{x_index_to_file(x=x)}{y_index_to_rank(y=y)}"
+def get_ambiguous_algebraic_notation_mapping(
+    board: Board, current_player: str, last_move: Optional[Move]
+) -> dict[str, list[Move]]:
 
-
-def _get_capturing_flag(move: Move) -> str:
-    return "x" if move.is_capturing_move else ""
-
-
-def _get_castling_identifer(move: Move) -> str:
-    if move.type == SHORT_CASTLING:
-        return "O-O"
-    elif move.type == LONG_CASTLING:
-        return "O-O-O"
-    else:
-        return ""
+    mapping: dict[str, list[Move]] = {}
+    for legal_move in get_all_legal_moves(
+        board=board, current_player=current_player, last_move=last_move
+    ):
+        ambiguous_identifer = get_algebraic_identifer(move=legal_move, board=board)
+        mapping.setdefault(ambiguous_identifer, []).append(legal_move)
+    return mapping
 
 
 def _disambiguate_moves(
-    ambiguous_identifier: AlgebraicNotation, moves_to_disambiguate: list[Move]
+    board: Board, ambiguous_identifier: str, moves_to_disambiguate: list[Move]
 ) -> dict[str, Move]:
     """Get unambiguous algebraic notation for ambigious identifiers."""
     if len(moves_to_disambiguate) == 1:
-        return {ambiguous_identifier.to_string(): moves_to_disambiguate[0]}
+        return {ambiguous_identifier: moves_to_disambiguate[0]}
 
     if len(moves_to_disambiguate) > 2:
         raise NotImplementedError(
@@ -141,24 +90,18 @@ def _disambiguate_moves(
 
     if not file1 == file2:
         return {
-            ambiguous_identifier.to_string_with_file(file=file1): move1,
-            ambiguous_identifier.to_string_with_file(file=file2): move2,
+            get_algebraic_identifer(board=board, move=move1, file=file1): move1,
+            get_algebraic_identifer(board=board, move=move2, file=file2): move2,
         }
     elif not rank1 == rank2:
         return {
-            ambiguous_identifier.to_string_with_rank(rank=rank1): move1,
-            ambiguous_identifier.to_string_with_rank(rank=rank2): move2,
+            get_algebraic_identifer(board=board, move=move1, rank=rank1): move1,
+            get_algebraic_identifer(board=board, move=move2, rank=rank2): move2,
         }
     raise Exception(
         f"Moves {moves_to_disambiguate} with ambiguous identifier "
         f"{ambiguous_identifier} could not be disambiguated with just rank and file."
     )
-
-
-def _get_en_passant_identifier(move: Move) -> str:
-    if move.type == EN_PASSANT_MOVE:
-        return " e.p."
-    return ""
 
 
 def _get_moving_piece_file(move: Move) -> str:
@@ -169,25 +112,3 @@ def _get_moving_piece_file(move: Move) -> str:
 def _get_moving_piece_rank(move: Move) -> str:
     x_from, y_from = move.piece_moves[0][0]
     return y_index_to_rank(y=y_from)
-
-
-def _get_check_or_checkmate_identifier(
-    board: Board, move: Move, current_player: str
-) -> str:
-
-    if is_checkmate(
-        board=make_move(board=board, move=move),
-        current_player=_get_opposite_player(current_player=current_player),
-    ):
-        return "#"
-    elif is_check(
-        board=make_move(board=board, move=move),
-        current_player=_get_opposite_player(current_player=current_player),
-    ):
-        return "+"
-    else:
-        return ""
-
-
-def _get_opposite_player(current_player: str) -> str:
-    return "black" if current_player == "white" else "white"

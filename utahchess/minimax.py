@@ -5,7 +5,7 @@ from itertools import product
 from typing import Any, Callable, Generator, Optional
 
 from utahchess.board import Board
-from utahchess.legal_moves import get_algebraic_notation_mapping
+from utahchess.legal_moves import get_move_per_algebraic_identifier
 from utahchess.move import Move, make_move
 from utahchess.move_validation import is_checkmate
 
@@ -143,7 +143,7 @@ def create_children_from_parent(
                 player=_get_enemy_color(friendly_color=parent_player),
             )
             for algebraic_identifier, legal_move in _order_moves_by_potential(
-                get_algebraic_notation_mapping(
+                get_move_per_algebraic_identifier(
                     board=parent_board,
                     current_player=parent_player,
                     last_move=parent_last_move,
@@ -159,7 +159,7 @@ def create_children_from_parent(
                 last_move=legal_move,
                 player=_get_enemy_color(friendly_color=parent_player),
             )
-            for algebraic_identifier, legal_move in get_algebraic_notation_mapping(
+            for algebraic_identifier, legal_move in get_move_per_algebraic_identifier(
                 board=parent_board,
                 current_player=parent_player,
                 last_move=parent_last_move,
