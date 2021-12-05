@@ -1,12 +1,12 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Optional
+from typing import Optional, Sequence
 
 from utahchess.board import Board
-from utahchess.legal_moves import get_move_per_algebraic_identifier, is_stalemate
+from utahchess.legal_moves import get_move_per_algebraic_identifier
 from utahchess.move import Move, make_move
-from utahchess.move_validation import is_checkmate
+from utahchess.move_validation import is_check, is_checkmate
 
 
 @dataclass(frozen=True)
@@ -141,7 +141,7 @@ def try_move(
 
     Returns:
             If the given move was legal this returns a tuple containing the board after
-            the move, a boolean indicating success and the last move that was just 
+            the move, a boolean indicating success and the last move that was just
             executed. In case the move was not legal the tuple will contain the initial
             board, a boolean indicating failure and None.
     """
@@ -153,6 +153,18 @@ def try_move(
         )
     except KeyError:
         return board, False, None
+
+
+def is_stalemate(
+    board: Board,
+    current_player: str,
+    legal_moves_for_current_player: Sequence[str],
+) -> bool:
+
+    return (
+        not is_check(board=board, current_player=current_player)
+        and len(legal_moves_for_current_player) == 0
+    )
 
 
 if __name__ == "__main__":
