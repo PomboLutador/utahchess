@@ -3,12 +3,10 @@ from __future__ import annotations
 from typing import Generator
 
 from utahchess.board import Board
-from utahchess.move import Move
+from utahchess.move import REGULAR_MOVE, Move
 from utahchess.move_candidates import get_all_move_candidates
 from utahchess.move_validation import is_valid_move
 from utahchess.piece import Piece
-
-REGULAR_MOVE = "Regular Move"
 
 
 def get_regular_moves(board: Board, current_player: str) -> Generator[Move, None, None]:

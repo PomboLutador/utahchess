@@ -3,16 +3,13 @@ from __future__ import annotations
 from typing import Generator, Optional
 
 from utahchess.board import Board, is_occupied
-from utahchess.move import Move
+from utahchess.move import LONG_CASTLING, SHORT_CASTLING, Move
 from utahchess.move_validation import find_current_players_king_position, is_check
 from utahchess.tile_movement_utils import (
     apply_movement_vector,
     apply_movement_vector_n_times,
     is_in_bounds,
 )
-
-SHORT_CASTLING = "Short Castling Move"
-LONG_CASTLING = "Long Castling Move"
 
 
 def get_castling_moves(

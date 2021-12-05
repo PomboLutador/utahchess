@@ -10,8 +10,7 @@ from utahchess.legal_moves import (
     x_index_to_file,
     y_index_to_rank,
 )
-from utahchess.move import Move
-from utahchess.regular_move import REGULAR_MOVE
+from utahchess.move import REGULAR_MOVE, Move
 
 
 @pytest.mark.parametrize(

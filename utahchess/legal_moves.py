@@ -6,9 +6,9 @@ from typing import Generator, Optional, Sequence
 
 from utahchess.algebraic_notation import AlgebraicNotation
 from utahchess.board import Board
-from utahchess.castling import LONG_CASTLING, SHORT_CASTLING, get_castling_moves
-from utahchess.en_passant import EN_PASSANT_MOVE, get_en_passant_moves
-from utahchess.move import Move
+from utahchess.castling import get_castling_moves
+from utahchess.en_passant import get_en_passant_moves
+from utahchess.move import EN_PASSANT_MOVE, LONG_CASTLING, SHORT_CASTLING, Move
 from utahchess.move_validation import is_check, is_checkmate
 from utahchess.regular_move import get_regular_moves
 
