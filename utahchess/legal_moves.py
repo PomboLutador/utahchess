@@ -1,28 +1,15 @@
 from __future__ import annotations
 
 from itertools import chain
-from typing import Generator, Optional, Sequence
+from typing import Generator, Optional
 
 from utahchess.algebraic_notation import get_algebraic_identifer
 from utahchess.board import Board
 from utahchess.castling import get_castling_moves
 from utahchess.en_passant import get_en_passant_moves
 from utahchess.move import Move
-from utahchess.move_validation import is_check
 from utahchess.regular_move import get_regular_moves
 from utahchess.utils import x_index_to_file, y_index_to_rank
-
-
-def is_stalemate(
-    board: Board,
-    current_player: str,
-    legal_moves_for_current_player: Sequence[str],
-) -> bool:
-
-    return (
-        not is_check(board=board, current_player=current_player)
-        and len(legal_moves_for_current_player) == 0
-    )
 
 
 def get_all_legal_moves(

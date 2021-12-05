@@ -1,7 +1,7 @@
 import pytest
 
 from utahchess.board import Board
-from utahchess.legal_moves import get_move_per_algebraic_identifier, is_stalemate
+from utahchess.legal_moves import get_move_per_algebraic_identifier
 from utahchess.move import REGULAR_MOVE, Move, make_move
 
 
@@ -248,61 +248,3 @@ def test_get_move_per_algebraic_identifier_with_last_move_for_en_passant(
     # then
     assert len(result) == len(expected_legal_moves_in_algebraic_notation)
     assert set(expected_legal_moves_in_algebraic_notation) == set(result)
-
-
-def test_is_stalemate():
-    # given
-    board = Board(
-        board_string=f"""bk-oo-oo-oo-oo-oo-oo-oo
-            oo-oo-oo-oo-oo-oo-oo-wr
-            oo-oo-oo-oo-oo-oo-oo-oo
-            oo-oo-oo-oo-oo-oo-oo-oo
-            oo-oo-oo-oo-oo-oo-oo-oo
-            oo-oo-oo-oo-oo-oo-oo-oo
-            oo-oo-oo-oo-oo-oo-oo-oo
-            oo-wr-oo-oo-oo-oo-oo-wk"""
-    )
-    black_legal_moves = tuple(
-        get_move_per_algebraic_identifier(
-            board=board, current_player="black", last_move=None
-        ).keys()
-    )
-
-    # when
-    result = is_stalemate(
-        board=board,
-        current_player="black",
-        legal_moves_for_current_player=black_legal_moves,
-    )
-
-    # then
-    assert result
-
-
-def test_is_not_stalemate():
-    # given
-    board = Board(
-        board_string=f"""bk-oo-oo-oo-oo-oo-oo-oo
-            oo-oo-oo-oo-oo-oo-oo-oo
-            oo-oo-oo-oo-oo-oo-oo-oo
-            oo-oo-oo-oo-oo-oo-oo-oo
-            oo-oo-oo-oo-oo-oo-oo-oo
-            oo-oo-oo-oo-oo-oo-oo-oo
-            oo-oo-oo-oo-oo-oo-oo-oo
-            oo-wr-oo-oo-oo-oo-oo-wk"""
-    )
-    black_legal_moves = tuple(
-        get_move_per_algebraic_identifier(
-            board=board, current_player="black", last_move=None
-        ).keys()
-    )
-
-    # when
-    result = is_stalemate(
-        board=board,
-        current_player="black",
-        legal_moves_for_current_player=black_legal_moves,
-    )
-
-    # then
-    assert not result
