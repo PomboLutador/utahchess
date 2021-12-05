@@ -11,3 +11,4 @@
 /utahchess/cython_extension/*
 *.cfg
 /env*
+*egg-info
