@@ -3,7 +3,7 @@ from functools import partial
 import pytest
 
 from utahchess.board import Board
-from utahchess.legal_moves import get_algebraic_notation_mapping
+from utahchess.legal_moves import get_move_per_algebraic_identifier
 from utahchess.minimax import (
     Node,
     create_children_from_parent,
@@ -78,7 +78,7 @@ def test_get_board_value_is_symmetric(current_player, opposite_player):
     # given
     board = Board()
     for move in list(
-        get_algebraic_notation_mapping(
+        get_move_per_algebraic_identifier(
             board=board, current_player=current_player, last_move=None
         ).values()
     ):
