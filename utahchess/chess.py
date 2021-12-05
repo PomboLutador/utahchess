@@ -1,12 +1,12 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Optional
+from typing import Optional, Sequence
 
 from utahchess.board import Board
-from utahchess.legal_moves import get_move_per_algebraic_identifier, is_stalemate
+from utahchess.legal_moves import get_move_per_algebraic_identifier
 from utahchess.move import Move, make_move
-from utahchess.move_validation import is_checkmate
+from utahchess.move_validation import is_check, is_checkmate
 
 
 @dataclass(frozen=True)
@@ -18,10 +18,11 @@ class GameState:
     last_move: Optional[Move] = None
 
     def __repr__(self) -> str:
-        representation = self.board.__repr__()
-        representation += f"\n Current player: {self.current_player}."
-        representation += f"\n It's turn {self.turn}."
-        return representation
+        return (
+            self.board.__repr__()
+            + f"\n Current player: {self.current_player}."
+            + f"\n It's turn {self.turn}."
+        )
 
 
 class ChessGame:
@@ -135,17 +136,14 @@ def try_move(
 
     Args:
         board: Board on which move is tried on.
-        legal_moves: A mapping of legal moves in algebraic notation to instances of the
-            Move class and its inherited classes.
-        move_in_algebraic_notation: Description of the move that should be tried in
-            algebraic notation.
+        legal_moves: A mapping of legal moves in algebraic notation to Moves.
+        move_in_algebraic_notation: Move in algebraic notation which will be tried.
 
     Returns:
-        tuple[Board, bool, Move]: If the given move was legal this returns a tuple
-            containing the board after the move, a boolean indicating success and
-            the last move that was just executed. In case the move was not legal the
-            tuple will contain the initial board, a boolean indicating failure and None
-            for the last move.
+            If the given move was legal this returns a tuple containing the board after
+            the move, a boolean indicating success and the last move that was just
+            executed. In case the move was not legal the tuple will contain the initial
+            board, a boolean indicating failure and None.
     """
     try:
         return (
@@ -155,6 +153,18 @@ def try_move(
         )
     except KeyError:
         return board, False, None
+
+
+def is_stalemate(
+    board: Board,
+    current_player: str,
+    legal_moves_for_current_player: Sequence[str],
+) -> bool:
+
+    return (
+        not is_check(board=board, current_player=current_player)
+        and len(legal_moves_for_current_player) == 0
+    )
 
 
 if __name__ == "__main__":
