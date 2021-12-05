@@ -1,7 +1,7 @@
 import pytest
 
 from utahchess.board import Board
-from utahchess.legal_moves import get_algebraic_notation_mapping, is_stalemate
+from utahchess.legal_moves import get_move_per_algebraic_identifier, is_stalemate
 from utahchess.move import REGULAR_MOVE, Move, make_move
 
 
@@ -143,7 +143,7 @@ from utahchess.move import REGULAR_MOVE, Move, make_move
         ),
     ],
 )
-def test_get_algebraic_notation_mapping(
+def test_get_move_per_algebraic_identifier(
     board_string, expected_legal_moves_in_algebraic_notation, current_player
 ):
     # given
@@ -151,7 +151,7 @@ def test_get_algebraic_notation_mapping(
 
     # when
     result = tuple(
-        get_algebraic_notation_mapping(
+        get_move_per_algebraic_identifier(
             board=board, current_player=current_player, last_move=None
         ).keys()
     )
@@ -219,7 +219,7 @@ def test_get_algebraic_notation_mapping(
         ),
     ],
 )
-def test_get_algebraic_notation_mapping_with_last_move_for_en_passant(
+def test_get_move_per_algebraic_identifier_with_last_move_for_en_passant(
     board_string,
     expected_legal_moves_in_algebraic_notation,
     current_player,
@@ -238,7 +238,7 @@ def test_get_algebraic_notation_mapping_with_last_move_for_en_passant(
 
     # when
     result = tuple(
-        get_algebraic_notation_mapping(
+        get_move_per_algebraic_identifier(
             board=board_after_move,
             current_player=current_player,
             last_move=move_to_make,
@@ -263,7 +263,7 @@ def test_is_stalemate():
             oo-wr-oo-oo-oo-oo-oo-wk"""
     )
     black_legal_moves = tuple(
-        get_algebraic_notation_mapping(
+        get_move_per_algebraic_identifier(
             board=board, current_player="black", last_move=None
         ).keys()
     )
@@ -292,7 +292,7 @@ def test_is_not_stalemate():
             oo-wr-oo-oo-oo-oo-oo-wk"""
     )
     black_legal_moves = tuple(
-        get_algebraic_notation_mapping(
+        get_move_per_algebraic_identifier(
             board=board, current_player="black", last_move=None
         ).keys()
     )

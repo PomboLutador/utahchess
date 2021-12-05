@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from typing import Optional
 
 from utahchess.board import Board
-from utahchess.legal_moves import get_algebraic_notation_mapping, is_stalemate
+from utahchess.legal_moves import get_move_per_algebraic_identifier, is_stalemate
 from utahchess.move import Move, make_move
 from utahchess.move_validation import is_checkmate
 
@@ -32,7 +32,7 @@ class ChessGame:
         board = Board()
         current_player = "white"
         turn = 1
-        legal_moves = get_algebraic_notation_mapping(
+        legal_moves = get_move_per_algebraic_identifier(
             board=board, current_player=current_player
         )
         self.current_game_state = GameState(
@@ -60,7 +60,7 @@ class ChessGame:
                     turn=self.current_game_state.turn,
                     current_player=self.current_game_state.current_player,
                 ),
-                legal_moves=get_algebraic_notation_mapping(
+                legal_moves=get_move_per_algebraic_identifier(
                     board=board_after_move,
                     current_player=next_player,
                     last_move=last_move,
