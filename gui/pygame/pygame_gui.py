@@ -63,7 +63,7 @@ class PygameGUI:
                     if not is_in_bounds(position=(x_index, y_index)):
                         continue
 
-                    # If we click on an occupied tile, highlight legal moves
+                    # If click lands on an occupied tile, highlight legal destinations
                     self._highlight_legal_destinations(x=x_index, y=y_index)
 
                     # If clicked tile not occupied or enemy color, try to make a move
