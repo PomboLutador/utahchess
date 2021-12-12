@@ -3,8 +3,10 @@ from __future__ import annotations
 from dataclasses import dataclass, replace
 from typing import Generator, Iterable, Optional
 
-from utahchess._board_repr import representation
 from utahchess.piece import Piece, create_piece_instance_from_string, get_initial_pieces
+from utahchess.utils import get_unicode_character, x_index_to_file, y_index_to_rank
+
+NO_RANKS_AND_FILES = 8
 
 
 @dataclass(frozen=True)
@@ -43,7 +45,10 @@ class Board:
             if not pieces:
                 pieces = get_initial_pieces()
 
-            _board = [[None for x in range(8)] for y in range(8)]
+            _board = [
+                [None for _ in range(NO_RANKS_AND_FILES)]
+                for _ in range(NO_RANKS_AND_FILES)
+            ]
             for piece in pieces:
                 x, y = piece.position
                 _board[x][y] = piece  # type: ignore
@@ -65,8 +70,8 @@ class Board:
         Yields:
             All pieces on the board.
         """
-        for x in range(8):
-            for y in range(8):
+        for x in range(NO_RANKS_AND_FILES):
+            for y in range(NO_RANKS_AND_FILES):
                 item = self._board[x][y]
                 if item is not None:
                     yield item
@@ -128,22 +133,40 @@ class Board:
                 "-".join(
                     [
                         self[x, y].to_string() if self[x, y] is not None else "oo"  # type: ignore # noqa
-                        for x in range(8)
+                        for x in range(NO_RANKS_AND_FILES)
                     ]
                 )
-                for y in range(8)
+                for y in range(NO_RANKS_AND_FILES)
             ]
         )
         return board_string
 
     def __repr__(self) -> str:
-        return representation(self._board)
+        representation = (
+            "          "
+            + "".join(
+                [f"     {x_index_to_file(i)}    " for i in range(NO_RANKS_AND_FILES)]
+            )
+            + "\n"
+        )
+        for y_coord in range(NO_RANKS_AND_FILES):
+            row = "  " + "--------  " * (NO_RANKS_AND_FILES + 1) + "\n"
+            row += f"    {y_index_to_rank(y_coord)}    | "
+            for x_coord in range(NO_RANKS_AND_FILES):
+                piece = self[(x_coord - 1, y_coord)]
+                row += get_unicode_character(piece=piece)
+            representation += row + "\n"
+        representation + "  " + "--------  " * (NO_RANKS_AND_FILES + 1)
+        return representation
 
     def _initialize_from_string(
         self, board_string: str
     ) -> tuple[tuple[Piece, ...], ...]:
         """Initialize a board from a string."""
-        _board = [[None for x in range(8)] for y in range(8)]
+        _board = [
+            [None for x_ in range(NO_RANKS_AND_FILES)]
+            for _ in range(NO_RANKS_AND_FILES)
+        ]
         row_string = board_string.replace(" ", "").split("\n")
         for y, row in enumerate(row_string):
             column_split_string = row.split("-")
