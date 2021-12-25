@@ -9,6 +9,6 @@
 /analyses/alpha_beta_performance_increase/board_strings
 /analyses/alpha_beta_performance_increase/__pycache__
 /utahchess/cython_extension/*
-*.cfg
 /env*
 *egg-info
+/.env

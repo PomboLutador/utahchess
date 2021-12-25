@@ -1,2 +1,6 @@
 [tool.isort]
 profile = 'black'
+skip = '.env'
+
+[tool.black]
+exclude = '.env'
