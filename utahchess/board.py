@@ -152,7 +152,7 @@ class Board:
             row = "  " + "--------  " * (NO_RANKS_AND_FILES + 1) + "\n"
             row += f"    {y_index_to_rank(y_coord)}    | "
             for x_coord in range(NO_RANKS_AND_FILES):
-                piece = self[(x_coord - 1, y_coord)]
+                piece = self[(x_coord, y_coord)]
                 row += get_unicode_character(piece=piece)
             representation += row + "\n"
         representation + "  " + "--------  " * (NO_RANKS_AND_FILES + 1)
