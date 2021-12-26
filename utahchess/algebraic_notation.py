@@ -14,7 +14,7 @@ from utahchess.utils import x_index_to_file, y_index_to_rank
 
 def get_algebraic_identifer(move: Move, board: Board, **kwargs):
     """Get the algebraic identifier of a move given a board.
-    
+
     For more information on algebraic notation of moves, see here:
     https://en.wikipedia.org/wiki/Algebraic_notation_(chess)
 
@@ -28,7 +28,7 @@ def get_algebraic_identifer(move: Move, board: Board, **kwargs):
     Args:
         move: Move for which to get the algebraic identifier for.
         board: Board on which move is executed.
-        **kwargs: Specifically for rank and file disambiguation. 
+        **kwargs: Specifically for rank and file disambiguation.
 
     Returns: A possibly ambiguous string describing the move in algebraic notation.
     """
