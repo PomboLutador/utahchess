@@ -52,6 +52,7 @@ def is_checkmate(
 
     Returns: Flag indicating whether the current player is in checkmate or not.
     """
+
     def all_possible_boards():
         for potential_move in _get_all_legal_moves(
             board=board, current_player=current_player, last_move=last_move
