@@ -141,7 +141,9 @@ class PygameGUI:
                     ):
                         potential_algebraic_move, _ = algebraic_move, move
                 if potential_algebraic_move:
-                    self.game.make_move(move_in_algebraic_notation=algebraic_move)
+                    self.game.make_move(
+                        move_in_algebraic_notation=potential_algebraic_move
+                    )
 
                 self.visualize_current_game_state()
 
