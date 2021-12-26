@@ -1,6 +1,7 @@
 import pytest
 
 from utahchess.board import Board
+from utahchess.piece import Pawn
 
 
 @pytest.mark.parametrize(("y", "expected_color"), [(1, "black"), (6, "white")])
@@ -162,13 +163,36 @@ def test_board_to_string():
     result = board.to_string()
 
     # then
-    expected = f"""br-bn-bb-bq-bk-bb-bn-br
-bp-bp-bp-bp-bp-bp-bp-bp
-oo-oo-oo-oo-oo-oo-oo-oo
-oo-oo-oo-oo-oo-oo-oo-oo
-oo-oo-oo-oo-oo-oo-oo-oo
-oo-oo-oo-oo-oo-oo-oo-oo
-wp-wp-wp-wp-wp-wp-wp-wp
-wr-wn-wb-wq-wk-wb-wn-wr"""
-    assert len(result) == len(expected)
+    expected = (
+        """br-bn-bb-bq-bk-bb-bn-br\n"""
+        """bp-bp-bp-bp-bp-bp-bp-bp\n"""
+        """oo-oo-oo-oo-oo-oo-oo-oo\n"""
+        """oo-oo-oo-oo-oo-oo-oo-oo\n"""
+        """oo-oo-oo-oo-oo-oo-oo-oo\n"""
+        """oo-oo-oo-oo-oo-oo-oo-oo\n"""
+        """wp-wp-wp-wp-wp-wp-wp-wp\n"""
+        """wr-wn-wb-wq-wk-wb-wn-wr"""
+    )
     assert result == expected
+
+
+def test_board_raises_valueerror():
+    # given
+    pieces = (Pawn(position=(0, 0), color="black", is_in_start_position=False),)
+    board_string = (
+        """br-bn-bb-bq-bk-bb-bn-br\n"""
+        """bp-bp-bp-bp-bp-bp-bp-bp\n"""
+        """oo-oo-oo-oo-oo-oo-oo-oo\n"""
+        """oo-oo-oo-oo-oo-oo-oo-oo\n"""
+        """oo-oo-oo-oo-oo-oo-oo-oo\n"""
+        """oo-oo-oo-oo-oo-oo-oo-oo\n"""
+        """wp-wp-wp-wp-wp-wp-wp-wp\n"""
+        """wr-wn-wb-wq-wk-wb-wn-wr"""
+    )
+
+    # when and then
+    with pytest.raises(ValueError) as e:
+        Board(pieces=pieces, board_string=board_string)
+        assert (
+            e == "Cannot create board when both pieces and board string are provided."
+        )
