@@ -12,19 +12,19 @@ from utahchess.regular_move import get_regular_moves
 from utahchess.utils import x_index_to_file, y_index_to_rank
 
 
-def get_all_legal_moves(
-    board: Board, current_player: str, last_move: Optional[Move]
-) -> Generator[Move, None, None]:
-    regular_moves = get_regular_moves(board=board, current_player=current_player)
-    castling_moves = get_castling_moves(board=board, current_player=current_player)
-    en_passant_moves = get_en_passant_moves(board=board, last_move=last_move)
-    return chain(regular_moves, en_passant_moves, castling_moves)  # type: ignore
-
-
 def get_move_per_algebraic_identifier(
     board: Board, current_player: str, last_move: Optional[Move] = None
 ) -> dict[str, Move]:
-    ambiguous_mapping = get_ambiguous_algebraic_notation_mapping(
+    """Get a map of algebraic identifiers to moves for current player.
+    
+    Args:
+        board: Board on which to compute all legal moves.
+        current_player: Player for which to get all legal moves.
+        last_move: Last move that was executed on the board.
+
+    Returns: A map from algebraic identifiers to each legal move possible on the board.
+    """
+    ambiguous_mapping = _get_ambiguous_algebraic_notation_mapping(
         board=board, current_player=current_player, last_move=last_move
     )
     mapping: dict[str, Move] = {}
@@ -40,12 +40,25 @@ def get_move_per_algebraic_identifier(
     return mapping
 
 
-def get_ambiguous_algebraic_notation_mapping(
+def _get_all_legal_moves(
+    board: Board, current_player: str, last_move: Optional[Move]
+) -> Generator[Move, None, None]:
+    regular_moves = get_regular_moves(board=board, current_player=current_player)
+    castling_moves = get_castling_moves(board=board, current_player=current_player)
+    en_passant_moves = get_en_passant_moves(board=board, last_move=last_move)
+    return chain(regular_moves, en_passant_moves, castling_moves)  # type: ignore
+
+
+def _get_ambiguous_algebraic_notation_mapping(
     board: Board, current_player: str, last_move: Optional[Move]
 ) -> dict[str, list[Move]]:
-
+    """Get a map of algebraic identifiers to lists of moves.
+    
+    All moves with the same algebraic identifier (without rank or file) are mapped to
+    the same key in the mapping.
+    """
     mapping: dict[str, list[Move]] = {}
-    for legal_move in get_all_legal_moves(
+    for legal_move in _get_all_legal_moves(
         board=board, current_player=current_player, last_move=last_move
     ):
         ambiguous_identifer = get_algebraic_identifer(move=legal_move, board=board)
@@ -56,7 +69,13 @@ def get_ambiguous_algebraic_notation_mapping(
 def _disambiguate_moves(
     board: Board, ambiguous_identifier: str, moves_to_disambiguate: list[Move]
 ) -> dict[str, Move]:
-    """Get unambiguous algebraic notation for ambigious identifiers."""
+    """Get unambiguous algebraic notation for ambigious identifiers.
+    
+    If two pieces of the same kind would end up in the same spot, without considering
+    rank or file, the move will have the same algebraic identifier. To disambiguate 
+    such moves either rank or file will be added to each move's identifier to arrive at
+    unambiguous algebraic identifiers.
+    """
     if len(moves_to_disambiguate) == 1:
         return {ambiguous_identifier: moves_to_disambiguate[0]}
 
