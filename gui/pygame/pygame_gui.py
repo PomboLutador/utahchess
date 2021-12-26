@@ -130,14 +130,18 @@ class PygameGUI:
             friendly_color=self.get_current_player(),
         ):
             if self.last_mouse_click_indices:
-                # Make Move here
-                potential_move = self.game.get_move_from_positions(
-                    from_position=self.last_mouse_click_indices,
-                    to_position=(x, y),
-                )
-                if potential_move:
-                    algebraic_move, _ = potential_move
-                _ = self.game.make_move(move_in_algebraic_notation=algebraic_move)
+                potential_algebraic_move, _ = None, None
+                for (
+                    algebraic_move,
+                    move,
+                ) in self.game.current_game_state.legal_moves.items():
+                    if (
+                        move.piece_moves[0][1] == (x, y)
+                        and move.piece_moves[0][0] == self.last_mouse_click_indices
+                    ):
+                        potential_algebraic_move, _ = algebraic_move, move
+                if potential_algebraic_move:
+                    self.game.make_move(move_in_algebraic_notation=algebraic_move)
 
                 self.visualize_current_game_state()
 
