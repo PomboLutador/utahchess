@@ -13,6 +13,21 @@ from utahchess.utils import x_index_to_file, y_index_to_rank
 
 
 def get_algebraic_identifer(move: Move, board: Board, **kwargs):
+    """Get the algebraic identifier of a move given a board.
+    
+    For more information on algebraic notation of moves, see here:
+    https://en.wikipedia.org/wiki/Algebraic_notation_(chess)
+
+    Note that this function does not disambiguate a move's identifer. See
+    "utahchess.legal_moves.get_move_per_algebraic_identifier" for that.
+
+    Args:
+        move: Move for which to get the algebraic identifier for.
+        board: Board on which move is executed.
+        **kwargs: Specifically for rank and file disambiguation. Often two moves
+            can have the same algebraic identifier save for adding the rank or file
+            of the moving piece.
+    """
     if move.type in (LONG_CASTLING, SHORT_CASTLING):
         return _get_castling_identifer(move=move)
     check_or_checkmate_identifer = _get_check_or_checkmate_identifier(
