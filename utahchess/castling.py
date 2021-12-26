@@ -15,7 +15,14 @@ from utahchess.tile_movement_utils import (
 def get_castling_moves(
     board: Board, current_player: str
 ) -> Generator[Move, None, None]:
-    """Get all castling moves for the current player."""
+    """Get all castling moves for the current player.
+
+    Args:
+        board: Board on which to get castling moves.
+        current_player: Player for which to get castling moves.
+
+    Returns: All possible castling moves on the given board for current player.
+    """
     king_position = find_current_players_king_position(
         board=board, current_player=current_player
     )
@@ -25,7 +32,7 @@ def get_castling_moves(
             f"Piece at position {king_position} is None when it should be a King."
         )
     if not king.is_in_start_position:
-        return
+        return  # King has to be in starting position to castle
 
     if is_check(board=board, current_player=current_player):
         return  # Cant castle out of check
@@ -37,7 +44,7 @@ def get_castling_moves(
             movement_vector=movement_vector,
         )
         if rook_tile is None:
-            continue
+            continue  # No suitable rook found to the left or right of king
 
         castling_move = _get_castling_move(
             board=board,
@@ -53,15 +60,17 @@ def get_castling_moves(
             ),
             current_player=current_player,
         ):
-            break
+            break  # Cannot castle into check
         yield castling_move
 
 
 def get_rook_move(move: Move) -> tuple[tuple[int, int], tuple[int, int]]:
+    """Get piece move of the rook."""
     return move.piece_moves[1]
 
 
 def get_king_move(move: Move) -> tuple[tuple[int, int], tuple[int, int]]:
+    """Get piece move of the king."""
     return move.piece_moves[0]
 
 
@@ -75,7 +84,10 @@ def _get_castling_move(
     king_position: tuple[int, int],
     rook_position: tuple[int, int],
 ) -> Move:
-    """Gather description of castling move."""
+    """Gather description of castling move.
+
+    movement_vector is from the point of view of the king towards the rook.
+    """
     castling_type = _get_castling_type(movement_vector=movement_vector)
     if castling_type == SHORT_CASTLING:
         king_destination_tile = apply_movement_vector(
@@ -92,9 +104,9 @@ def _get_castling_move(
         position=king_position, movement_vector=movement_vector
     )
 
-    rook_move, king_move = (rook_position, rook_destination_tile), (
-        king_position,
-        king_destination_tile,
+    rook_move, king_move = (
+        (rook_position, rook_destination_tile),
+        (king_position, king_destination_tile),
     )
     king, rook = board[king_position], board[rook_position]
     castling_move = Move(
@@ -104,7 +116,6 @@ def _get_castling_move(
         is_capturing_move=False,
         allows_en_passant=False,
     )
-
     return castling_move
 
 
@@ -114,12 +125,10 @@ def _find_rook_for_castling(
     """Find rook in direction of movement vector starting from friendly King."""
     king_position = find_current_players_king_position(
         board=board, current_player=current_player
-    )
+    )  # King is guaranteed to be in starting position
     next_tile = apply_movement_vector(
         position=king_position, movement_vector=movement_vector
     )
-    if not is_in_bounds(position=next_tile):
-        return None
     while True:
         next_piece = board[next_tile]
         if not is_occupied(board=board, position=next_tile):

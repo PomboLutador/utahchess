@@ -22,11 +22,16 @@ class Move:
 
 
 def make_move(board: Board, move: Move) -> Board:
-    board_after_move = board.copy()
+    """Make a move on a given board.
+
+    Args:
+        board: Board on which to make the move.
+        move: Move to make.
+
+    Returns: A copy of the board after the move was made.
+    """
     for piece_move in move.piece_moves:
-        board_after_move = board_after_move.move_piece(
-            from_position=piece_move[0], to_position=piece_move[1]
-        )
+        board = board.move_piece(from_position=piece_move[0], to_position=piece_move[1])
     for piece_to_delete in move.pieces_to_delete:
-        board_after_move = board_after_move.delete_piece(position=piece_to_delete)
-    return board_after_move
+        board = board.delete_piece(position=piece_to_delete)
+    return board

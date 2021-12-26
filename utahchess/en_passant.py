@@ -11,7 +11,19 @@ from utahchess.tile_movement_utils import apply_movement_vector, is_in_bounds
 def get_en_passant_moves(
     board: Board, last_move: Optional[Move]
 ) -> Generator[Move, None, None]:
-    """Returns all legal En Passant moves for current player."""
+    """Get all legal En Passant moves for current player.
+
+    En passant moves are only possibly legal if the last move was a pawn moving two
+    tiles from starting position. Current player can be inferred from the last move
+    and thus does not have to be provided to this function.
+
+    Args:
+        board: Board on which to get en passant moves.
+        last_move: Last move that was executed on the board. Has to be an enemy move.
+            Can possibly be None if it's the first turn of the game.
+
+    Returns: All possible en passant moves on the given board for current player.
+    """
     if last_move is None:
         return None
 
@@ -23,7 +35,9 @@ def get_en_passant_moves(
     for x_offset in [1, -1]:
 
         initial_tile = apply_movement_vector(
-            position=last_move.piece_moves[0][1], movement_vector=(x_offset, 0)
+            # Initial tile for the potential en passant move's moving piece
+            position=last_move.piece_moves[0][1],
+            movement_vector=(x_offset, 0),
         )
         destination_tile = apply_movement_vector(
             position=last_move.piece_moves[0][1],
@@ -46,7 +60,7 @@ def get_en_passant_moves(
             )
 
         from_piece = board[initial_tile]
-        if from_piece is None:
+        if from_piece is None:  # No pawn in place to take advantage of last move's pawn
             continue
 
         if from_piece.piece_type == "Pawn" and opponent_piece.color != from_piece.color:
