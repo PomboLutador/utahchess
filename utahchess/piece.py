@@ -118,7 +118,7 @@ INITIAL_KINGS = (
 
 
 def get_initial_pieces() -> Generator[Piece, None, None]:
-
+    """Get pieces as they are on the initial configuration of a chess game."""
     for piece in (
         INITIAL_BLACK_PAWNS
         + INITIAL_WHITE_PAWNS
@@ -134,7 +134,19 @@ def get_initial_pieces() -> Generator[Piece, None, None]:
 def create_piece_instance_from_string(
     position: tuple[int, int], string: str
 ) -> Optional[Piece]:
-    """Convert a string to an instance of the Piece classes."""
+    """Convert a string to an instance of the Piece classes.
+
+    String has to be of the format <color><piece_type> where <color> is either
+    "b" or "w" and <piece_type> is one of "p", "r", "b", "k", "n", "q". "oo" is
+    interpreted as an empty tile.
+
+    Args:
+        position: Position to of the piece. This is used to figure out whether it is in
+            starting position or not.
+        string: String to be translated into an instance of a Piece.
+
+    Returns: Piece if string can be interpreted as a Piece, otherwise None.
+    """
     if string == "oo":
         return None
     color, class_identifier = string[0], string[1]
@@ -160,6 +172,11 @@ def create_piece_instance_from_string(
 def _get_is_in_start_position(
     position: tuple[int, int], class_identifier: str, color: str
 ) -> bool:
+    """Get whether piece is in starting position.
+
+    Piece is considered to be in starting position if it is on one of the tiles where
+    pieces of its type start.
+    """
     if class_identifier == "p":
         return position in tuple(
             piece.position
