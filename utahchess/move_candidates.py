@@ -34,9 +34,19 @@ def get_all_move_candidates(
     board: Board,
     current_player: str,
 ) -> Generator[tuple[tuple[int, int], tuple[int, int]], None, None]:
+    """Get all move candidates for the current player on the given board.
+
+    A move candidate is a tuple of an initial- and a destination tile.
+
+    Args:
+        board: Board on which to get all move candidates.
+        current_player: Player for which to get move candidates.
+
+    Returns: All move candidates for the current player.
+    """
     return chain(
         *tuple(
-            get_move_candidate_function(piece=piece)(
+            _get_move_candidate_function(piece=piece)(
                 board=board, position=piece.position
             )
             for piece in board.all_pieces()
@@ -45,28 +55,15 @@ def get_all_move_candidates(
     )  # type: ignore
 
 
-def get_move_candidate_function(piece: Piece) -> Callable:
-    if piece.piece_type == "Pawn":
-        return get_pawn_move_candidates
-    elif piece.piece_type == "Knight":
-        return get_knight_move_candidates
-    elif piece.piece_type == "Bishop":
-        return get_bishop_move_candidates
-    elif piece.piece_type == "Rook":
-        return get_rook_move_candidates
-    elif piece.piece_type == "Queen":
-        return get_queen_move_candidates
-    elif piece.piece_type == "King":
-        return get_king_move_candidates
-    raise Exception(f"Piece {piece} did not correspond to any piece type.")
-
-
 def get_pawn_move_candidates(
     board: Board, position: tuple[int, int]
 ) -> Generator[tuple[tuple[int, int], tuple[int, int]], None, None]:
+    """Get all move candidates for a specific pawn."""
     pawn = board[position]
     if pawn is None:
-        return
+        raise Exception(
+            f"Piece at position {position} is None when it should be a Pawn."
+        )
     movement_direction = -1 if pawn.color == "white" else 1
     movement_vector = (0, movement_direction)
 
@@ -107,12 +104,13 @@ def get_pawn_move_candidates(
 def get_knight_move_candidates(
     board: Board, position: tuple[int, int]
 ) -> Generator[tuple[tuple[int, int], tuple[int, int]], None, None]:
-    piece = board[position]
-    if piece is None:
+    """Get all move candidates for a specific knight."""
+    knight = board[position]
+    if knight is None:
         raise Exception(
             f"Piece at position {position} is None when it should be a Knight."
         )
-    friendly_color = piece.color
+    friendly_color = knight.color
     for movement_vector in KNIGHT_MOVEMENT_VECTORS:
 
         tile_to_check = apply_movement_vector(
@@ -130,48 +128,47 @@ def get_knight_move_candidates(
 def get_rook_move_candidates(
     board: Board, position: tuple[int, int]
 ) -> Generator[tuple[tuple[int, int], tuple[int, int]], None, None]:
-
-    horizontal_move_candidates = _get_horizontal_moves(
-        board=board, initial_position=position
-    )
-    vertical_move_candidates = _get_vertical_moves(
-        board=board, initial_position=position
-    )
-
-    return chain(horizontal_move_candidates, vertical_move_candidates)  # type: ignore
+    """Get all move candidates for a specific rook."""
+    if board[position] is None:
+        raise Exception(
+            f"Piece at position {position} is None when it should be a Rook."
+        )
+    return chain(
+        _get_horizontal_moves(board=board, initial_position=position),
+        _get_vertical_moves(board=board, initial_position=position),
+    )  # type: ignore
 
 
 def get_bishop_move_candidates(
     board: Board, position: tuple[int, int]
 ) -> Generator[tuple[tuple[int, int], tuple[int, int]], None, None]:
-
+    """Get all move candidates for a specific bishop."""
+    if board[position] is None:
+        raise Exception(
+            f"Piece at position {position} is None when it should be a Bishop."
+        )
     return _get_diagonal_moves(board=board, initial_position=position)
 
 
 def get_queen_move_candidates(
     board: Board, position: tuple[int, int]
 ) -> Generator[tuple[tuple[int, int], tuple[int, int]], None, None]:
-
-    diagonal_move_candidates = _get_diagonal_moves(
-        board=board, initial_position=position
-    )
-    horizontal_move_candidates = _get_horizontal_moves(
-        board=board, initial_position=position
-    )
-    vertical_move_candidates = _get_vertical_moves(
-        board=board, initial_position=position
-    )
-
+    """Get all move candidates for a specific queen."""
+    if board[position] is None:
+        raise Exception(
+            f"Piece at position {position} is None when it should be a Queen."
+        )
     return chain(
-        diagonal_move_candidates,
-        horizontal_move_candidates,
-        vertical_move_candidates,
+        _get_diagonal_moves(board=board, initial_position=position),
+        _get_horizontal_moves(board=board, initial_position=position),
+        _get_vertical_moves(board=board, initial_position=position),
     )  # type: ignore
 
 
 def get_king_move_candidates(
     board: Board, position: tuple[int, int]
 ) -> Generator[tuple[tuple[int, int], tuple[int, int]], None, None]:
+    """Get all move candidates for a specific king."""
     king = board[position]
     if king is None:
         raise Exception(
@@ -196,7 +193,9 @@ def _get_straight_line_moves(
 ) -> Generator[tuple[tuple[int, int], tuple[int, int]], None, None]:
     piece = board[initial_position]
     if piece is None:
-        return
+        raise Exception(
+            f"Piece at position {initial_position} is None when it should not be."
+        )
     next_tile = apply_movement_vector(
         position=initial_position, movement_vector=movement_vector
     )
@@ -223,7 +222,11 @@ def _get_straight_line_moves(
 def _get_horizontal_moves(
     board: Board, initial_position: tuple[int, int]
 ) -> Generator[tuple[tuple[int, int], tuple[int, int]], None, None]:
-
+    piece = board[initial_position]
+    if piece is None:
+        raise Exception(
+            f"Piece at position {initial_position} is None when it should not be."
+        )
     left_side_moves = _get_straight_line_moves(
         board=board,
         initial_position=initial_position,
@@ -240,6 +243,11 @@ def _get_horizontal_moves(
 def _get_vertical_moves(
     board: Board, initial_position: tuple[int, int]
 ) -> Generator[tuple[tuple[int, int], tuple[int, int]], None, None]:
+    piece = board[initial_position]
+    if piece is None:
+        raise Exception(
+            f"Piece at position {initial_position} is None when it should not be."
+        )
     upwards_moves = _get_straight_line_moves(
         board=board,
         initial_position=initial_position,
@@ -256,6 +264,11 @@ def _get_vertical_moves(
 def _get_diagonal_moves(
     board: Board, initial_position: tuple[int, int]
 ) -> Generator[tuple[tuple[int, int], tuple[int, int]], None, None]:
+    piece = board[initial_position]
+    if piece is None:
+        raise Exception(
+            f"Piece at position {initial_position} is None when it should not be."
+        )
     upper_right_diagonal_moves = _get_straight_line_moves(
         board=board,
         initial_position=initial_position,
@@ -283,3 +296,19 @@ def _get_diagonal_moves(
         lower_right_diagonal_moves,
         lower_left_diagonal_moves,
     )  # type: ignore
+
+
+def _get_move_candidate_function(piece: Piece) -> Callable:
+    if piece.piece_type == "Pawn":
+        return get_pawn_move_candidates
+    elif piece.piece_type == "Knight":
+        return get_knight_move_candidates
+    elif piece.piece_type == "Bishop":
+        return get_bishop_move_candidates
+    elif piece.piece_type == "Rook":
+        return get_rook_move_candidates
+    elif piece.piece_type == "Queen":
+        return get_queen_move_candidates
+    elif piece.piece_type == "King":
+        return get_king_move_candidates
+    raise Exception(f"Piece {piece} did not correspond to any piece type.")
