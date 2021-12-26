@@ -335,4 +335,4 @@ def test_is_checkmate_averted_by_en_passant():
     board = make_move(board=board, move=last_move)
 
     # then
-    assert not is_checkmate(board=board, current_player="black")
+    assert not is_checkmate(board=board, current_player="white")
