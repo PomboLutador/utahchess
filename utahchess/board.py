@@ -14,7 +14,7 @@ class Board:
     _board: tuple[tuple[Optional[Piece], ...], ...]
 
     def __init__(self, pieces: Iterable[Piece] = [], board_string: str = "") -> None:
-        """8x8 chess board containing black and white pieces.
+        """Container for chess pieces.
 
         If no arguments are provided a board containing the original 32 chess pieces
         will be initialized.
@@ -33,11 +33,10 @@ class Board:
                 >>            oo-wk-oo-wb-oo-wk-oo-wr'''
 
         Raises:
-            Exception: If both a board string and an iterable of pieces are provided
-                the initialization method will raise an exception.
+            Exception: If both a board string and an iterable of pieces are provided.
         """
         if pieces and board_string:
-            raise Exception(
+            raise ValueError(
                 "Cannot create board when both pieces and board string are provided."
             )
 
@@ -78,8 +77,7 @@ class Board:
 
     def copy(self) -> Board:
         """Create a copy of the board."""
-        new_pieces = tuple(piece for piece in self.all_pieces())
-        return Board(pieces=new_pieces)
+        return Board(pieces=tuple(piece for piece in self.all_pieces()))
 
     def move_piece(
         self, from_position: tuple[int, int], to_position: tuple[int, int]
@@ -108,10 +106,11 @@ class Board:
 
     def delete_piece(self, position: tuple[int, int]) -> Board:
         """Get a new board with one piece deleted."""
-        new_pieces = tuple(
-            piece for piece in self.all_pieces() if piece.position != position
+        return Board(
+            pieces=tuple(
+                piece for piece in self.all_pieces() if piece.position != position
+            )
         )
-        return Board(pieces=new_pieces)
 
     def to_string(self) -> str:
         """Get string representation of the board to use for initialization.
@@ -185,10 +184,10 @@ def is_edible(board: Board, position: tuple[int, int], friendly_color: str) -> b
     Args:
         board: Board to check.
         position: Position on the board to check.
-        friendly_color: Color of pieces which is considered friendly.
+        friendly_color: Color of pieces which are considered friendly.
 
     Returns:
-        A boolean indicating whether the position is edible or not.
+        A flag indicating whether the position is edible or not.
     """
     if not is_occupied(board=board, position=position):
         return False
@@ -203,6 +202,6 @@ def is_occupied(board: Board, position: tuple[int, int]) -> bool:
         position: Position on the board to check.
 
     Returns:
-        bool: A boolean indicating whether the position is occupied or not.
+        A flag indicating whether the position is occupied or not.
     """
     return board[position] is not None
