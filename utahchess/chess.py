@@ -97,7 +97,7 @@ class ChessGame:
         self, position: tuple[int, int]
     ) -> tuple[tuple[int, int], ...]:
         """Get all possible destinations for a piece.
-        
+
         Castling moves are considered king moves and so the legal destination of a
         castling move will show up as a legal destination of the king, never the rook.
         """
