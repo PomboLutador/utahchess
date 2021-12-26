@@ -69,7 +69,7 @@ def _get_ambiguous_algebraic_notation_mapping(
 def _disambiguate_moves(
     board: Board, ambiguous_identifier: str, moves_to_disambiguate: list[Move]
 ) -> dict[str, Move]:
-    """Get unambiguous algebraic notation for ambigious identifiers.
+    """Get unambiguous algebraic notation for ambiguous identifiers.
 
     If two pieces of the same kind would end up in the same spot, without considering
     rank or file, the move will have the same algebraic identifier. To disambiguate
