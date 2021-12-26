@@ -5,9 +5,8 @@ from itertools import product
 from typing import Any, Callable, Generator, Iterable, Optional
 
 from utahchess.board import Board
-from utahchess.legal_moves import get_move_per_algebraic_identifier
+from utahchess.legal_moves import get_move_per_algebraic_identifier, is_checkmate
 from utahchess.move import Move, make_move
-from utahchess.move_validation import is_checkmate
 
 PAWN_VALUE = 1
 BISHOP_VALUE = 3

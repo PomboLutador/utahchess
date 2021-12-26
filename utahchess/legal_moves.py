@@ -7,7 +7,8 @@ from utahchess.algebraic_notation import get_algebraic_identifer
 from utahchess.board import Board
 from utahchess.castling import get_castling_moves
 from utahchess.en_passant import get_en_passant_moves
-from utahchess.move import Move
+from utahchess.move import Move, make_move
+from utahchess.move_validation import is_check
 from utahchess.regular_move import get_regular_moves
 from utahchess.utils import x_index_to_file, y_index_to_rank
 
@@ -40,6 +41,29 @@ def get_move_per_algebraic_identifier(
     return mapping
 
 
+def is_checkmate(
+    board: Board, current_player: str, last_move: Optional[Move] = None
+) -> bool:
+    """Check if current player is in checkmate.
+
+    Args:
+        board: Board on which to check whether current player is in checkmate or not.
+        current_player: Player for which the check is done.
+
+    Returns: Flag indicating whether the current player is in checkmate or not.
+    """
+    def all_possible_boards():
+        for potential_move in _get_all_legal_moves(
+            board=board, current_player=current_player, last_move=last_move
+        ):
+            yield make_move(board=board, move=potential_move)
+
+    for possible_board in all_possible_boards():
+        if not is_check(board=possible_board, current_player=current_player):
+            return False
+    return is_check(board=board, current_player=current_player)
+
+
 def _get_all_legal_moves(
     board: Board, current_player: str, last_move: Optional[Move]
 ) -> Generator[Move, None, None]:
@@ -61,7 +85,13 @@ def _get_ambiguous_algebraic_notation_mapping(
     for legal_move in _get_all_legal_moves(
         board=board, current_player=current_player, last_move=last_move
     ):
-        ambiguous_identifer = get_algebraic_identifer(move=legal_move, board=board)
+        ambiguous_identifer = get_algebraic_identifer(
+            move=legal_move,
+            board=board,
+            check_or_checkmate=_get_check_or_checkmate_identifier(
+                board=board, move=legal_move, current_player=current_player
+            ),
+        )
         mapping.setdefault(ambiguous_identifer, []).append(legal_move)
     return mapping
 
@@ -118,3 +148,25 @@ def _get_moving_piece_file(move: Move) -> str:
 def _get_moving_piece_rank(move: Move) -> str:
     x_from, y_from = move.piece_moves[0][0]
     return y_index_to_rank(y=y_from)
+
+
+def _get_check_or_checkmate_identifier(
+    board: Board, move: Move, current_player: str
+) -> str:
+
+    if is_checkmate(
+        board=make_move(board=board, move=move),
+        current_player=_get_opposite_player(current_player=current_player),
+    ):
+        return "#"
+    elif is_check(
+        board=make_move(board=board, move=move),
+        current_player=_get_opposite_player(current_player=current_player),
+    ):
+        return "+"
+    else:
+        return ""
+
+
+def _get_opposite_player(current_player: str) -> str:
+    return "black" if current_player == "white" else "white"

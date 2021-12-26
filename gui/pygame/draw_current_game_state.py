@@ -18,7 +18,7 @@ from gui.constants import (
 from gui.piece_to_assetname import piece_to_assetname
 from gui.pygame.click_handler import get_pixel_coordinates_from_integer_coordinates
 from utahchess.board import Board
-from utahchess.move_validation import is_checkmate
+from utahchess.legal_moves import is_checkmate
 
 
 def draw_pieces(screen: pygame.Surface, board: Board):

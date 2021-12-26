@@ -4,9 +4,9 @@ from dataclasses import dataclass
 from typing import Optional, Sequence
 
 from utahchess.board import Board
-from utahchess.legal_moves import get_move_per_algebraic_identifier
+from utahchess.legal_moves import get_move_per_algebraic_identifier, is_checkmate
 from utahchess.move import Move, make_move
-from utahchess.move_validation import is_check, is_checkmate
+from utahchess.move_validation import is_check
 
 
 class ChessGame:

@@ -3,7 +3,7 @@ from functools import partial
 import pytest
 
 from utahchess.board import Board
-from utahchess.legal_moves import get_move_per_algebraic_identifier
+from utahchess.legal_moves import get_move_per_algebraic_identifier, is_checkmate
 from utahchess.minimax import (
     Node,
     create_children_from_parent,
@@ -12,7 +12,6 @@ from utahchess.minimax import (
     minimax,
 )
 from utahchess.move import make_move
-from utahchess.move_validation import is_checkmate
 
 
 def test_get_board_value_on_symmetric_board():

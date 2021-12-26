@@ -5,7 +5,8 @@ from itertools import product
 from typing import Type
 
 from utahchess.board import Board
-from utahchess.move_validation import is_check, is_checkmate
+from utahchess.legal_moves import is_checkmate
+from utahchess.move_validation import is_check
 from utahchess.piece import Bishop, King, Knight, Pawn, Piece, Queen, Rook
 
 ALL_POSITIONS = tuple(product((0, 1, 2, 3, 4, 5, 6, 7), (0, 1, 2, 3, 4, 5, 6, 7)))

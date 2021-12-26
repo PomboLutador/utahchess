@@ -47,7 +47,7 @@ def test_get_algebraic_identifier_with_checkmate():
     )
 
     # when
-    result = get_algebraic_identifer(move=move, board=board)
+    result = get_algebraic_identifer(move=move, board=board, check_or_checkmate="#")
 
     # then
     assert result == "Qh4#"
@@ -76,7 +76,7 @@ def test_get_algebraic_identifier_with_check():
     )
 
     # when
-    result = get_algebraic_identifer(move=move, board=board)
+    result = get_algebraic_identifer(move=move, board=board, check_or_checkmate="+")
 
     # then
     assert result == "Qh4+"
