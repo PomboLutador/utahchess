@@ -312,3 +312,27 @@ def test_is_checkmate_another_scenario():
 
     # then
     assert not is_checkmate(board=board, current_player="black")
+
+
+def test_is_checkmate_averted_by_en_passant():
+    # given
+    board_string = f"""bk-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-bb
+            oo-oo-oo-oo-bp-oo-oo-bb
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-wp-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-wk-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-br
+            oo-oo-oo-oo-oo-oo-oo-oo"""
+    board = Board(board_string=board_string)
+    last_move = Move(
+        type=REGULAR_MOVE,
+        piece_moves=(((4, 2), (4, 4)),),
+        moving_pieces=board[(4, 2)],
+        is_capturing_move=False,
+        allows_en_passant=True,
+    )
+    board = make_move(board=board, move=last_move)
+
+    # then
+    assert not is_checkmate(board=board, current_player="black")
