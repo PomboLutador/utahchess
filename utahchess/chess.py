@@ -52,6 +52,7 @@ class ChessGame:
             self.current_game_state = GameState(
                 board=board_after_move,
                 last_move=last_move,
+                last_move_algebraic=move_in_algebraic_notation,
                 current_player=next_player,
                 turn=self._increment_turn(
                     turn=self.current_game_state.turn,
@@ -85,7 +86,11 @@ class ChessGame:
 
     def undo_move(self) -> None:
         """Revert game state back to previous game state."""
-        self.current_game_state = self.previous_game_states.pop()
+        self.current_game_state = (
+            self.previous_game_states.pop()  # type: ignore
+            if self.previous_game_states
+            else None
+        )
 
     def get_current_player(self) -> str:
         return self.current_game_state.current_player
@@ -127,6 +132,7 @@ class GameState:
     turn: int
     legal_moves: dict[str, Move]
     last_move: Optional[Move] = None
+    last_move_algebraic: Optional[str] = None
 
     def __repr__(self) -> str:
         return (
