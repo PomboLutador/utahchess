@@ -31,9 +31,9 @@ def get_algebraic_identifer(move: Move, board: Board, **kwargs):
         return _get_castling_identifer(move=move)
 
     try:
-        check_or_checkmate_identifer = kwargs["check_or_checkmate"]
+        check_or_checkmate = kwargs["check_or_checkmate"]
     except KeyError:
-        check_or_checkmate_identifer = ""
+        check_or_checkmate = ""
 
     try:
         rank = kwargs["rank"]
@@ -47,7 +47,7 @@ def get_algebraic_identifer(move: Move, board: Board, **kwargs):
     return (
         f"{_get_moving_piece_signifier(move=move)}{rank}{file}"
         f"{_get_capturing_flag(move=move)}{_get_destination_tile(move=move)}"
-        f"{_get_en_passant_identifier(move=move)}{check_or_checkmate_identifer}"
+        f"{_get_en_passant_identifier(move=move)}{check_or_checkmate}"
     )
 
 

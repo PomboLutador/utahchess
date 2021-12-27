@@ -41,9 +41,7 @@ def get_move_per_algebraic_identifier(
     return mapping
 
 
-def is_checkmate(
-    board: Board, current_player: str, last_move: Optional[Move] = None
-) -> bool:
+def is_checkmate(board: Board, current_player: str, last_move: Optional[Move]) -> bool:
     """Check if current player is in checkmate.
 
     Args:
@@ -90,7 +88,9 @@ def _get_ambiguous_algebraic_notation_mapping(
             move=legal_move,
             board=board,
             check_or_checkmate=_get_check_or_checkmate_identifier(
-                board=board, move=legal_move, current_player=current_player
+                board=board,
+                move=legal_move,
+                current_player=current_player,
             ),
         )
         mapping.setdefault(ambiguous_identifer, []).append(legal_move)
@@ -152,12 +152,15 @@ def _get_moving_piece_rank(move: Move) -> str:
 
 
 def _get_check_or_checkmate_identifier(
-    board: Board, move: Move, current_player: str
+    board: Board,
+    move: Move,
+    current_player: str,
 ) -> str:
 
     if is_checkmate(
         board=make_move(board=board, move=move),
         current_player=_get_opposite_player(current_player=current_player),
+        last_move=move,
     ):
         return "#"
     elif is_check(

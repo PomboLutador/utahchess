@@ -113,9 +113,9 @@ def sample_random_board(n_pieces: int) -> Board:
 
     board = Board(pieces=board_pieces)
 
-    if is_checkmate(board=board, current_player="black") or is_checkmate(
-        board=board, current_player="white"
-    ):
+    if is_checkmate(
+        board=board, current_player="black", last_move=None
+    ) or is_checkmate(board=board, current_player="white", last_move=None):
         return sample_random_board(n_pieces=n_pieces)
     if is_check(board=board, current_player="black") or is_check(
         board=board, current_player="white"

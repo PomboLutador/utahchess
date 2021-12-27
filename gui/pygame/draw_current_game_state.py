@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Optional
+
 import pygame
 
 from gui.constants import (
@@ -19,6 +21,7 @@ from gui.piece_to_assetname import piece_to_assetname
 from gui.pygame.click_handler import get_pixel_coordinates_from_integer_coordinates
 from utahchess.board import Board
 from utahchess.legal_moves import is_checkmate
+from utahchess.move import Move
 
 
 def draw_pieces(screen: pygame.Surface, board: Board):
@@ -59,9 +62,11 @@ def notify_checkmate(
     player_in_checkmate: str,
     winning_player: str,
     font: pygame.font.Font,
+    last_move: Optional[Move],
 ):
-
-    if is_checkmate(board=board, current_player=player_in_checkmate):
+    if is_checkmate(
+        board=board, current_player=player_in_checkmate, last_move=last_move
+    ):
         text_rect = font.render(
             f"{player_in_checkmate} is in checkmate - {winning_player} wins!",
             True,

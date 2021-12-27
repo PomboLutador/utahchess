@@ -263,7 +263,7 @@ def test_is_checkmate_fools_mate():
     board = Board(board_string=board_string)
 
     # then
-    assert is_checkmate(board=board, current_player="white")
+    assert is_checkmate(board=board, current_player="white", last_move=None)
 
 
 def test_is_checkmate_friendly_piece_can_save_king():
@@ -279,7 +279,7 @@ def test_is_checkmate_friendly_piece_can_save_king():
     board = Board(board_string=board_string)
 
     # then
-    assert not is_checkmate(board=board, current_player="black")
+    assert not is_checkmate(board=board, current_player="black", last_move=None)
 
 
 def test_is_checkmate_friendly_piece_can_save_king_two():
@@ -295,7 +295,7 @@ def test_is_checkmate_friendly_piece_can_save_king_two():
     board = Board(board_string=board_string)
 
     # then
-    assert not is_checkmate(board=board, current_player="white")
+    assert not is_checkmate(board=board, current_player="white", last_move=None)
 
 
 def test_is_checkmate_another_scenario():
@@ -311,28 +311,29 @@ def test_is_checkmate_another_scenario():
     board = Board(board_string=board_string)
 
     # then
-    assert not is_checkmate(board=board, current_player="black")
+    assert not is_checkmate(board=board, current_player="black", last_move=None)
 
 
 def test_is_checkmate_averted_by_en_passant():
     # given
-    board_string = f"""bk-oo-oo-oo-oo-oo-oo-oo
-            oo-oo-oo-oo-oo-oo-oo-bb
+    board_string = f"""bk-oo-oo-oo-oo-oo-br-bb
             oo-oo-oo-oo-bp-oo-oo-bb
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-wp-oo-oo-oo-oo
             oo-oo-oo-oo-oo-wk-oo-oo
             oo-oo-oo-oo-oo-oo-oo-br
+            oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-oo"""
     board = Board(board_string=board_string)
     last_move = Move(
         type=REGULAR_MOVE,
-        piece_moves=(((4, 2), (4, 4)),),
-        moving_pieces=board[(4, 2)],
+        piece_moves=(((4, 1), (4, 3)),),
+        moving_pieces=(board[(4, 1)],),
         is_capturing_move=False,
         allows_en_passant=True,
     )
     board = make_move(board=board, move=last_move)
 
     # then
-    assert not is_checkmate(board=board, current_player="white")
+    assert not is_checkmate(board=board, current_player="white", last_move=last_move)
+    assert is_checkmate(board=board, current_player="white", last_move=None)

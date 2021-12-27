@@ -19,8 +19,12 @@ def test_get_board_value_on_symmetric_board():
     board = Board()
 
     # when
-    result1 = get_board_value(board=board, player_that_just_made_the_move="white")
-    result2 = get_board_value(board=board, player_that_just_made_the_move="black")
+    result1 = get_board_value(
+        board=board, player_that_just_made_the_move="white", last_move=None
+    )
+    result2 = get_board_value(
+        board=board, player_that_just_made_the_move="black", last_move=None
+    )
 
     # then
     assert result1 == result2
@@ -40,8 +44,12 @@ def test_get_board_value_better_if_middle_is_occupied():
     board2 = Board()
 
     # when
-    result1 = get_board_value(board=board1, player_that_just_made_the_move="black")
-    result2 = get_board_value(board=board2, player_that_just_made_the_move="black")
+    result1 = get_board_value(
+        board=board1, player_that_just_made_the_move="black", last_move=None
+    )
+    result2 = get_board_value(
+        board=board2, player_that_just_made_the_move="black", last_move=None
+    )
 
     # then
     assert result1 >= result2
@@ -60,11 +68,15 @@ def test_get_board_value_is_infinite_when_in_checkmate():
     board = Board(board_string=board_string)
 
     # when
-    result_black = get_board_value(board=board, player_that_just_made_the_move="black")
-    result_white = get_board_value(board=board, player_that_just_made_the_move="white")
+    result_black = get_board_value(
+        board=board, player_that_just_made_the_move="black", last_move=None
+    )
+    result_white = get_board_value(
+        board=board, player_that_just_made_the_move="white", last_move=None
+    )
 
     # then
-    assert is_checkmate(board=board, current_player="white")
+    assert is_checkmate(board=board, current_player="white", last_move=None)
     assert result_black == float("inf")
     assert result_black == -result_white
 
@@ -87,10 +99,12 @@ def test_get_board_value_is_symmetric(current_player, opposite_player):
         result1 = get_board_value(
             board=board_after_move,
             player_that_just_made_the_move=current_player,
+            last_move=None,
         )
         result2 = get_board_value(
             board=board_after_move,
             player_that_just_made_the_move=opposite_player,
+            last_move=None,
         )
 
         # then
