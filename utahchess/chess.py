@@ -8,6 +8,9 @@ from utahchess.legal_moves import get_move_per_algebraic_identifier, is_checkmat
 from utahchess.move import Move, make_move
 from utahchess.move_validation import is_check
 
+CHECKMATE = "checkmate"
+STALEMATE = "stalemate"
+
 
 class ChessGame:
     current_game_state: GameState
@@ -83,6 +86,19 @@ class ChessGame:
                 self.current_game_state.legal_moves.keys()
             ),
         )
+
+    def get_game_over_type(self) -> Optional[str]:
+        if self.is_game_over():
+            return (
+                CHECKMATE
+                if is_checkmate(
+                    board=self.current_game_state.board,
+                    current_player=self.get_current_player(),
+                    last_move=self.current_game_state.last_move,
+                )
+                else STALEMATE
+            )
+        return None
 
     def undo_move(self) -> None:
         """Revert game state back to previous game state."""
@@ -194,4 +210,6 @@ if __name__ == "__main__":
         print(game)
         game.make_move(move_in_algebraic_notation=input("Please enter a move: \n"))
     else:
-        print(f"Game over! The winner is {game.get_next_player()}!")
+        print("Game ends in", game.get_game_over_type())
+    print("Final board state:")
+    print(game.current_game_state.board)
