@@ -74,6 +74,7 @@ class ChessGame:
         return is_checkmate(
             board=self.current_game_state.board,
             current_player=self.get_current_player(),
+            last_move=self.current_game_state.last_move,
         ) or is_stalemate(
             board=self.current_game_state.board,
             current_player=self.get_current_player(),
