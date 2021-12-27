@@ -1,5 +1,6 @@
 import pytest
 
+from utahchess import BLACK, WHITE
 from utahchess.algebraic_notation import get_algebraic_identifer
 from utahchess.board import Board
 from utahchess.castling import get_castling_moves
@@ -167,7 +168,7 @@ def test_get_algebraic_identifer_with_en_passant_move():
             oo-oo-oo-oo-oo-wp-oo-oo
             wp-wp-wp-wp-wp-oo-oo-wp
             wr-wn-wb-wq-wn-wb-wn-wr""",
-            "black",
+            BLACK,
             "O-O-O",
         ),
         (
@@ -179,7 +180,7 @@ def test_get_algebraic_identifer_with_en_passant_move():
             oo-oo-oo-oo-oo-wp-oo-oo
             wp-wp-wp-wp-wp-oo-oo-wp
             wr-wn-wb-wq-wk-wb-wn-wr""",
-            "black",
+            BLACK,
             "O-O",
         ),
         (
@@ -191,7 +192,7 @@ def test_get_algebraic_identifer_with_en_passant_move():
             oo-oo-oo-oo-oo-wp-oo-oo
             wp-wp-wp-wp-wp-oo-oo-wp
             wr-oo-oo-oo-wk-wb-wn-wr""",
-            "white",
+            WHITE,
             "O-O-O",
         ),
         (
@@ -203,7 +204,7 @@ def test_get_algebraic_identifer_with_en_passant_move():
             oo-oo-oo-oo-oo-wp-oo-oo
             wp-wp-wp-wp-wp-oo-oo-wp
             wr-wn-wb-wq-wk-oo-oo-wr""",
-            "white",
+            WHITE,
             "O-O",
         ),
     ],

@@ -2,6 +2,7 @@ from functools import partial
 
 import pytest
 
+from utahchess import BLACK, WHITE
 from utahchess.board import Board
 from utahchess.legal_moves import get_move_per_algebraic_identifier, is_checkmate
 from utahchess.minimax import (
@@ -20,10 +21,10 @@ def test_get_board_value_on_symmetric_board():
 
     # when
     result1 = get_board_value(
-        board=board, player_that_just_made_the_move="white", last_move=None
+        board=board, player_that_just_made_the_move=WHITE, last_move=None
     )
     result2 = get_board_value(
-        board=board, player_that_just_made_the_move="black", last_move=None
+        board=board, player_that_just_made_the_move=BLACK, last_move=None
     )
 
     # then
@@ -45,10 +46,10 @@ def test_get_board_value_better_if_middle_is_occupied():
 
     # when
     result1 = get_board_value(
-        board=board1, player_that_just_made_the_move="black", last_move=None
+        board=board1, player_that_just_made_the_move=BLACK, last_move=None
     )
     result2 = get_board_value(
-        board=board2, player_that_just_made_the_move="black", last_move=None
+        board=board2, player_that_just_made_the_move=BLACK, last_move=None
     )
 
     # then
@@ -69,21 +70,21 @@ def test_get_board_value_is_infinite_when_in_checkmate():
 
     # when
     result_black = get_board_value(
-        board=board, player_that_just_made_the_move="black", last_move=None
+        board=board, player_that_just_made_the_move=BLACK, last_move=None
     )
     result_white = get_board_value(
-        board=board, player_that_just_made_the_move="white", last_move=None
+        board=board, player_that_just_made_the_move=WHITE, last_move=None
     )
 
     # then
-    assert is_checkmate(board=board, current_player="white", last_move=None)
+    assert is_checkmate(board=board, current_player=WHITE, last_move=None)
     assert result_black == float("inf")
     assert result_black == -result_white
 
 
 @pytest.mark.parametrize(
     ("current_player", "opposite_player"),
-    [("white", "black"), ("black", "white")],
+    [(WHITE, BLACK), (BLACK, WHITE)],
 )
 def test_get_board_value_is_symmetric(current_player, opposite_player):
     # given
@@ -127,7 +128,7 @@ def test_minimax_finds_checkmate_in_fools_mate(depth, ordered):
             wr-wn-wb-wq-wk-wb-wn-wr"""
     )
     parent_node = Node(
-        name="parent", parent=None, board=board, last_move=None, player="black"
+        name="parent", parent=None, board=board, last_move=None, player=BLACK
     )
 
     # when

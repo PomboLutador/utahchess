@@ -1,10 +1,12 @@
+from utahchess import BLACK, WHITE
+
 converter = {
-    "Pawn": {"black": "Chess_pdt60.png", "white": "Chess_plt60.png"},
-    "Knight": {"black": "Chess_ndt60.png", "white": "Chess_nlt60.png"},
-    "Rook": {"black": "Chess_rdt60.png", "white": "Chess_rlt60.png"},
-    "Bishop": {"black": "Chess_bdt60.png", "white": "Chess_blt60.png"},
-    "Queen": {"black": "Chess_qdt60.png", "white": "Chess_qlt60.png"},
-    "King": {"black": "Chess_kdt60.png", "white": "Chess_klt60.png"},
+    "Pawn": {BLACK: "Chess_pdt60.png", WHITE: "Chess_plt60.png"},
+    "Knight": {BLACK: "Chess_ndt60.png", WHITE: "Chess_nlt60.png"},
+    "Rook": {BLACK: "Chess_rdt60.png", WHITE: "Chess_rlt60.png"},
+    "Bishop": {BLACK: "Chess_bdt60.png", WHITE: "Chess_blt60.png"},
+    "Queen": {BLACK: "Chess_qdt60.png", WHITE: "Chess_qlt60.png"},
+    "King": {BLACK: "Chess_kdt60.png", WHITE: "Chess_klt60.png"},
 }
 
 

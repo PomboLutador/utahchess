@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Optional, Sequence
 
+from utahchess import BLACK, WHITE
 from utahchess.board import Board
 from utahchess.legal_moves import get_move_per_algebraic_identifier, is_checkmate
 from utahchess.move import Move, make_move
@@ -19,7 +20,7 @@ class ChessGame:
     def new_game(self) -> None:
         """Initialize a new game of chess."""
         board = Board()
-        current_player = "white"
+        current_player = WHITE
         turn = 1
         legal_moves = get_move_per_algebraic_identifier(
             board=board, current_player=current_player
@@ -71,7 +72,7 @@ class ChessGame:
         return False
 
     def get_next_player(self) -> str:
-        return "white" if self.get_current_player() == "black" else "black"
+        return WHITE if self.get_current_player() == BLACK else BLACK
 
     def is_game_over(self) -> bool:
         """Get whether game is either in checkmate or stalemate."""
@@ -133,7 +134,7 @@ class ChessGame:
         return self.current_game_state.__repr__()
 
     def _increment_turn(self, turn: int, current_player: str) -> int:
-        if current_player == "black":
+        if current_player == BLACK:
             return turn + 1
         else:
             return turn

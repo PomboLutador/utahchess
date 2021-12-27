@@ -20,6 +20,7 @@ from gui.pygame.draw_current_game_state import (
     highlight_legal_destinations,
     notify_checkmate,
 )
+from utahchess import BLACK, WHITE
 from utahchess.board import Board, is_edible, is_occupied
 from utahchess.chess import ChessGame
 from utahchess.minimax import Node, create_children_from_parent, get_node_value, minimax
@@ -69,7 +70,7 @@ class PygameGUI:
                         self.make_ai_move()
                         continue
 
-                    if self.game.get_current_player() == "white":
+                    if self.game.get_current_player() == WHITE:
                         # No button clicked and click is outside of board bounds, skip
                         if not is_in_bounds(position=(x_index, y_index)):
                             continue
@@ -98,13 +99,13 @@ class PygameGUI:
         self.visualize_current_game_state()
 
     def make_ai_move(self) -> None:
-        if self.game.get_current_player() == "black":
+        if self.game.get_current_player() == BLACK:
             parent_node = Node(
                 name="initial_node",
                 parent=None,
                 board=self.get_current_board(),
                 last_move=None,
-                player="black",
+                player=BLACK,
             )
 
             suggested_node, value = minimax(
@@ -154,7 +155,7 @@ class PygameGUI:
         draw_rank_and_file(screen=self.screen, font=self.font)
 
     def get_opposite_player(self) -> str:
-        return "black" if self.get_current_player() == "white" else "white"
+        return BLACK if self.get_current_player() == WHITE else WHITE
 
     def _highlight_legal_destinations(self, x, y) -> None:
         if is_occupied(self.get_current_board(), position=(x, y)):

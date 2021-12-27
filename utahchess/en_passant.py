@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import Generator, Optional
 
+from utahchess import BLACK, WHITE
 from utahchess.board import Board
 from utahchess.move import EN_PASSANT_MOVE, Move
 from utahchess.move_validation import is_valid_move
@@ -27,8 +28,8 @@ def get_en_passant_moves(
     if last_move is None:
         return None
 
-    current_player = "white" if last_move.moving_pieces[0].color == "black" else "black"
-    move_direction = 1 if current_player == "black" else -1
+    current_player = WHITE if last_move.moving_pieces[0].color == BLACK else BLACK
+    move_direction = 1 if current_player == BLACK else -1
     if not last_move.allows_en_passant:
         return None
 
