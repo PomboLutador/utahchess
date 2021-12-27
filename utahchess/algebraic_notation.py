@@ -1,14 +1,7 @@
 from __future__ import annotations
 
 from utahchess.board import Board
-from utahchess.move import (
-    EN_PASSANT_MOVE,
-    LONG_CASTLING,
-    SHORT_CASTLING,
-    Move,
-    make_move,
-)
-from utahchess.move_validation import is_check, is_checkmate
+from utahchess.move import EN_PASSANT_MOVE, LONG_CASTLING, SHORT_CASTLING, Move
 from utahchess.utils import x_index_to_file, y_index_to_rank
 
 
@@ -20,7 +13,8 @@ def get_algebraic_identifer(move: Move, board: Board, **kwargs):
 
     For two moves on the same board the algebraic identifier can be ambiguous, meaning
     two moves can have the same identifier, if rank and file of the moving piece are
-    not considered. Rank and file paramters can be passed via **kwargs.
+    not considered. Rank and file paramters as well as a check or checkmate flag can
+    be passed via **kwargs.
 
     This function does thus not disambiguate a move's identifer. See
     "utahchess.legal_moves.get_move_per_algebraic_identifier" for that.
@@ -28,17 +22,19 @@ def get_algebraic_identifer(move: Move, board: Board, **kwargs):
     Args:
         move: Move for which to get the algebraic identifier for.
         board: Board on which move is executed.
-        **kwargs: Specifically for rank and file disambiguation.
+        **kwargs: Specifically for rank and file disambiguation and to pass check or
+            checkmate flag.
 
     Returns: A possibly ambiguous string describing the move in algebraic notation.
     """
     if move.type in (LONG_CASTLING, SHORT_CASTLING):
         return _get_castling_identifer(move=move)
-    check_or_checkmate_identifer = _get_check_or_checkmate_identifier(
-        board=board,
-        move=move,
-        current_player=move.moving_pieces[0].color,
-    )
+
+    try:
+        check_or_checkmate = kwargs["check_or_checkmate"]
+    except KeyError:
+        check_or_checkmate = ""
+
     try:
         rank = kwargs["rank"]
     except KeyError:
@@ -51,7 +47,7 @@ def get_algebraic_identifer(move: Move, board: Board, **kwargs):
     return (
         f"{_get_moving_piece_signifier(move=move)}{rank}{file}"
         f"{_get_capturing_flag(move=move)}{_get_destination_tile(move=move)}"
-        f"{_get_en_passant_identifier(move=move)}{check_or_checkmate_identifer}"
+        f"{_get_en_passant_identifier(move=move)}{check_or_checkmate}"
     )
 
 
@@ -94,25 +90,3 @@ def _get_en_passant_identifier(move: Move) -> str:
     if move.type == EN_PASSANT_MOVE:
         return " e.p."
     return ""
-
-
-def _get_check_or_checkmate_identifier(
-    board: Board, move: Move, current_player: str
-) -> str:
-
-    if is_checkmate(
-        board=make_move(board=board, move=move),
-        current_player=_get_opposite_player(current_player=current_player),
-    ):
-        return "#"
-    elif is_check(
-        board=make_move(board=board, move=move),
-        current_player=_get_opposite_player(current_player=current_player),
-    ):
-        return "+"
-    else:
-        return ""
-
-
-def _get_opposite_player(current_player: str) -> str:
-    return "black" if current_player == "white" else "white"

@@ -4,9 +4,9 @@ from dataclasses import dataclass
 from typing import Optional, Sequence
 
 from utahchess.board import Board
-from utahchess.legal_moves import get_move_per_algebraic_identifier
+from utahchess.legal_moves import get_move_per_algebraic_identifier, is_checkmate
 from utahchess.move import Move, make_move
-from utahchess.move_validation import is_check, is_checkmate
+from utahchess.move_validation import is_check
 
 
 class ChessGame:
@@ -74,6 +74,7 @@ class ChessGame:
         return is_checkmate(
             board=self.current_game_state.board,
             current_player=self.get_current_player(),
+            last_move=self.current_game_state.last_move,
         ) or is_stalemate(
             board=self.current_game_state.board,
             current_player=self.get_current_player(),

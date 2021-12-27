@@ -26,30 +26,6 @@ def is_check(board: Board, current_player: str) -> bool:
     ]
 
 
-def is_checkmate(board: Board, current_player: str) -> bool:
-    """Check if current player is in checkmate.
-
-    Args:
-        board: Board on which to check whether current player is in checkmate or not.
-        current_player: Player for which the check is done.
-
-    Returns: Flag indicating whether the current player is in checkmate or not.
-    """
-
-    def all_possible_boards():
-        all_move_candidates = get_all_move_candidates(
-            board=board, current_player=current_player
-        )
-        for move_candidate in all_move_candidates:
-            from_position, to_position = move_candidate
-            yield board.move_piece(from_position=from_position, to_position=to_position)
-
-    for possible_board in all_possible_boards():
-        if not is_check(board=possible_board, current_player=current_player):
-            return False
-    return is_check(board=board, current_player=current_player)
-
-
 def is_valid_move(board: Board, move: Move) -> bool:
     """Get whether move is valid given the board.
 

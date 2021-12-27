@@ -5,9 +5,8 @@ from itertools import product
 from typing import Any, Callable, Generator, Iterable, Optional
 
 from utahchess.board import Board
-from utahchess.legal_moves import get_move_per_algebraic_identifier
+from utahchess.legal_moves import get_move_per_algebraic_identifier, is_checkmate
 from utahchess.move import Move, make_move
-from utahchess.move_validation import is_checkmate
 
 PAWN_VALUE = 1
 BISHOP_VALUE = 3
@@ -170,7 +169,9 @@ def create_children_from_parent(
         )
 
 
-def get_board_value(board: Board, player_that_just_made_the_move: str) -> float:
+def get_board_value(
+    board: Board, player_that_just_made_the_move: str, last_move: Optional[Move]
+) -> float:
     """Get ad-hoc evaluation of a board.
 
     This function gets the value of the board to the player that just made the move.
@@ -187,9 +188,12 @@ def get_board_value(board: Board, player_that_just_made_the_move: str) -> float:
     if is_checkmate(
         board=board,
         current_player=_get_enemy_color(friendly_color=player_that_just_made_the_move),
+        last_move=last_move,
     ):
         return +CHECKMATE_VALUE
-    elif is_checkmate(board=board, current_player=player_that_just_made_the_move):
+    elif is_checkmate(
+        board=board, current_player=player_that_just_made_the_move, last_move=last_move
+    ):
         return -CHECKMATE_VALUE
 
     value: float = 0.0
@@ -217,6 +221,7 @@ def get_node_value(node: Node):
     return get_board_value(
         board=node.board,
         player_that_just_made_the_move=_get_enemy_color(friendly_color=node.player),
+        last_move=node.last_move,
     )
 
 
