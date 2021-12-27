@@ -1,6 +1,7 @@
 import string
 from typing import Optional
 
+from utahchess import BLACK, WHITE
 from utahchess.piece import Piece
 
 FILE_POSSIBILITIES = "abcdefgh"
@@ -32,33 +33,33 @@ def get_unicode_character(piece: Optional[Piece]) -> str:
     if piece is None:
         return "|       | "
     elif piece.piece_type == "Pawn":
-        if piece.color == "black":
+        if piece.color == BLACK:
             return f"|   \u265F   | "
-        if piece.color == "white":
+        if piece.color == WHITE:
             return f"|   \u2659   | "
     elif piece.piece_type == "Knight":
-        if piece.color == "black":
+        if piece.color == BLACK:
             return f"|   \u265E   | "
-        if piece.color == "white":
+        if piece.color == WHITE:
             return f"|   \u2658   | "
     elif piece.piece_type == "Rook":
-        if piece.color == "black":
+        if piece.color == BLACK:
             return f"|   \u265C   | "
-        if piece.color == "white":
+        if piece.color == WHITE:
             return f"|   \u2656   | "
     elif piece.piece_type == "Bishop":
-        if piece.color == "black":
+        if piece.color == BLACK:
             return f"|   \u265D   | "
-        if piece.color == "white":
+        if piece.color == WHITE:
             return f"|   \u2657   | "
     elif piece.piece_type == "Queen":
-        if piece.color == "black":
+        if piece.color == BLACK:
             return f"|   \u265B   | "
-        if piece.color == "white":
+        if piece.color == WHITE:
             return f"|   \u2655   | "
     elif piece.piece_type == "King":
-        if piece.color == "black":
+        if piece.color == BLACK:
             return f"|   \u265A   | "
-        if piece.color == "white":
+        if piece.color == WHITE:
             return f"|   \u2654   | "
     raise Exception(f"Could not determine piece {piece}")

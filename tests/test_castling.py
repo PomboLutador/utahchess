@@ -1,5 +1,6 @@
 import pytest
 
+from utahchess import BLACK, WHITE
 from utahchess.board import Board
 from utahchess.castling import get_castling_moves
 from utahchess.move import LONG_CASTLING, SHORT_CASTLING, Move, make_move
@@ -29,7 +30,7 @@ from utahchess.move import LONG_CASTLING, SHORT_CASTLING, Move, make_move
             (3, 0),
             (4, 0),
             (2, 0),
-            "black",
+            BLACK,
             LONG_CASTLING,
         ),
         (
@@ -45,7 +46,7 @@ from utahchess.move import LONG_CASTLING, SHORT_CASTLING, Move, make_move
             (5, 0),
             (4, 0),
             (6, 0),
-            "black",
+            BLACK,
             SHORT_CASTLING,
         ),
         (
@@ -61,7 +62,7 @@ from utahchess.move import LONG_CASTLING, SHORT_CASTLING, Move, make_move
             (3, 7),
             (4, 7),
             (2, 7),
-            "white",
+            WHITE,
             LONG_CASTLING,
         ),
         (
@@ -77,7 +78,7 @@ from utahchess.move import LONG_CASTLING, SHORT_CASTLING, Move, make_move
             (5, 7),
             (4, 7),
             (6, 7),
-            "white",
+            WHITE,
             SHORT_CASTLING,
         ),
     ],
@@ -136,7 +137,7 @@ def test_castling_in_corners(
             (0, 7),
             (7, 7),
             (4, 7),
-            "white",
+            WHITE,
         ),
         (
             f"""br-oo-oo-oo-bk-oo-oo-br
@@ -150,7 +151,7 @@ def test_castling_in_corners(
             (0, 0),
             (7, 0),
             (4, 0),
-            "black",
+            BLACK,
         ),
     ],
 )
@@ -213,7 +214,7 @@ def test_no_rook_for_castling_bottom():
     expected = ()
 
     # then
-    actual = tuple(get_castling_moves(board=board, current_player="white"))
+    actual = tuple(get_castling_moves(board=board, current_player=WHITE))
     assert expected == actual
 
 
@@ -231,7 +232,7 @@ def test_no_rook_for_castling_top():
     expected = ()
 
     # then
-    actual = tuple(get_castling_moves(board=board, current_player="black"))
+    actual = tuple(get_castling_moves(board=board, current_player=BLACK))
     assert expected == actual
 
 
@@ -249,7 +250,7 @@ def test_black_cant_castle_through_check():
     expected = ()
 
     # then
-    actual = tuple(get_castling_moves(board=board, current_player="black"))
+    actual = tuple(get_castling_moves(board=board, current_player=BLACK))
     assert expected == actual
 
 
@@ -267,7 +268,7 @@ def test_black_cant_castle_into_check():
     expected = ()
 
     # then
-    actual = tuple(get_castling_moves(board=board, current_player="black"))
+    actual = tuple(get_castling_moves(board=board, current_player=BLACK))
     assert expected == actual
 
 
@@ -285,7 +286,7 @@ def test_black_cant_castle_out_of_check():
     expected = ()
 
     # then
-    actual = tuple(get_castling_moves(board=board, current_player="black"))
+    actual = tuple(get_castling_moves(board=board, current_player=BLACK))
     assert expected == actual
 
 

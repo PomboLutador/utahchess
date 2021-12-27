@@ -3,6 +3,7 @@ from __future__ import annotations
 from itertools import chain
 from typing import Callable, Generator
 
+from utahchess import WHITE
 from utahchess.board import Board, is_edible, is_occupied
 from utahchess.piece import Piece
 from utahchess.tile_movement_utils import apply_movement_vector, is_in_bounds
@@ -64,7 +65,7 @@ def get_pawn_move_candidates(
         raise Exception(
             f"Piece at position {position} is None when it should be a Pawn."
         )
-    movement_direction = -1 if pawn.color == "white" else 1
+    movement_direction = -1 if pawn.color == WHITE else 1
     movement_vector = (0, movement_direction)
 
     tile_in_front = apply_movement_vector(

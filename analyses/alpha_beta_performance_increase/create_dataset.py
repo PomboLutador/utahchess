@@ -4,6 +4,7 @@ import random
 from itertools import product
 from typing import Type
 
+from utahchess import BLACK, WHITE
 from utahchess.board import Board
 from utahchess.legal_moves import is_checkmate
 from utahchess.move_validation import is_check
@@ -29,14 +30,14 @@ def sample_random_board(n_pieces: int) -> Board:
     board_pieces.append(
         King(
             position=positions_to_fill.pop(),
-            color="white",
+            color=WHITE,
             is_in_start_position=False,
         )
     )
     board_pieces.append(
         King(
             position=positions_to_fill.pop(),
-            color="black",
+            color=BLACK,
             is_in_start_position=False,
         )
     )
@@ -48,7 +49,7 @@ def sample_random_board(n_pieces: int) -> Board:
     black_number_of_pieces = pieces_left - white_number_of_pieces
 
     for color, number_of_pieces in zip(
-        ("white", "black"), (white_number_of_pieces, black_number_of_pieces)
+        (WHITE, BLACK), (white_number_of_pieces, black_number_of_pieces)
     ):
         pawn_counter = 0
         bishop_counter = 0
@@ -113,12 +114,12 @@ def sample_random_board(n_pieces: int) -> Board:
 
     board = Board(pieces=board_pieces)
 
-    if is_checkmate(
-        board=board, current_player="black", last_move=None
-    ) or is_checkmate(board=board, current_player="white", last_move=None):
+    if is_checkmate(board=board, current_player=BLACK, last_move=None) or is_checkmate(
+        board=board, current_player=WHITE, last_move=None
+    ):
         return sample_random_board(n_pieces=n_pieces)
-    if is_check(board=board, current_player="black") or is_check(
-        board=board, current_player="white"
+    if is_check(board=board, current_player=BLACK) or is_check(
+        board=board, current_player=WHITE
     ):
         return sample_random_board(n_pieces=n_pieces)
     return board

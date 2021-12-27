@@ -1,5 +1,7 @@
 import pygame
 
+from utahchess import BLACK, WHITE
+
 pygame.init()
 
 FONT = pygame.font.SysFont("Arial", 15)
@@ -25,7 +27,7 @@ HIGHLIGHT_COLOR = "#cca9cc"
 PIECE_ASSET_HEIGHT = 60
 PIECE_ASSET_WIDTH = 60
 BACKGROUND_COLOR = "#000000"
-PLAYERS = ["white", "black"]
+PLAYERS = [WHITE, BLACK]
 
 CONTROLS_BOX_COLOR = "#DDFFFF"
 CONTROLS_BOX_OFFSET = 5

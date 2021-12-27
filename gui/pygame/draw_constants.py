@@ -29,6 +29,7 @@ from gui.pygame.buttons import (
     NEW_GAME_BUTTON,
     UNDO_MOVE_BUTTON,
 )
+from utahchess import BLACK, WHITE
 
 
 def draw_empty_board(screen: pygame.Surface) -> None:
@@ -178,9 +179,9 @@ def _draw_current_player(
     )
     if not current_player:
         text_to_display = ""
-    elif current_player == "white":
+    elif current_player == WHITE:
         text_to_display = f"It's your turn!"
-    elif current_player == "black":
+    elif current_player == BLACK:
         text_to_display = f"It's the AI's turn! Press the button to the left!"
 
     text_rect = font.render(text_to_display, True, BUTTON_FONT_COLOR)

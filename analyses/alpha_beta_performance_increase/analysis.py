@@ -5,6 +5,7 @@ from functools import partial
 from os import walk
 from typing import Generator, Sequence
 
+from utahchess import WHITE
 from utahchess.board import Board
 from utahchess.minimax import Node, create_children_from_parent, get_node_value, minimax
 
@@ -33,7 +34,7 @@ def run_experiment(
             parent=None,
             board=board,
             last_move=None,
-            player="white",
+            player=WHITE,
         )
         suggested_node, value = minimax(
             parent_node=parent_node,

@@ -4,6 +4,8 @@ import abc
 from dataclasses import dataclass
 from typing import Generator, Optional
 
+from utahchess import BLACK, WHITE
+
 
 class Piece(abc.ABC):
     piece_type: str
@@ -79,41 +81,41 @@ class King(Piece):
 
 
 INITIAL_BLACK_PAWNS = tuple(
-    Pawn(position=indices, color="black", is_in_start_position=True)
+    Pawn(position=indices, color=BLACK, is_in_start_position=True)
     for indices in ((x_coord, 1) for x_coord in range(8))
 )
 INITIAL_WHITE_PAWNS = tuple(
-    Pawn(position=indices, color="white", is_in_start_position=True)
+    Pawn(position=indices, color=WHITE, is_in_start_position=True)
     for indices in ((x_coord, 6) for x_coord in range(8))
 )
 INITIAL_KNIGHTS = tuple(
-    Knight(position=indices, color="black", is_in_start_position=True)
+    Knight(position=indices, color=BLACK, is_in_start_position=True)
     for indices in ((1, 0), (6, 0))
 ) + tuple(
-    Knight(position=indices, color="white", is_in_start_position=True)
+    Knight(position=indices, color=WHITE, is_in_start_position=True)
     for indices in ((1, 7), (6, 7))
 )
 INITIAL_ROOKS = tuple(
-    Rook(position=indices, color="black", is_in_start_position=True)
+    Rook(position=indices, color=BLACK, is_in_start_position=True)
     for indices in ((0, 0), (7, 0))
 ) + tuple(
-    Rook(position=indices, color="white", is_in_start_position=True)
+    Rook(position=indices, color=WHITE, is_in_start_position=True)
     for indices in ((0, 7), (7, 7))
 )
 INITIAL_BISHOPS = tuple(
-    Bishop(position=indices, color="black", is_in_start_position=True)
+    Bishop(position=indices, color=BLACK, is_in_start_position=True)
     for indices in ((2, 0), (5, 0))
 ) + tuple(
-    Bishop(position=indices, color="white", is_in_start_position=True)
+    Bishop(position=indices, color=WHITE, is_in_start_position=True)
     for indices in ((2, 7), (5, 7))
 )
 INITIAL_QUEENS = (
-    Queen(position=(3, 0), color="black", is_in_start_position=True),
-    Queen(position=(3, 7), color="white", is_in_start_position=True),
+    Queen(position=(3, 0), color=BLACK, is_in_start_position=True),
+    Queen(position=(3, 7), color=WHITE, is_in_start_position=True),
 )
 INITIAL_KINGS = (
-    King(position=(4, 0), color="black", is_in_start_position=True),
-    King(position=(4, 7), color="white", is_in_start_position=True),
+    King(position=(4, 0), color=BLACK, is_in_start_position=True),
+    King(position=(4, 7), color=WHITE, is_in_start_position=True),
 )
 
 
@@ -150,7 +152,7 @@ def create_piece_instance_from_string(
     if string == "oo":
         return None
     color, class_identifier = string[0], string[1]
-    color = "black" if color == "b" else "white"
+    color = BLACK if color == "b" else WHITE
     is_in_start_position = _get_is_in_start_position(
         position=position, class_identifier=class_identifier, color=color
     )

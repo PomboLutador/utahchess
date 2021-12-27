@@ -1,10 +1,11 @@
 import pytest
 
+from utahchess import BLACK, WHITE
 from utahchess.board import Board
 from utahchess.piece import Pawn
 
 
-@pytest.mark.parametrize(("y", "expected_color"), [(1, "black"), (6, "white")])
+@pytest.mark.parametrize(("y", "expected_color"), [(1, BLACK), (6, WHITE)])
 @pytest.mark.parametrize(("x"), [0, 1, 2, 3, 4, 5, 6, 7])
 def test_get_initial_pawns(x, y, expected_color):
     # when
@@ -17,7 +18,7 @@ def test_get_initial_pawns(x, y, expected_color):
     assert result_piece_type == "Pawn"
 
 
-@pytest.mark.parametrize(("y", "expected_color"), [(0, "black"), (7, "white")])
+@pytest.mark.parametrize(("y", "expected_color"), [(0, BLACK), (7, WHITE)])
 @pytest.mark.parametrize(("x"), [0, 7])
 def test_get_initial_rooks(x, y, expected_color):
     # when
@@ -30,7 +31,7 @@ def test_get_initial_rooks(x, y, expected_color):
     assert result_piece_type == "Rook"
 
 
-@pytest.mark.parametrize(("y", "expected_color"), [(0, "black"), (7, "white")])
+@pytest.mark.parametrize(("y", "expected_color"), [(0, BLACK), (7, WHITE)])
 @pytest.mark.parametrize(("x"), [1, 6])
 def test_get_initial_knights(x, y, expected_color):
     # when
@@ -43,7 +44,7 @@ def test_get_initial_knights(x, y, expected_color):
     assert result_piece_type == "Knight"
 
 
-@pytest.mark.parametrize(("y", "expected_color"), [(0, "black"), (7, "white")])
+@pytest.mark.parametrize(("y", "expected_color"), [(0, BLACK), (7, WHITE)])
 @pytest.mark.parametrize(("x"), [2, 5])
 def test_get_initial_bishops(x, y, expected_color):
     # when
@@ -56,9 +57,7 @@ def test_get_initial_bishops(x, y, expected_color):
     assert result_piece_type == "Bishop"
 
 
-@pytest.mark.parametrize(
-    ("x", "y", "expected_color"), [(3, 0, "black"), (3, 7, "white")]
-)
+@pytest.mark.parametrize(("x", "y", "expected_color"), [(3, 0, BLACK), (3, 7, WHITE)])
 def test_get_initial_queens(x, y, expected_color):
     # when
     board = Board()
@@ -70,9 +69,7 @@ def test_get_initial_queens(x, y, expected_color):
     assert result_piece_type == "Queen"
 
 
-@pytest.mark.parametrize(
-    ("x", "y", "expected_color"), [(4, 0, "black"), (4, 7, "white")]
-)
+@pytest.mark.parametrize(("x", "y", "expected_color"), [(4, 0, BLACK), (4, 7, WHITE)])
 def test_get_initial_kings(x, y, expected_color):
     # when
     board = Board()
@@ -178,7 +175,7 @@ def test_board_to_string():
 
 def test_board_raises_valueerror():
     # given
-    pieces = (Pawn(position=(0, 0), color="black", is_in_start_position=False),)
+    pieces = (Pawn(position=(0, 0), color=BLACK, is_in_start_position=False),)
     board_string = (
         """br-bn-bb-bq-bk-bb-bn-br\n"""
         """bp-bp-bp-bp-bp-bp-bp-bp\n"""
