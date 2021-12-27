@@ -47,6 +47,7 @@ def is_checkmate(board: Board, current_player: str, last_move: Optional[Move]) -
     Args:
         board: Board on which to check whether current player is in checkmate or not.
         current_player: Player for which the check is done.
+        last_move: Last move that was executed on the board.
 
     Returns: Flag indicating whether the current player is in checkmate or not.
     """
