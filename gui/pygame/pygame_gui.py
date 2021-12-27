@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Optional
+
 import pygame
 
 from gui.constants import FONT, HEIGHT, WIDTH
@@ -20,6 +22,7 @@ from gui.pygame.draw_current_game_state import (
 )
 from utahchess.board import Board, is_edible, is_occupied
 from utahchess.chess import ChessGame
+from utahchess.minimax import Node, create_children_from_parent, get_node_value, minimax
 from utahchess.tile_movement_utils import is_in_bounds
 
 
@@ -35,9 +38,11 @@ class PygameGUI:
         self.game_started = False
 
         draw_empty_board(screen=self.screen)
-        self.new_game_button, self.undo_move_button = draw_controls(
-            screen=self.screen, font=self.font
-        )
+        (
+            self.new_game_button,
+            self.undo_move_button,
+            self.ai_move_button,
+        ) = draw_controls(screen=self.screen, font=self.font)
 
         draw_rank_and_file(screen=self.screen, font=self.font)
         while self.running:
@@ -56,18 +61,24 @@ class PygameGUI:
                     # Handle button clicks on buttons
                     if self.new_game_button.collidepoint(x_pixel, y_pixel):
                         self.new_game()
+                        continue
                     if self.undo_move_button.collidepoint(x_pixel, y_pixel):
                         self.undo_move()
-
-                    # If no button is clicked and click is outside of board bounds, skip
-                    if not is_in_bounds(position=(x_index, y_index)):
+                        continue
+                    if self.ai_move_button.collidepoint(x_pixel, y_pixel):
+                        self.make_ai_move()
                         continue
 
-                    # If click lands on an occupied tile, highlight legal destinations
-                    self._highlight_legal_destinations(x=x_index, y=y_index)
+                    if self.game.get_current_player() == "white":
+                        # No button clicked and click is outside of board bounds, skip
+                        if not is_in_bounds(position=(x_index, y_index)):
+                            continue
 
-                    # If clicked tile not occupied or enemy color, try to make a move
-                    self._make_move(x=x_index, y=y_index)
+                        # Click lands on an occupied tile, highlight legal destinations
+                        self._highlight_legal_destinations(x=x_index, y=y_index)
+
+                        # Clicked tile not occupied or enemy color, try to make a move
+                        self._make_move(x=x_index, y=y_index)
 
                 elif event.type == pygame.MOUSEBUTTONUP:
                     # On release of mouse button if the click was in bounds, it is saved
@@ -86,16 +97,49 @@ class PygameGUI:
         self.game.undo_move()
         self.visualize_current_game_state()
 
+    def make_ai_move(self) -> None:
+        if self.game.get_current_player() == "black":
+            parent_node = Node(
+                name="initial_node",
+                parent=None,
+                board=self.get_current_board(),
+                last_move=None,
+                player="black",
+            )
+
+            suggested_node, value = minimax(
+                parent_node=parent_node,
+                value_function=get_node_value,
+                get_children=create_children_from_parent,
+                depth=3,
+                alpha=-float("inf"),
+                beta=float("inf"),
+                maximizing_player=True,
+            )
+            print(suggested_node, value)
+            self.game.make_move(move_in_algebraic_notation=suggested_node.name)
+            self.visualize_current_game_state()
+
     def get_current_board(self) -> Board:
         return self.game.current_game_state.board
+
+    def get_last_move(self) -> Optional[str]:
+        return self.game.current_game_state.last_move_algebraic
 
     def get_current_player(self) -> str:
         return self.game.get_current_player()
 
     def visualize_current_game_state(self) -> None:
         draw_empty_board(screen=self.screen)
-        self.new_game_button, self.undo_move_button = draw_controls(
-            screen=self.screen, font=self.font
+        (
+            self.new_game_button,
+            self.undo_move_button,
+            self.ai_move_button,
+        ) = draw_controls(
+            screen=self.screen,
+            font=self.font,
+            current_player=self.get_current_player() if self.game_started else None,
+            last_move=self.get_last_move() if self.game_started else None,
         )
         if self.game_started:
             draw_pieces(screen=self.screen, board=self.get_current_board())
