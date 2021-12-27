@@ -3,6 +3,7 @@ from __future__ import annotations
 from itertools import chain
 from typing import Generator, Optional
 
+from utahchess import BLACK, WHITE
 from utahchess.algebraic_notation import get_algebraic_identifer
 from utahchess.board import Board
 from utahchess.castling import get_castling_moves
@@ -174,4 +175,4 @@ def _get_check_or_checkmate_identifier(
 
 
 def _get_opposite_player(current_player: str) -> str:
-    return "black" if current_player == "white" else "white"
+    return BLACK if current_player == WHITE else WHITE

@@ -1,5 +1,6 @@
 import pytest
 
+from utahchess import BLACK, WHITE
 from utahchess.board import Board
 from utahchess.legal_moves import get_move_per_algebraic_identifier, is_checkmate
 from utahchess.move import REGULAR_MOVE, Move, make_move
@@ -22,7 +23,7 @@ from utahchess.move import REGULAR_MOVE, Move, make_move
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-wk""",
             ("Kb7", "Kb8", "Ka7"),
-            "black",
+            BLACK,
         ),
         (
             f"""bk-oo-oo-oo-oo-oo-oo-oo
@@ -34,7 +35,7 @@ from utahchess.move import REGULAR_MOVE, Move, make_move
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-oo-oo-oo-oo-oo-oo-wk""",
             ("Kg2", "Kg1", "Kh2"),
-            "white",
+            WHITE,
         ),
         (
             f"""bk-oo-oo-oo-oo-oo-oo-oo
@@ -46,7 +47,7 @@ from utahchess.move import REGULAR_MOVE, Move, make_move
             oo-oo-oo-oo-oo-oo-oo-oo
             oo-br-oo-oo-oo-wp-oo-wk""",
             ("Kg2", "Kg1", "Kh2"),
-            "white",
+            WHITE,
         ),
         (
             f"""bk-oo-oo-oo-oo-oo-oo-oo
@@ -58,7 +59,7 @@ from utahchess.move import REGULAR_MOVE, Move, make_move
             oo-oo-oo-oo-oo-oo-oo-oo
             wr-oo-oo-oo-oo-wp-oo-wk""",
             ("Kb7", "Kb8", "Ka7"),
-            "black",
+            BLACK,
         ),
         (
             f"""br-oo-oo-oo-bk-oo-oo-oo
@@ -87,7 +88,7 @@ from utahchess.move import REGULAR_MOVE, Move, make_move
                 "Rc8",
                 "Rd8",
             ),
-            "black",
+            BLACK,
         ),
         (
             f"""bk-oo-oo-oo-oo-oo-oo-oo
@@ -111,7 +112,7 @@ from utahchess.move import REGULAR_MOVE, Move, make_move
                 "Ng6",
                 "Ng2",
             ),
-            "black",
+            BLACK,
         ),
         (
             f"""bk-oo-oo-oo-oo-oo-oo-oo
@@ -139,7 +140,7 @@ from utahchess.move import REGULAR_MOVE, Move, make_move
                 "Nd5",
                 "Nh7",
             ),
-            "black",
+            BLACK,
         ),
     ],
 )
@@ -185,7 +186,7 @@ def test_get_move_per_algebraic_identifier(
                 "e3",
                 "xd3 e.p.",
             ),
-            "black",
+            BLACK,
             (
                 (
                     (3, 6),
@@ -209,7 +210,7 @@ def test_get_move_per_algebraic_identifier(
                 "d6",
                 "xe6 e.p.",
             ),
-            "white",
+            WHITE,
             (
                 (
                     (4, 1),
@@ -263,7 +264,7 @@ def test_is_checkmate_fools_mate():
     board = Board(board_string=board_string)
 
     # then
-    assert is_checkmate(board=board, current_player="white", last_move=None)
+    assert is_checkmate(board=board, current_player=WHITE, last_move=None)
 
 
 def test_is_checkmate_friendly_piece_can_save_king():
@@ -279,7 +280,7 @@ def test_is_checkmate_friendly_piece_can_save_king():
     board = Board(board_string=board_string)
 
     # then
-    assert not is_checkmate(board=board, current_player="black", last_move=None)
+    assert not is_checkmate(board=board, current_player=BLACK, last_move=None)
 
 
 def test_is_checkmate_friendly_piece_can_save_king_two():
@@ -295,7 +296,7 @@ def test_is_checkmate_friendly_piece_can_save_king_two():
     board = Board(board_string=board_string)
 
     # then
-    assert not is_checkmate(board=board, current_player="white", last_move=None)
+    assert not is_checkmate(board=board, current_player=WHITE, last_move=None)
 
 
 def test_is_checkmate_another_scenario():
@@ -311,7 +312,7 @@ def test_is_checkmate_another_scenario():
     board = Board(board_string=board_string)
 
     # then
-    assert not is_checkmate(board=board, current_player="black", last_move=None)
+    assert not is_checkmate(board=board, current_player=BLACK, last_move=None)
 
 
 def test_is_checkmate_averted_by_en_passant():
@@ -335,5 +336,5 @@ def test_is_checkmate_averted_by_en_passant():
     board = make_move(board=board, move=last_move)
 
     # then
-    assert not is_checkmate(board=board, current_player="white", last_move=last_move)
-    assert is_checkmate(board=board, current_player="white", last_move=None)
+    assert not is_checkmate(board=board, current_player=WHITE, last_move=last_move)
+    assert is_checkmate(board=board, current_player=WHITE, last_move=None)

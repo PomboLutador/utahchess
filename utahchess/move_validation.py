@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from utahchess import BLACK, WHITE
 from utahchess.board import Board
 from utahchess.move import Move
 from utahchess.move_candidates import get_all_move_candidates
@@ -17,7 +18,7 @@ def is_check(board: Board, current_player: str) -> bool:
 
     Returns: Flag indicating whether the current player is in check or not.
     """
-    enemy_color = "white" if current_player == "black" else "black"
+    enemy_color = WHITE if current_player == BLACK else BLACK
     return find_current_players_king_position(
         board=board, current_player=current_player
     ) in [

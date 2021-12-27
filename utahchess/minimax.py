@@ -4,6 +4,7 @@ from collections import OrderedDict
 from itertools import product
 from typing import Any, Callable, Generator, Iterable, Optional
 
+from utahchess import BLACK, WHITE
 from utahchess.board import Board
 from utahchess.legal_moves import get_move_per_algebraic_identifier, is_checkmate
 from utahchess.move import Move, make_move
@@ -254,7 +255,7 @@ def _order_moves_by_potential(moves_mapping: dict[str, Move]) -> OrderedDict[str
 
 
 def _get_enemy_color(friendly_color: str) -> str:
-    return "white" if friendly_color == "black" else "black"
+    return WHITE if friendly_color == BLACK else BLACK
 
 
 if __name__ == "__main__":
@@ -274,7 +275,7 @@ if __name__ == "__main__":
         parent=None,
         board=fools_mate,
         last_move=None,
-        player="black",
+        player=BLACK,
     )
 
     suggested_node, value = minimax(
