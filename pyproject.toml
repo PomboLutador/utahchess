@@ -4,3 +4,6 @@ skip = '.env'
 
 [tool.black]
 exclude = '.env'
+
+[build-system]
+requires = ["setuptools", "wheel"]
