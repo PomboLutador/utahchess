@@ -105,6 +105,7 @@ class PygameGUI:
                 player_in_checkmate=self.get_current_player(),
                 winning_player=self.get_opposite_player(),
                 font=self.font,
+                last_move=self.game.current_game_state.last_move,
             )
         draw_rank_and_file(screen=self.screen, font=self.font)
 

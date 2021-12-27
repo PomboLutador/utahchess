@@ -1,7 +1,7 @@
 import pytest
 
 from utahchess.board import Board
-from utahchess.legal_moves import get_move_per_algebraic_identifier
+from utahchess.legal_moves import get_move_per_algebraic_identifier, is_checkmate
 from utahchess.move import REGULAR_MOVE, Move, make_move
 
 
@@ -248,3 +248,92 @@ def test_get_move_per_algebraic_identifier_with_last_move_for_en_passant(
     # then
     assert len(result) == len(expected_legal_moves_in_algebraic_notation)
     assert set(expected_legal_moves_in_algebraic_notation) == set(result)
+
+
+def test_is_checkmate_fools_mate():
+    # when
+    board_string = f"""br-bn-bb-oo-bk-bb-bn-br
+            bp-bp-bp-bp-oo-bp-bp-bp
+            oo-oo-oo-oo-bp-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-wp-bq
+            oo-oo-oo-oo-oo-wp-oo-oo
+            wp-wp-wp-wp-wp-oo-oo-wp
+            wr-wn-wb-wq-wk-wb-wn-wr"""
+    board = Board(board_string=board_string)
+
+    # then
+    assert is_checkmate(board=board, current_player="white", last_move=None)
+
+
+def test_is_checkmate_friendly_piece_can_save_king():
+    # when
+    board_string = f"""br-oo-wq-bq-bk-bb-oo-br
+            bp-bp-oo-oo-oo-oo-oo-oo
+            bb-oo-oo-oo-oo-bp-oo-oo
+            wp-oo-wb-oo-oo-oo-oo-wb
+            oo-oo-oo-oo-oo-oo-oo-oo
+            wn-oo-oo-oo-oo-oo-oo-oo
+            oo-wp-wk-oo-oo-oo-wp-oo
+            oo-wr-oo-bn-oo-oo-wn-wr"""
+    board = Board(board_string=board_string)
+
+    # then
+    assert not is_checkmate(board=board, current_player="black", last_move=None)
+
+
+def test_is_checkmate_friendly_piece_can_save_king_two():
+    # when
+    board_string = f"""br-oo-oo-oo-oo-bb-oo-br
+            bp-bp-oo-bb-oo-oo-bp-bp
+            bn-oo-oo-bp-oo-bk-oo-oo
+            oo-wb-oo-oo-bp-oo-oo-oo
+            oo-oo-wp-oo-wp-wp-bn-oo
+            wp-oo-wp-oo-oo-oo-oo-oo
+            oo-wb-oo-oo-oo-bq-wp-wp
+            wr-wn-oo-oo-oo-wq-wk-wr"""
+    board = Board(board_string=board_string)
+
+    # then
+    assert not is_checkmate(board=board, current_player="white", last_move=None)
+
+
+def test_is_checkmate_another_scenario():
+    # when
+    board_string = f"""br-oo-oo-wq-oo-bk-oo-br
+            oo-oo-oo-oo-bn-oo-bp-oo
+            oo-wb-oo-oo-wp-bp-oo-oo
+            oo-bp-oo-oo-oo-wp-wn-oo
+            bq-wp-oo-oo-wp-oo-oo-bp
+            bb-oo-wp-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-wn-oo-wb-oo-wn-oo-wr"""
+    board = Board(board_string=board_string)
+
+    # then
+    assert not is_checkmate(board=board, current_player="black", last_move=None)
+
+
+def test_is_checkmate_averted_by_en_passant():
+    # given
+    board_string = f"""bk-oo-oo-oo-oo-oo-br-bb
+            oo-oo-oo-oo-bp-oo-oo-bb
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-wp-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-wk-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-br
+            oo-oo-oo-oo-oo-oo-oo-oo
+            oo-oo-oo-oo-oo-oo-oo-oo"""
+    board = Board(board_string=board_string)
+    last_move = Move(
+        type=REGULAR_MOVE,
+        piece_moves=(((4, 1), (4, 3)),),
+        moving_pieces=(board[(4, 1)],),
+        is_capturing_move=False,
+        allows_en_passant=True,
+    )
+    board = make_move(board=board, move=last_move)
+
+    # then
+    assert not is_checkmate(board=board, current_player="white", last_move=last_move)
+    assert is_checkmate(board=board, current_player="white", last_move=None)

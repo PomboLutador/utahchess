@@ -5,7 +5,8 @@ from itertools import product
 from typing import Type
 
 from utahchess.board import Board
-from utahchess.move_validation import is_check, is_checkmate
+from utahchess.legal_moves import is_checkmate
+from utahchess.move_validation import is_check
 from utahchess.piece import Bishop, King, Knight, Pawn, Piece, Queen, Rook
 
 ALL_POSITIONS = tuple(product((0, 1, 2, 3, 4, 5, 6, 7), (0, 1, 2, 3, 4, 5, 6, 7)))
@@ -112,9 +113,9 @@ def sample_random_board(n_pieces: int) -> Board:
 
     board = Board(pieces=board_pieces)
 
-    if is_checkmate(board=board, current_player="black") or is_checkmate(
-        board=board, current_player="white"
-    ):
+    if is_checkmate(
+        board=board, current_player="black", last_move=None
+    ) or is_checkmate(board=board, current_player="white", last_move=None):
         return sample_random_board(n_pieces=n_pieces)
     if is_check(board=board, current_player="black") or is_check(
         board=board, current_player="white"
