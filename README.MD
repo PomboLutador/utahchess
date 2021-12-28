@@ -71,7 +71,7 @@ There are also three other shell scripts in the `bin` folder (`install_<placehol
 - The main loop in `utahchess.chess` shows how to play a game of chess in the command line using user input for both sides of the game.
 - To implement a game of chess yourself the utils `utahchess.move_validation.is_check`, `utahchess.legal_moves.is_checkmate` and `utahchess.legal_moves.is_stalemate` can be used to check the status of a board.
 ### GUI
-- The proof of concept GUI using pygame can be tried out by executing `python gui/pygame/pygame.gui`.
+- The proof of concept GUI using pygame can be tried out by executing `python gui/pygame/pygame_gui.py`.
 - The GUI allows the user to play against the CPU, powered by an alpha-beta pruned minimax algorithm.
 ### Minimax
 - An implementation of the minimax algorithm with alpha-beta pruning can be found in `utahchess.minimax`, called `minimax`. 
