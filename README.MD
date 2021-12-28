@@ -76,7 +76,7 @@ There are also three other shell scripts in the `bin` folder (`install_<placehol
 ### Minimax
 - An implementation of the minimax algorithm with alpha-beta pruning can be found in `utahchess.minimax`, called `minimax`. 
 - A small helper class called `Node` can be used to provide the nodes necessary to navigate through the game tree.
-- The minimax function is general purpose and be used for other games by providing appropriate `get_children` and `value function` parameters.
+- The minimax function is general purpose and can be used for other games by providing appropriate `get_children` and `value function` parameters.
 - Implementations of those two parameters which can be used with the chess engine can be found in the module itself: `get_node_value` and `create_children_from_parent`.
   
 ## Miscellaneous
