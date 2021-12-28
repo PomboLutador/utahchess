@@ -13,7 +13,7 @@
     - [Minimax](#minimax)
   - [Miscellaneous](#miscellaneous)
     - [Minimax analysis](#minimax-analysis)
-    - [Some GUI screenshots](#some-gui-screenshots)
+    - [Some pygame GUI screenshots](#some-pygame-gui-screenshots)
     - [Dev utils](#dev-utils)
 
 This package is a chess engine entirely written in Python. A small proof of concept of a GUI using `pygame` where you can play against the CPU can be found in the `gui` folder.
@@ -99,7 +99,7 @@ Same table but with number of seconds per board:
 | 4     | 10               | 823.7              | 21                    | 15.4                         |
 | 5     | 10               | N/A                | 287.4                 | 31.3                         |
 
-### Some GUI screenshots
+### Some pygame GUI screenshots
 <img src="gui/pygame/screenshots/gui_screenshot.PNG" alt="drawing" width="400"/>
 <img src="gui/pygame/screenshots/gui_screenshot_2.PNG" alt="drawing" width="400"/>
 <img src="gui/pygame/screenshots/gui_screenshot_3.png" alt="drawing" width="400"/>
