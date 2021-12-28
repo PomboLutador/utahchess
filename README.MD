@@ -15,6 +15,7 @@
     - [Minimax analysis](#minimax-analysis)
     - [Some pygame GUI screenshots](#some-pygame-gui-screenshots)
     - [Dev utils](#dev-utils)
+    - [Assets origin](#assets-origin)
 
 This package is a chess engine entirely written in Python. A small proof of concept of a GUI using `pygame` where you can play against the CPU can be found in the `gui` folder.
 
@@ -107,4 +108,7 @@ Same table but with number of seconds per board:
 
 ### Dev utils
 - The two shell scripts `bin/format.sh` and `bin/lint.sh` can be used to format- and lint the code respectively.
+
+### Assets origin
+- Chess piece graphics were taken from wikimedia: https://commons.wikimedia.org/wiki/Chess_pieces.
 
