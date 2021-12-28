@@ -1,5 +1,21 @@
 # Utahchess Chess Engine
 
+- [Utahchess Chess Engine](#utahchess-chess-engine)
+  - [Installation Guide](#installation-guide)
+    - [Basic](#basic)
+    - [For Dev](#for-dev)
+    - [For GUI](#for-gui)
+  - [How to use](#how-to-use)
+    - [Board](#board)
+    - [Getting legal moves and making them](#getting-legal-moves-and-making-them)
+    - [Game of chess](#game-of-chess)
+    - [GUI](#gui)
+    - [Minimax](#minimax)
+  - [Miscellaneous](#miscellaneous)
+    - [Minimax analysis](#minimax-analysis)
+    - [Some GUI screenshots](#some-gui-screenshots)
+    - [Dev utils](#dev-utils)
+
 This package is a chess engine entirely written in Python. A small proof of concept of a GUI using `pygame` where you can play against the CPU can be found in the `gui` folder.
 
 ## Installation Guide
@@ -47,8 +63,8 @@ There are also three other shell scripts in the `bin` folder (`install_<placehol
 ### Game of chess
 - The `ChessGame` class in `utahchess.chess` can be used to play a complete game of chess.
 - The main loop in `utahchess.chess` shows how to play a game of chess in the command line using user input for both sides of the game.
+- To implement a game of chess yourself the utils `utahchess.move_validation.is_check`, `utahchess.legal_moves.is_checkmate` and `utahchess.legal_moves.is_stalemate` can be used to check the status of a board.
 ### GUI
-**(don't forget a couple nice screenshots)**
 - The proof of concept GUI using pygame can be tried out by executing `python gui/pygame/pygame.gui`.
 - The GUI allows the user to play against the CPU, powered by an alpha-beta pruned minimax algorithm.
 ### Minimax
@@ -61,17 +77,34 @@ There are also three other shell scripts in the `bin` folder (`install_<placehol
 ### Minimax analysis
 An analysis was conducted to showcase the power of alpha-beta pruning and ordering nodes in the game tree by potential volume.
 
-The minimax algorithm was used to compute the optimal move for depths 1 through 5 for a variety of semi-random chess board configurations. For each depth the minimax algorithm was used with and without alpha-beta pruning as well as with alpha-beta pruning and nodes ordered by their potential value via a simple ad-hoc evaluation.
+The minimax algorithm was used to compute the optimal move for depths 1 through 5 for a variety of semi-random chess board configurations. For each depth the minimax algorithm was used with and without alpha-beta pruning as well as with alpha-beta pruning and nodes ordered by their potential value via a simple ad-hoc rule.
 
-As expected the performance gain of alpha-beta pruning and the moves ordering can be seen especially at higher depths:
+As expected the performance gain of alpha-beta pruning and the moves ordering can be seen especially at higher depths. The following table contains the number of seconds each experiment took to run:
 
-**Depth 1**     100 boards      1.87 seconds        1.91 seconds        1.96 seconds 
+| Depth | Number of boards | Baseline [s] | Only pruned [s] | Pruned and ordered [s] |
+| ----- | ---------------- | ------------ | --------------- | ---------------------- |
+| 1     | 100              | 1.96         | 1.91            | 1.87                   |
+| 2     | 50               | 36           | 22              | 25                     |
+| 3     | 10               | 199          | 35              | 11                     |
+| 4     | 10               | 8237         | 210             | 154                    |
+| 5     | 10               | N/A          | 2874            | 313                    |
 
-**Depth 2**    50 boards       25 seconds       22 seconds       36 seconds
+Same table but with number of seconds per board:
 
-**Depth 3**     10 boards       11 seconds      35 seconds      199 seconds
+| Depth | Number of boards | Baseline [s/board] | Only pruned [s/board] | Pruned and ordered [s/board] |
+| ----- | ---------------- | ------------------ | --------------------- | ---------------------------- |
+| 1     | 100              | 0.0196             | 0.0191                | 0.0187                       |
+| 2     | 50               | 0.72               | 0.44                  | 0.5                          |
+| 3     | 10               | 19.9               | 3.5                   | 1.1                          |
+| 4     | 10               | 823.7              | 21                    | 15.4                         |
+| 5     | 10               | N/A                | 287.4                 | 31.3                         |
 
-**Depth 4**     10 boards       154 seconds      210 seconds      8237 seconds
+### Some GUI screenshots
+<img src="gui/pygame/screenshots/gui_screenshot.PNG" alt="drawing" width="400"/>
+<img src="gui/pygame/screenshots/gui_screenshot_2.PNG" alt="drawing" width="400"/>
+<img src="gui/pygame/screenshots/gui_screenshot_3.png" alt="drawing" width="400"/>
 
-**Depth 5**     10 boards       313 seconds      2874 seconds      N/A 
+
 ### Dev utils
+- The two shell scripts `bin/format.sh` and `bin/lint.sh` can be used to format- and lint the code respectively.
+
