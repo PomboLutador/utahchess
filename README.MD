@@ -21,7 +21,7 @@ This package is a chess engine entirely written in Python. A small proof of conc
 
 ## Installation Guide
 
-Python 3.8 or more is required to install the package. Three rules are defined to install the package:
+Python 3.8 or higher is required to install the package. Three rules are defined to install the package:
 
 ### Basic
 - Without any development or GUI dependencies
@@ -45,15 +45,20 @@ There are also three other shell scripts in the `bin` folder (`install_<placehol
 - Boards can be instantiated using a sequence of `Piece` objects or a string that looks as follows:
 
 ```python
-    f'''oo-oo-oo-oo-oo-oo-oo-oo
+    f"""oo-oo-oo-oo-oo-oo-oo-oo
         oo-oo-oo-oo-bk-oo-oo-oo
         oo-oo-oo-oo-oo-oo-oo-oo
         wp-bp-wp-oo-oo-oo-oo-oo
         oo-oo-oo-oo-oo-oo-oo-oo
         oo-oo-oo-oo-oo-oo-oo-oo
         oo-oo-oo-oo-oo-oo-oo-oo
-        oo-oo-oo-oo-wk-oo-oo-oo'''
+        oo-oo-oo-oo-wk-oo-oo-oo"""
 ```
+
+- `oo` represents an empty tile
+- `w` stands for player white
+- `b` stands for player black
+- `k` (King), `q` (Queen), `r` (Rook), `n` (Knight), `b` (Bishop) and `p` (Pawn) stand for the different piece types
 - The method `to_string()` can be used to create a string such as the above.
 
 ### Getting legal moves and making them
@@ -101,9 +106,9 @@ Same table but with number of seconds per board:
 | 5     | 10               | N/A                | 287.4                 | 31.3                         |
 
 ### Some pygame GUI screenshots
-| Initial board | Board after some moves | Available moves for knight |
-|---|---|---|
-|<img src="gui/pygame/screenshots/gui_screenshot.PNG" alt="drawing" width="250"/>|<img src="gui/pygame/screenshots/gui_screenshot_2.PNG" alt="drawing" width="250"/>|<img src="gui/pygame/screenshots/gui_screenshot_3.png" alt="drawing" width="250"/>|
+| Initial board                                                                    | Board after some moves                                                             | Available moves for knight                                                         |
+| -------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| <img src="gui/pygame/screenshots/gui_screenshot.PNG" alt="drawing" width="250"/> | <img src="gui/pygame/screenshots/gui_screenshot_2.PNG" alt="drawing" width="250"/> | <img src="gui/pygame/screenshots/gui_screenshot_3.png" alt="drawing" width="250"/> |
 
 
 ### Dev utils
