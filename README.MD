@@ -42,7 +42,7 @@ There are also three other shell scripts in the `bin` folder (`install_<placehol
 ### Board
 - The `Board` class in `utahchess.board` is used as a container for the chess pieces. 
 - It can be directly manipulated with the `move_piece` and `delete_piece` methods.
-- Boards can be instantiated using a sequence of `Piece` objects or a string that looks as follows:
+- Boards can be instantiated using a sequence of `utahchess.piece.Piece` objects or a string that looks as follows:
 
 ```python
     f"""oo-oo-oo-oo-oo-oo-oo-oo
