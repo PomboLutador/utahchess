@@ -101,7 +101,7 @@ Same table but with number of seconds per board:
 | 5     | 10               | N/A                | 287.4                 | 31.3                         |
 
 ### Some pygame GUI screenshots
-|<img src="gui/pygame/screenshots/gui_screenshot.PNG" alt="drawing" width="250"/>|<img src="gui/pygame/screenshots/gui_screenshot_2.PNG" alt="drawing" width="250"/>|<img src="gui/pygame/screenshots/gui_screenshot_3.png" alt="drawing" width="250"/>|
+|-<img src="gui/pygame/screenshots/gui_screenshot.PNG" alt="drawing" width="250"/>|-<img src="gui/pygame/screenshots/gui_screenshot_2.PNG" alt="drawing" width="250"/>|-<img src="gui/pygame/screenshots/gui_screenshot_3.png" alt="drawing" width="250"/>|
 
 
 ### Dev utils
