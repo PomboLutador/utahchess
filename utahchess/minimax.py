@@ -74,47 +74,31 @@ def minimax(
         return parent_node, value_function(node=parent_node)
 
     best_move: Any = None
-    if maximizing_player:
-        best_value = -float("inf")
-        for child_node in get_children(parent_node=parent_node):
-            _, eval = minimax(
-                parent_node=child_node,
-                value_function=value_function,
-                get_children=get_children,
-                depth=depth - 1,
-                maximizing_player=False,
-                alpha=alpha,
-                beta=beta,
-                prune=prune,
-            )
+    best_value = -float("inf") if maximizing_player else +float("inf")
+    for child_node in get_children(parent_node=parent_node):
+        _, eval = minimax(
+            parent_node=child_node,
+            value_function=value_function,
+            get_children=get_children,
+            depth=depth - 1,
+            maximizing_player=False if maximizing_player else True,
+            alpha=alpha,
+            beta=beta,
+            prune=prune,
+        )
+        if maximizing_player:
             if eval > best_value:
                 best_value = eval
                 best_move = child_node
             alpha = max(alpha, best_value)
-            if alpha >= beta:
-                if prune:
-                    break
-
-    else:
-        best_value = +float("inf")
-        for child_node in get_children(parent_node=parent_node):
-            _, eval = minimax(
-                parent_node=child_node,
-                value_function=value_function,
-                get_children=get_children,
-                depth=depth - 1,
-                maximizing_player=True,
-                alpha=alpha,
-                beta=beta,
-                prune=prune,
-            )
+        else:
             if eval < best_value:
                 best_value = eval
                 best_move = child_node
             beta = min(beta, best_value)
-            if alpha >= beta:
-                if prune:
-                    break
+        if alpha >= beta:
+            if prune:
+                break
     return best_move, best_value
 
 
@@ -136,38 +120,25 @@ def create_children_from_parent(
     parent_board = parent_node.board
     parent_last_move = parent_node.last_move
     parent_player = parent_node.player
-    if ordered:
-        return (
-            Node(
-                parent=parent_node,
-                name=algebraic_identifier,
-                board=make_move(board=parent_board, move=legal_move),
-                last_move=legal_move,
-                player=_get_enemy_color(friendly_color=parent_player),
-            )
-            for algebraic_identifier, legal_move in _order_moves_by_potential(
-                get_move_per_algebraic_identifier(
-                    board=parent_board,
-                    current_player=parent_player,
-                    last_move=parent_last_move,
-                )
-            ).items()
+    move_per_algebraic_identifier = get_move_per_algebraic_identifier(
+        board=parent_board,
+        current_player=parent_player,
+        last_move=parent_last_move,
+    )
+    return (
+        Node(
+            parent=parent_node,
+            name=algebraic_identifier,
+            board=make_move(board=parent_board, move=legal_move),
+            last_move=legal_move,
+            player=_get_enemy_color(friendly_color=parent_player),
         )
-    else:
-        return (
-            Node(
-                parent=parent_node,
-                name=algebraic_identifier,
-                board=make_move(board=parent_board, move=legal_move),
-                last_move=legal_move,
-                player=_get_enemy_color(friendly_color=parent_player),
-            )
-            for algebraic_identifier, legal_move in get_move_per_algebraic_identifier(
-                board=parent_board,
-                current_player=parent_player,
-                last_move=parent_last_move,
-            ).items()
-        )
+        for algebraic_identifier, legal_move in (
+            _order_moves_by_potential(moves_mapping=move_per_algebraic_identifier)
+            if ordered
+            else move_per_algebraic_identifier
+        ).items()
+    )
 
 
 def get_board_value(
@@ -232,20 +203,16 @@ def _order_moves_by_potential(moves_mapping: dict[str, Move]) -> OrderedDict[str
     pawn_captures = []
     other_captures = []
     rest = []
-
     for algebraic_identifier, move in moves_mapping.items():
         # Checkmate moves
         if algebraic_identifier[-1] == "#":
             checkmate_moves.append((algebraic_identifier, move))
-
         # Pawn captures
         elif algebraic_identifier[0] == "x":
             pawn_captures.append((algebraic_identifier, move))
-
         # Other captures
         elif algebraic_identifier[0] != "x" and "x" in algebraic_identifier:
             other_captures.append((algebraic_identifier, move))
-
         # Leftovers
         else:
             rest.append((algebraic_identifier, move))
@@ -277,12 +244,11 @@ if __name__ == "__main__":
         last_move=None,
         player=BLACK,
     )
-
     suggested_node, value = minimax(
         parent_node=parent_node,
         value_function=get_node_value,
         get_children=create_children_from_parent,
-        depth=4,
+        depth=3,
         alpha=-float("inf"),
         beta=float("inf"),
         maximizing_player=True,
