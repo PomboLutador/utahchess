@@ -71,12 +71,12 @@ There are also three other shell scripts in the `bin` folder (`install_<placehol
 - The main loop in `utahchess.chess` shows how to play a game of chess in the command line using user input for both sides of the game.
 - To implement a game of chess yourself the utils `utahchess.move_validation.is_check`, `utahchess.legal_moves.is_checkmate` and `utahchess.legal_moves.is_stalemate` can be used to check the status of a board.
 ### GUI
-- The proof of concept GUI using pygame can be tried out by executing `python gui/pygame/pygame_gui.py`.
+- The proof of concept GUI using pygame can be tried out by executing `python gui/pygame/pygame.gui`.
 - The GUI allows the user to play against the CPU, powered by an alpha-beta pruned minimax algorithm.
 ### Minimax
 - An implementation of the minimax algorithm with alpha-beta pruning can be found in `utahchess.minimax`, called `minimax`. 
 - A small helper class called `Node` can be used to provide the nodes necessary to navigate through the game tree.
-- The minimax function is general purpose and can be used for other games by providing appropriate `get_children` and `value function` parameters.
+- The minimax function is general purpose and be used for other games by providing appropriate `get_children` and `value function` parameters.
 - Implementations of those two parameters which can be used with the chess engine can be found in the module itself: `get_node_value` and `create_children_from_parent`.
   
 ## Miscellaneous
@@ -89,21 +89,24 @@ As expected the performance gain of alpha-beta pruning and the moves ordering ca
 
 | Depth | Number of boards | Baseline [s] | Only pruned [s] | Pruned and ordered [s] |
 | ----- | ---------------- | ------------ | --------------- | ---------------------- |
-| 1     | 100              | 1.96         | 1.91            | 1.87                   |
-| 2     | 50               | 36           | 22              | 25                     |
-| 3     | 10               | 199          | 35              | 11                     |
-| 4     | 10               | 8237         | 210             | 154                    |
-| 5     | 10               | N/A          | 2874            | 313                    |
+| 1     | 100              | 3            | 3               | 3                      |
+| 2     | 50               | 57           | 33              | 36                     |
+| 3     | 50               | 1901         | 284             | 125                    |
+| 4     | 50               | N/A          | 2902            | 4650                   |
+| 5     | 50               | N/A          | 27672           | 4462                   |
 
 Same table but with number of seconds per board:
 
 | Depth | Number of boards | Baseline [s/board] | Only pruned [s/board] | Pruned and ordered [s/board] |
 | ----- | ---------------- | ------------------ | --------------------- | ---------------------------- |
-| 1     | 100              | 0.0196             | 0.0191                | 0.0187                       |
-| 2     | 50               | 0.72               | 0.44                  | 0.5                          |
-| 3     | 10               | 19.9               | 3.5                   | 1.1                          |
-| 4     | 10               | 823.7              | 21                    | 15.4                         |
-| 5     | 10               | N/A                | 287.4                 | 31.3                         |
+| 1     | 100              | 0.03               | 0.03                  | 0.03                         |
+| 2     | 50               | 1.15               | 0.67                  | 0.72                         |
+| 3     | 50               | 38                 | 5.7                   | 2.5                          |
+| 4     | 50               | N/A                | 56                    | 93                           |
+| 5     | 50               | N/A                | 553                   | 89                           |
+
+Note that the baseline was omitted past depth 3 since it is very slow. In a different run the baseline was run on 10 boards at depth 4 and it already took more than an hour (8200 seconds specifically).
+It is interesting to see that the 'only pruned' experiment actually performs better than the 'pruned and ordered' one at depth 4. Note that the 50 boards are the same at every level. It seems like the ad-hoc ordering function actually makes the algorithms job harder at depth 4 which is strange since even at depth 3 we can see an improvement on the same boards. The improvement is obvious again at depth 5.
 
 ### Some pygame GUI screenshots
 | Initial board                                                                    | Board after some moves                                                             | Available moves for knight                                                         |
