@@ -19,11 +19,29 @@ IMBALANCE_RANGE_HIGH = 0.7
 
 
 def sample_n_positions(n: int) -> list[tuple[int, int]]:
+    """Generate n positions on a chess board at random."""
     random.shuffle(POSSIBLE_INDICES)
     return list(ALL_POSITIONS[i] for i in POSSIBLE_INDICES[:n])
 
 
 def sample_random_board(n_pieces: int) -> Board:
+    """Generate semi-random chess board.
+
+    The board is configured by first placing the king of each color.
+    The amount of pieces left to distribute are allocated at random between 30% white
+    and 70% white.
+    Types of pieces are randomly sampled according to their occurence. This means a
+    white rook is twice as likely to appear than a white queen but is four time less
+    like to appear than a white pawn.
+    In the end the procedure is repeated if the resulting board is arleady in check or
+    checkmate.
+
+    Args:
+        n_pieces: Number of pieces to distribute on the board.
+
+    Returns: A board with randomly distributed pieces placed on it. Always contains
+        each color's king and is never in check or checkmate.
+    """
     board_pieces: list[Piece] = []
     positions_to_fill = sample_n_positions(n=n_pieces)
     # place two kings
@@ -129,7 +147,7 @@ if __name__ == "__main__":
     NUM_BOARDS = 1000
     count = 0
     while count < NUM_BOARDS:
-        num_pieces = int(random.uniform(3, 20))
+        num_pieces = int(random.uniform(6, 20))
         board = sample_random_board(n_pieces=num_pieces)
         count += 1
         if count % 10 == 0:
