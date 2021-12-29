@@ -74,10 +74,13 @@ if __name__ == "__main__":
                 num_boards=NUM_BOARDS,
             )
         )
+        average_num_pieces = sum(
+            len(tuple(board.all_pieces())) for board, _ in dataset
+        ) / len(dataset)
         print(
             f"Loaded dataset with {len(dataset)} boards. "
             f"On average these boards contain "
-            f"{sum(len(tuple(board.all_pieces())) for board, _ in dataset)/len(dataset)} "
+            f"{average_num_pieces} "
             f"pieces. \nWith a maximum of "
             f"{max(len(tuple(board.all_pieces())) for board, _ in dataset)} pieces "
             f"and a minimum of "
