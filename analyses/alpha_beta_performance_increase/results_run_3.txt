@@ -1,0 +1,38 @@
+=====================================================================
+DEPTH: 1
+NUM_BOARDS: 100
+Loaded dataset with 100 boards. On average these boards contain 12.42 pieces. 
+With a maximum of 19 pieces and a minimum of 6 pieces.
+Experiment of type 'ordered and pruned' took 3.25 seconds to run. This implies each board took 0.03 seconds to process.
+Experiment of type 'only pruned' took 3.27 seconds to run. This implies each board took 0.03 seconds to process.
+Experiment of type 'baseline' took 3.22 seconds to run. This implies each board took 0.03 seconds to process.
+=====================================================================
+DEPTH: 2
+NUM_BOARDS: 50
+Loaded dataset with 50 boards. On average these boards contain 12.9 pieces. 
+With a maximum of 19 pieces and a minimum of 6 pieces.
+Experiment of type 'ordered and pruned' took 36.16 seconds to run. This implies each board took 0.72 seconds to process.
+Experiment of type 'only pruned' took 33.35 seconds to run. This implies each board took 0.67 seconds to process.
+Experiment of type 'baseline' took 57.42 seconds to run. This implies each board took 1.15 seconds to process.
+=====================================================================
+DEPTH: 3
+NUM_BOARDS: 50
+Loaded dataset with 50 boards. On average these boards contain 12.9 pieces. 
+With a maximum of 19 pieces and a minimum of 6 pieces.
+Experiment of type 'ordered and pruned' took 124.38 seconds to run. This implies each board took 2.49 seconds to process.
+Experiment of type 'only pruned' took 283.53 seconds to run. This implies each board took 5.67 seconds to process.
+Experiment of type 'baseline' took 1901.40 seconds to run. This implies each board took 38.03 seconds to process.
+=====================================================================
+DEPTH: 4
+NUM_BOARDS: 50
+Loaded dataset with 50 boards. On average these boards contain 12.9 pieces. 
+With a maximum of 19 pieces and a minimum of 6 pieces.
+Experiment of type 'ordered and pruned' took 4650.92 seconds to run. This implies each board took 93.02 seconds to process.
+Experiment of type 'only pruned' took 2902.81 seconds to run. This implies each board took 58.06 seconds to process.
+=====================================================================
+DEPTH: 5
+NUM_BOARDS: 50
+Loaded dataset with 50 boards. On average these boards contain 12.9 pieces. 
+With a maximum of 19 pieces and a minimum of 6 pieces.
+Experiment of type 'ordered and pruned' took 4462.30 seconds to run. This implies each board took 89.25 seconds to process.
+Experiment of type 'only pruned' took 27672.62 seconds to run. This implies each board took 553.45 seconds to process.

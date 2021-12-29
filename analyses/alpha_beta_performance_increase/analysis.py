@@ -12,22 +12,25 @@ from utahchess.minimax import Node, create_children_from_parent, get_node_value,
 
 def generate_dataset(
     dataset_path: str, num_boards: int
-) -> Generator[Board, None, None]:
+) -> Generator[tuple[Board, str], None, None]:
+    """Read and yield a number of board strings read from files."""
     for root, _, filenames in walk(dataset_path):
         for count, filename in enumerate(filenames):
             if count == num_boards:
                 break
             with open(f"{root}/{filename}", "r") as file:
-                yield Board(board_string=file.read())
+                yield Board(board_string=file.read()), filename
 
 
 def run_experiment(
-    dataset: Sequence[Board], depth: int, order: bool, prune: bool
-) -> tuple[float, list[float]]:
-
+    dataset: Sequence[tuple[Board, str]], depth: int, order: bool, prune: bool
+) -> tuple[float, list[float], list[str], list[str]]:
+    """Run minimax algorithm at given depth for all boards in the dataset."""
     start = time.time()
     found_values = []
-    for board in dataset:
+    found_nodes = []
+    filenames = []
+    for board, filename in dataset:
 
         parent_node = Node(
             name="initial_node",
@@ -47,12 +50,22 @@ def run_experiment(
             prune=prune,
         )
         found_values.append(value)
-    return time.time() - start, found_values
+        found_nodes.append(suggested_node.name)
+        filenames.append(filename)
+    return time.time() - start, found_values, found_nodes, filenames
+
+
+def report_results(time: float, type: str, num_boards: int) -> None:
+    print(
+        f"Experiment of type '{type}' took {time:.2f} seconds to run. "
+        f"This implies each board took {time/num_boards:.2f} seconds to process."
+    )
 
 
 if __name__ == "__main__":
 
-    for DEPTH, NUM_BOARDS in zip((1, 2, 3, 4, 5), (100, 50, 10, 10, 10)):
+    for DEPTH, NUM_BOARDS in zip((1, 2, 3, 4, 5), (100, 50, 50, 50, 50)):
+        print("=====================================================================")
         print("DEPTH:", DEPTH)
         print("NUM_BOARDS:", NUM_BOARDS)
         dataset = tuple(
@@ -61,55 +74,47 @@ if __name__ == "__main__":
                 num_boards=NUM_BOARDS,
             )
         )
+        average_num_pieces = sum(
+            len(tuple(board.all_pieces())) for board, _ in dataset
+        ) / len(dataset)
         print(
             f"Loaded dataset with {len(dataset)} boards. "
             f"On average these boards contain "
-            f"{sum(len(tuple(board.all_pieces())) for board in dataset)/len(dataset)} "
+            f"{average_num_pieces} "
             f"pieces. \nWith a maximum of "
-            f"{max(len(tuple(board.all_pieces())) for board in dataset)} pieces "
+            f"{max(len(tuple(board.all_pieces())) for board, _ in dataset)} pieces "
             f"and a minimum of "
-            f" {min(len(tuple(board.all_pieces())) for board in dataset)} pieces."
+            f"{min(len(tuple(board.all_pieces())) for board, _ in dataset)} pieces."
         )
 
-        print("Working on ordered and pruned experiment...")
-        ordered_and_pruned_time, ordered_and_pruned_values = run_experiment(
-            dataset=dataset, depth=DEPTH, order=True, prune=True
-        )
-        print(
-            "Ordered and pruned finished after",
+        (
             ordered_and_pruned_time,
-            "seconds",
-        )
-        print("Working on just pruned experiment...")
-        just_pruned_time, just_pruned_values = run_experiment(
-            dataset=dataset, depth=DEPTH, order=False, prune=True
-        )
-        print("Just pruned finished after", just_pruned_time, "seconds")
-        if DEPTH <= 4:
-            print("Working on baseline experiment...")
-            baseline_time, baseline_values = run_experiment(
-                dataset=dataset, depth=DEPTH, order=False, prune=False
-            )
-            print("Baseline finished after", baseline_time, "seconds")
+            ordered_and_pruned_values,
+            ordered_and_pruned_node_names,
+            ordered_and_pruned_node_filenames,
+        ) = run_experiment(dataset=dataset, depth=DEPTH, order=True, prune=True)
+        (
+            just_pruned_time,
+            just_pruned_values,
+            just_pruned_node_names,
+            just_pruned_filenames,
+        ) = run_experiment(dataset=dataset, depth=DEPTH, order=False, prune=True)
 
-        print("\n")
-        print("Times:")
-        print(ordered_and_pruned_time)
-        print(just_pruned_time)
-        if DEPTH <= 4:
-            print(baseline_time)
-
-        print(ordered_and_pruned_values)
-        print(just_pruned_values)
-        if DEPTH <= 4:
-            print(baseline_values)
-        print("\n")
-        print("-------------------------------------------------")
-        print("-------------------------------------------------")
-        print("-------------------------------------------------")
-        print("\n")
-
+        # Assert all algorithms found the same values
         assert ordered_and_pruned_values == just_pruned_values
-        if DEPTH <= 4:
+        for experiment_time, type in zip(
+            (ordered_and_pruned_time, just_pruned_time),
+            ("ordered and pruned", "only pruned"),
+        ):
+            report_results(time=experiment_time, type=type, num_boards=NUM_BOARDS)
+
+        if DEPTH < 4:
+            (
+                baseline_time,
+                baseline_values,
+                baseline_node_names,
+                baseline_filenames,
+            ) = run_experiment(dataset=dataset, depth=DEPTH, order=False, prune=False)
             assert just_pruned_values == baseline_values
             assert baseline_values == ordered_and_pruned_values
+            report_results(time=baseline_time, type="baseline", num_boards=NUM_BOARDS)
