@@ -106,7 +106,8 @@ Same table but with number of seconds per board:
 | 5     | 50               | N/A                | 553                   | 89                           |
 
 Note that the baseline was omitted past depth 3 since it is very slow. In a different run the baseline was run on 10 boards at depth 4 and it already took more than an hour (8200 seconds specifically).
-It is interesting to see that the 'only pruned' experiment actually performs better than the 'pruned and ordered' one at depth 4. Note that the 50 boards are the same at every level. It seems like the ad-hoc ordering function actually makes the algorithms job harder at depth 4 which is strange since even at depth 3 we can see an improvement on the same boards. The improvement is obvious again at depth 5.
+
+It is interesting to see that the 'only pruned' experiment actually performs better than the 'pruned and ordered' one at depth 4. Note that the 50 boards are the same at every level. It seems like the ad-hoc ordering function actually makes the algorithms job harder at depth 4 which is strange since even at depth 3 we can see an improvement on the same boards. The improvement is obvious again at depth 5 and curiously enough the time per board **decreases** for the 'pruned and ordered' experiment when moving from depth 4 to 5.
 
 ### Some pygame GUI screenshots
 | Initial board                                                                    | Board after some moves                                                             | Available moves for knight                                                         |
