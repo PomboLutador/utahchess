@@ -35,7 +35,7 @@ def draw_pieces(screen: pygame.Surface, board: Board):
         ) = get_pixel_coordinates_from_integer_coordinates(x=x, y=y)
 
         assetname = piece_to_assetname(piece)
-        img = pygame.image.load(f"GUI\\assets\\{assetname}")
+        img = pygame.image.load(f"src\\gui\\assets\\{assetname}")
         screen.blit(
             img,
             (
