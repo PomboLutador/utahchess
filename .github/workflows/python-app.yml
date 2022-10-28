@@ -38,4 +38,4 @@ jobs:
     - name: Install GUI dependencies and type check
       run: |
         pip install -e .[GUI]
-        mypy gui/
+        mypy src/gui/
