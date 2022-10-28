@@ -71,7 +71,7 @@ There are also three other shell scripts in the `bin` folder (`install_<placehol
 - The main loop in `utahchess.chess` shows how to play a game of chess in the command line using user input for both sides of the game.
 - To implement a game of chess yourself the utils `utahchess.move_validation.is_check`, `utahchess.legal_moves.is_checkmate` and `utahchess.legal_moves.is_stalemate` can be used to check the status of a board.
 ### GUI
-- The proof of concept GUI using pygame can be tried out by executing `python gui/pygame/pygame.gui`.
+- The proof of concept GUI using pygame can be tried out by executing `python src/gui/pygame/pygame.gui`.
 - The GUI allows the user to play against the CPU, powered by an alpha-beta pruned minimax algorithm.
 ### Minimax
 - An implementation of the minimax algorithm with alpha-beta pruning can be found in `utahchess.minimax`, called `minimax`. 
@@ -110,9 +110,9 @@ Note that the baseline was omitted past depth 3 since it is very slow. In a diff
 It is interesting to see that the 'only pruned' experiment actually performs better than the 'pruned and ordered' one at depth 4. Note that the 50 boards are the same at every level. It seems like the ad-hoc ordering function actually makes the algorithms job harder at depth 4 which is strange since even at depth 3 we can see an improvement on the same boards. The improvement is obvious again at depth 5 and curiously enough the time per board **decreases** for the 'pruned and ordered' experiment when moving from depth 4 to 5.
 
 ### Some pygame GUI screenshots
-| Initial board                                                                    | Board after some moves                                                             | Available moves for knight                                                         |
-| -------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
-| <img src="gui/pygame/screenshots/gui_screenshot.PNG" alt="drawing" width="250"/> | <img src="gui/pygame/screenshots/gui_screenshot_2.PNG" alt="drawing" width="250"/> | <img src="gui/pygame/screenshots/gui_screenshot_3.png" alt="drawing" width="250"/> |
+| Initial board                                                                        | Board after some moves                                                                 | Available moves for knight                                                             |
+| ------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| <img src="src/gui/pygame/screenshots/gui_screenshot.PNG" alt="drawing" width="250"/> | <img src="src/gui/pygame/screenshots/gui_screenshot_2.PNG" alt="drawing" width="250"/> | <img src="src/gui/pygame/screenshots/gui_screenshot_3.png" alt="drawing" width="250"/> |
 
 
 ### Dev utils
